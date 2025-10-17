@@ -94,16 +94,23 @@ class Session:
         try:
             cmd = "docker exec {} bash -c '{}'".format(self.container_name, command)
             result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=60)
-            return result.returncode == 0, result.stdout, result.stderr
+            output = result.stdout if result.stdout else ""
+            error = result.stderr if result.stderr else ""
+            combined = output + ("\n" + error if error else "")
+            return result.returncode == 0, combined, error
         except subprocess.TimeoutExpired:
-            return False, "", "Command timed out"
+            return False, "Command timed out", "Timeout"
         except Exception as e:
-            return False, "", str(e)
+            return False, str(e), str(e)
 
     def execute_simple(self, command):
         """Execute simple command and return success/failure"""
         success, stdout, stderr = self.execute(command)
-        return success, stdout + stderr
+        # Combine stdout and stderr for output
+        combined = stdout
+        if stderr and stderr != stdout:
+            combined += ("\n" + stderr if combined else stderr)
+        return success, combined
 
 class Sandbox:
     def __init__(self, namespace, full_name, root_path):

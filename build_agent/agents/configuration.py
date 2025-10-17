@@ -107,6 +107,10 @@ Start now by checking the directory!
                 break
             
             print(f"✓ LLM responded ({len(response)} chars)")
+            print(f"\n{'='*60}")
+            print("LLM Response:")
+            print(response)
+            print(f"{'='*60}\n")
             
             # Append assistant response
             messages.append({"role": "assistant", "content": response})
@@ -127,10 +131,18 @@ Start now by checking the directory!
             # Execute commands
             command_results = []
             for cmd in commands:
-                print(f"Executing command: {cmd}")
+                print(f"\n{'>'*60}")
+                print(f"Executing: {cmd}")
+                print(f"{'>'*60}")
                 outer_commands.append(cmd)
                 
                 success, output = self.sandbox_session.execute_simple(cmd)
+                
+                print(f"\n{'<'*60}")
+                print(f"Result: {'✓ SUCCESS' if success else '✗ FAILED'}")
+                print(f"{'<'*60}")
+                print(output)
+                print(f"{'<'*60}\n")
                 
                 if success:
                     command_results.append(f"Command '{cmd}' executed successfully:\n{output}")
