@@ -148,13 +148,10 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
         # Set container name
         self.container_name = f"c-build-{self.full_name.replace('/', '-')}-container"
         
-        # Remove existing container if it exists
-        check_cmd = f"docker ps -aq -f name=^{self.container_name}$"
-        result = subprocess.run(check_cmd, shell=True, capture_output=True, text=True)
-        if result.stdout.strip():
-            print(f"Removing existing container: {self.container_name}")
-            subprocess.run(f"docker stop {self.container_name}", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            subprocess.run(f"docker rm {self.container_name}", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        # Remove existing container if it exists (forcefully)
+        print(f"Cleaning up any existing container: {self.container_name}")
+        # Force remove any container with this name
+        subprocess.run(f"docker rm -f {self.container_name} 2>/dev/null || true", shell=True)
         
         # Start container
         start_cmd = f"docker run -d --name {self.container_name} {image_name} tail -f /dev/null"
@@ -166,8 +163,17 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
         repo_path = f"{self.root_path}/utils/repo/{author_name}/{repo_name}/repo"
         
         if os.path.exists(repo_path):
+            print(f"Copying files from {repo_path} to container...")
             copy_cmd = f"docker cp {repo_path}/. {self.container_name}:/repo/"
-            subprocess.run(copy_cmd, shell=True, check=True)
+            result = subprocess.run(copy_cmd, shell=True, check=True, capture_output=True, text=True)
+            
+            # Verify files were copied
+            verify_cmd = f"docker exec {self.container_name} ls -la /repo"
+            verify_result = subprocess.run(verify_cmd, shell=True, capture_output=True, text=True)
+            print(f"Files in container /repo:")
+            print(verify_result.stdout)
+        else:
+            print(f"⚠️  Warning: Repository path does not exist: {repo_path}")
         
         # Create session
         self.session = Session(self.container_name)
