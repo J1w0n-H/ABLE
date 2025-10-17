@@ -53,29 +53,28 @@ def download_repo(root_path, full_name, sha):
         pass
 ```
 
-**After (ARVO2.0 - C/C++ detection):**
+**After (ARVO2.0 - Always treat as C/C++):**
 ```python
 def download_repo(root_path, full_name, sha):
     # ... git clone ...
     
-    # 🆕 Detect C/C++ project - Skip pipreqs
-    repo_path = f'{root_path}/utils/repo/{author_name}/{repo_name}/repo'
+    # 🆕 ARVO2.0 is C/C++ only - Always skip pipreqs
+    # Line 76-77:
+    print("C project detected, skipping pipreqs dependency analysis")
     
-    # Check for C/C++ indicators
-    has_makefile = os.path.exists(os.path.join(repo_path, 'Makefile'))
-    has_cmake = os.path.exists(os.path.join(repo_path, 'CMakeLists.txt'))
-    has_configure = os.path.exists(os.path.join(repo_path, 'configure'))
-    
-    if has_makefile or has_cmake or has_configure:
-        print("C project detected, skipping pipreqs dependency analysis")
-        # Don't run pipreqs for C projects
-    else:
-        # Python project - run pipreqs (original logic)
-        pipreqs_cmd = f"pipreqs ..."
-        subprocess.run(pipreqs_cmd, ...)
+    # ❌ COMPLETELY REMOVED: pipreqs execution
+    # No language detection needed - ARVO2.0 is C-only system
 ```
 
-**Why**: C projects don't have Python imports, so pipreqs is meaningless and will fail.
+**Why**: 
+- ARVO2.0 is **dedicated to C/C++ projects only** (not multi-language)
+- Simplified: No need for language detection logic
+- Cleaner: Remove all Python-related code paths
+- Different from HereNThere: HereNThere is Python-only, ARVO2.0 is C-only
+
+**Design Decision**: Instead of maintaining both languages, create separate specialized systems:
+- HereNThere: Python specialist
+- ARVO2.0: C/C++ specialist
 
 ---
 

@@ -72,13 +72,11 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║          │   │   └─ Remove existing Dockerfile                         ║
 ║          │   │   ⚠️ UNCHANGED from HereNThere                          ║
 ║          │   │                                                          ║
-║          │   ├─ 🆕 C/C++ PROJECT DETECTION (line 79-85)                ║
-║          │   │   ├─ if Makefile/CMakeLists.txt/configure exists:       ║
-║          │   │   │   print('C project detected')                       ║
-║          │   │   │   └─ Skip pipreqs (lines 79-85)                     ║
-║          │   │   └─ else:                                              ║
-║          │   │       └─ subprocess.run("pipreqs ...") ❌ REMOVED       ║
-║          │   │           └─ Generate requirements_pipreqs.txt          ║
+║          │   ├─ 🆕 C/C++ ONLY - NO LANGUAGE DETECTION (lines 76-77)    ║
+║          │   │   └─ print('C project detected, skipping pipreqs')     ║
+║          │   │       └─ ARVO2.0 is C-only system (no Python support)  ║
+║          │   │       ❌ COMPLETELY REMOVED: pipreqs execution          ║
+║          │   │       ℹ️  Design: Specialized system, not multi-language║
 ║          │   │                                                          ║
 ║          │   └─ subprocess.run("git checkout sha") (line 88)           ║
 ║          │       └─ Checkout specific commit                           ║
