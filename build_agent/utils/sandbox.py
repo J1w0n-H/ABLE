@@ -138,8 +138,18 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
         build_cmd = f"docker build -t {image_name} {dockerfile_dir}"
         subprocess.run(build_cmd, shell=True, check=True)
         
-        # Start container
+        # Set container name
         self.container_name = f"c-build-{self.full_name.replace('/', '-')}-container"
+        
+        # Remove existing container if it exists
+        check_cmd = f"docker ps -aq -f name=^{self.container_name}$"
+        result = subprocess.run(check_cmd, shell=True, capture_output=True, text=True)
+        if result.stdout.strip():
+            print(f"Removing existing container: {self.container_name}")
+            subprocess.run(f"docker stop {self.container_name}", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(f"docker rm {self.container_name}", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
+        # Start container
         start_cmd = f"docker run -d --name {self.container_name} {image_name} tail -f /dev/null"
         subprocess.run(start_cmd, shell=True, check=True)
         

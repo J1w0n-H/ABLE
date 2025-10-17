@@ -70,8 +70,15 @@ You are now in a C build environment. Please perform all operations within this 
         messages = [{"role": "system", "content": self.init_prompt}]
         outer_commands = []
         
+        print(f"\n{'='*60}")
+        print(f"Starting Configuration Agent (max {self.max_turn} turns)")
+        print(f"{'='*60}\n")
+        
         for turn in range(self.max_turn):
+            print(f"\n--- Turn {turn + 1}/{self.max_turn} ---")
+            
             # Get LLM response
+            print("Calling LLM...")
             response, usage = get_llm_response(
                 model=self.model,
                 messages=messages,
@@ -81,8 +88,14 @@ You are now in a C build environment. Please perform all operations within this 
             )
             
             if response is None:
-                print("LLM response failed")
+                print("❌ LLM response failed - stopping agent")
+                print("Please check:")
+                print("  1. OPENAI_API_KEY environment variable is set")
+                print("  2. API key has sufficient credits")
+                print("  3. Network connectivity")
                 break
+            
+            print(f"✓ LLM responded ({len(response)} chars)")
             
             # Append assistant response
             messages.append({"role": "assistant", "content": response})
