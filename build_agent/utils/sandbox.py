@@ -40,10 +40,33 @@ safe_cmd = [
     ]
 
 # 用来截断，传入result_message为字符串，command为运行指令，truncate为正常阈值，bar_truncate为保留疑似进度条数量
-def truncate_msg(result_message, command, truncate=1000, bar_truncate=20):
+def truncate_msg(result_message, command, truncate=1000, bar_truncate=20, returncode=0):
+    """
+    Truncate command output intelligently:
+    - Success (returncode=0): Show brief summary only
+    - Failure (returncode!=0): Show full error details
+    """
     lines = result_message.splitlines()
     lines = [x for x in lines if len(x.strip()) > 0]
-    # 用来存疑似进度条的행수
+    
+    # 🆕 For successful commands, show brief summary only
+    if returncode == 0:
+        line_count = len(lines)
+        
+        # If output is reasonable, keep it
+        if line_count <= 20 and len(result_message) <= 1000:
+            return result_message
+        
+        # If output is long, show brief summary
+        if line_count > 50 or len(result_message) > 5000:
+            return f"Command executed successfully. Output: {line_count} lines, {len(result_message)} characters (truncated for brevity)."
+        
+        # Medium output: show first 10 and last 10 lines
+        if line_count > 20:
+            return '\n'.join(lines[:10] + ['...'] + lines[-10:])
+    
+    # For failed commands, show detailed output
+    # 用来存疑似진행표시줄의 행수
     bar_lines = list()
     for i in range(len(lines)):
         line = lines[i]
@@ -57,7 +80,7 @@ def truncate_msg(result_message, command, truncate=1000, bar_truncate=20):
 
     result_message = '\n'.join(lines)
     res = result_message
-    # 处理过长문장 - More aggressive truncation for C projects
+    # 处리과長문장 - More aggressive truncation for C projects
     if len(result_message) > truncate * 3:
         res = f"Running `{command}`...\nThe output is too long, so we've truncated it to show you the first and last 3000 characters.\n"
         res += (result_message[:truncate*3] + "\n...[Truncation]...\n" + result_message[-truncate*3:])
@@ -563,7 +586,7 @@ Explanation: Clear all the items in the waiting list.'''
                             return result_message, return_code
                         else:
                             result_message = f'Running `{command}`...\n' + result_message + '\n'
-                            return truncate_msg(result_message, command), return_code
+                            return truncate_msg(result_message, command, returncode=return_code), return_code
                 
                 except pexpect.TIMEOUT:
                     if match_runtest(command):
