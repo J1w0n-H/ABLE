@@ -563,13 +563,11 @@ Explanation: Clear all the items in the conflict list.'''
                                 return result_message, return_code
                             elif command.strip().lower().startswith('waiting'):
                                 msg = '''waitinglist command usage error, the following command formats are leagal:
-1. `waitinglist add -p package_name1 -v >=1.0.0 -t pip`
-Explanation: Add package_name1>=1.0.0 into waiting list(using pip), and version constraints string cannot contain spaces.
-2. `waitinglist add -p package_name1 -t pip`
-Explanation: Add package_name1 into waiting list, no `-v` means download the latest version by default.
-3. `waitinglist addfile /path/to/file`
-Explanation: Add all the items in the /path/to/file into waiting list. Note that you must make sure each line's item meet the formats like [package_name][version_constraints].
-4. `waitinglist clear`
+1. `waitinglist add -p package_name1 -t apt`
+Explanation: Add package_name1 into waiting list(using apt-get), no version means install the latest available version by default.
+2. `waitinglist addfile /path/to/file`
+Explanation: Add all the items in the /path/to/file into waiting list. Note that you must make sure each line contains a valid package name.
+3. `waitinglist clear`
 Explanation: Clear all the items in the waiting list.'''
                                 result_message = f'Running `{command}`...\n' + msg + '\n'
     
