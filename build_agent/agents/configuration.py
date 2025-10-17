@@ -41,28 +41,39 @@ class Agent:
         
         # C-specific prompt
         self.init_prompt = f"""\
-You are an expert skilled in C environment configuration. Your goal is to build a C project successfully.
+You are an expert C build engineer. Your ONLY job is to build a C project in /repo directory.
 
-WORK PROCESS:
-1. **Check Project Structure**: Look for Makefile, CMakeLists.txt, or main.c files
-2. **Identify Build System**: Determine the appropriate build method
-   - Makefile exists → use `run_make`
-   - CMakeLists.txt exists → use `run_cmake` 
-   - Only .c files → use `run_gcc`
-3. **Install Dependencies**: If needed, use `apt_install package_name` for system libraries
-4. **Build Project**: Execute the appropriate build command
-5. **Verify Success**: Ensure the build completes without errors
+CRITICAL RULES:
+1. You MUST use bash commands wrapped in ```bash ``` blocks
+2. First, check what files exist: ls /repo
+3. Then execute ONE build command based on what you find
+4. Do NOT explain - just execute commands
 
-AVAILABLE TOOLS:
-- `run_make`: Build using make command
-- `run_cmake`: Build using cmake (configure + make)
-- `run_gcc`: Direct gcc compilation
-- `apt_install package_name`: Install system packages
+BUILD COMMANDS (use these EXACTLY as shown):
+```bash
+ls /repo
+```
 
-GOAL: Build the C project successfully. When build succeeds, output:
-"Congratulations, you have successfully built the C project!"
+Then if you see:
+- Makefile → use: ```bash
+run_make
+```
+- CMakeLists.txt → use: ```bash
+run_cmake
+```
+- Only .c files → use: ```bash
+run_gcc
+```
 
-You are now in a C build environment. Please perform all operations within this environment.
+EXAMPLE SESSION:
+Turn 1: ```bash
+ls /repo
+```
+Turn 2: ```bash
+run_make
+```
+
+Start now by checking the directory!
 """
 
     def run(self, work_dir, trajectory):
