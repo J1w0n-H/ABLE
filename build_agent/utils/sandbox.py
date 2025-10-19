@@ -18,11 +18,11 @@ import pexpect
 import time 
 import subprocess
 import os 
-import glob
 import re
+import glob
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from parser.parse_command import match_download, match_runtest, match_conflict_solve, match_waitinglist_add, match_waitinglist_addfile, match_conflictlist_clear, match_waitinglist_clear, match_waitinglist_show, match_conflictlist_show, match_clear_configuration
+from parser.parse_command import match_download, match_runtest, match_build, match_conflict_solve, match_waitinglist_add, match_waitinglist_addfile, match_conflictlist_clear, match_waitinglist_clear, match_waitinglist_show, match_conflictlist_show, match_clear_configuration
 from download import download
 from outputcollector import OutputCollector
 from show_msg import show_msg
@@ -43,52 +43,26 @@ safe_cmd = [
 def truncate_msg(result_message, command, truncate=1000, bar_truncate=20, returncode=0):
     """
     Truncate command output intelligently:
-    - Success (returncode=0): Show brief summary only
-    - Failure (returncode!=0): Show full error details
+    - <= 20 lines: Show full output (regardless of returncode)
+    - > 20 lines && returncode=0: Show first 10 + last 10 lines
+    - > 20 lines && returncode!=0: Show full output (errors need full context)
     """
     lines = result_message.splitlines()
     lines = [x for x in lines if len(x.strip()) > 0]
+    line_count = len(lines)
     
-    # 🆕 For successful commands, show brief summary only
+    # 1. 20줄 이하 -> 전체 출력 (리턴코드 무관)
+    if line_count <= 20:
+        return result_message
+    
+    # 2. 20줄 이상
     if returncode == 0:
-        line_count = len(lines)
-        
-        # If output is reasonable, keep it
-        if line_count <= 20 and len(result_message) <= 1000:
-            return result_message
-        
-        # If output is long, show brief summary
-        if line_count > 50 or len(result_message) > 5000:
-            return f"Command executed successfully. Output: {line_count} lines, {len(result_message)} characters (truncated for brevity)."
-        
-        # Medium output: show first 10 and last 10 lines
-        if line_count > 20:
-            return '\n'.join(lines[:10] + ['...'] + lines[-10:])
-    
-    # For failed commands, show detailed output
-    # 用来存疑似진행표시줄의 행수
-    bar_lines = list()
-    for i in range(len(lines)):
-        line = lines[i]
-        if line.strip().startswith('\x1b[') or line.count('\x1b[') >= 2 or line.count('█') >= 2 or '━━━━━' in line:
-            bar_lines.append(i)
-    if len(bar_lines) > bar_truncate:
-        for i in range(len(lines)):
-            if i in bar_lines[:-bar_truncate]:
-                lines[i] = ''
-    lines = [x for x in lines if len(x) > 0]
-
-    result_message = '\n'.join(lines)
-    res = result_message
-    # 处리과長문장 - More aggressive truncation for C projects
-    if len(result_message) > truncate * 3:
-        res = f"Running `{command}`...\nThe output is too long, so we've truncated it to show you the first and last 3000 characters.\n"
-        res += (result_message[:truncate*3] + "\n...[Truncation]...\n" + result_message[-truncate*3:])
-    elif len(result_message.split(' ')) > truncate:
-        res = f"Running `{command}`...\nThe output is too long, so we've truncated it to show you the first and last 1000 words.\n"
-        res += (' '.join(result_message.split(' ')[:truncate]) + "\n...[Truncation]...\n" + ' '.join(result_message.split(' ')[-truncate:]))
-    
-    return res
+        # 성공이면 앞뒤 10줄씩만 (토큰 절약)
+        truncated_output = '\n'.join(lines[:10] + [f'... ({line_count - 20} lines omitted) ...'] + lines[-10:])
+        return truncated_output
+    else:
+        # 실패면 전체 출력 (디버깅 필요)
+        return result_message
 
 def delete_dangling_image():
     # 获取所有 dangling 镜像的 ID
@@ -389,7 +363,7 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                 try:
                     if 'hatch shell' == command.lower().strip():
                         return 'You are not allowed to use commands like `hatch shell` that would open a new shell!!!', -1
-                    # 在持久shell中执行命令
+                    # 在持久shell中执行명령
                     if '$pwd$' == command.lower().strip():
                         command = 'pwd'
                         self.sandbox.shell.sendline(command)
@@ -496,6 +470,8 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                         result_message = msg
                         return result_message, 1
                     else:
+                        if match_build(command):
+                            command = 'python /home/tools/build.py'
                         if match_runtest(command):
                             command = 'python /home/tools/runtest.py'
                         if command == 'generate_diff':

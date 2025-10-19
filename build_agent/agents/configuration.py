@@ -80,6 +80,7 @@ class Configuration(Agent):
             Tools.conflict_list_show,
             Tools.waiting_list_show,
             Tools.download,
+            Tools.build,
             Tools.runtest,
             Tools.clear_configuration,
         ]
@@ -97,6 +98,14 @@ You are an expert skilled in C/C++ environment configuration. You can refer to v
 WORK PROCESS:
 1. **Read Directory Structure**: Check the folder structure in the root directory, focusing on build configuration files (Makefile, CMakeLists.txt, configure, etc.).
 2. **Check the configuration files in the root directory**: Read build configuration files such as: `Makefile`, `CMakeLists.txt`, `configure.ac`, `configure.sh`, `.github` folder for CI configurations, `README.md` for build instructions, etc.
+    **IMPORTANT - Smart File Reading to Avoid Token Overflow**:
+    - ⚠️ NEVER use `cat` on large files (>100 lines) - this wastes tokens!
+    - ✅ Use `head -50 <file>` or `head -100 <file>` to read first N lines
+    - ✅ Use `tail -50 <file>` to read last N lines
+    - ✅ Use `grep -n <keyword> <file>` to search for specific content (e.g., `grep -n "find_package\|PKG_CHECK" CMakeLists.txt`)
+    - ✅ Use `wc -l <file>` first to check file size before reading
+    - ✅ For very large files (>500 lines), use multiple targeted commands instead of reading everything
+    - Example: Instead of `cat Makefile`, use `head -50 Makefile` to see build targets and `grep "LIBS\|LDFLAGS" Makefile` for dependencies
 2.5 **Try testing (optional)**: Using `runtest` command to check if it is possible to pass the tests directly without any additional configuration.
 3. **Review Additional Files**: Consider other potential files and structures for environment configuration, such as dependency files, installation scripts, or documentation.
 4. **Analyze build dependencies**: Based on the observed structure in the root directory, determine the necessary system packages and libraries:
@@ -107,15 +116,19 @@ WORK PROCESS:
 5. **Install system dependencies**: Use apt-get to install required libraries and development packages:
     - For each library dependency, install the corresponding -dev package (e.g., libssl-dev, libcurl4-openssl-dev)
     - Install build tools if needed (autoconf, automake, libtool, pkg-config, etc.)
-    - Use `apt-get update -qq && apt-get install -y -qq <packages>` for quiet installation
-6. **Run build configuration**: If the project uses autoconf/configure:
-    - Run `./autogen.sh` or `autoreconf -i` if needed
-    - Run `./configure` with appropriate flags
-    - Check for any missing dependencies reported by configure
-7. **Build the project**: Try to compile the project:
-    - For Makefile projects: run `make` or `make all`
-    - For CMake projects: run `mkdir build && cd build && cmake .. && make`
-    - Fix any compilation errors by installing missing dependencies
+    - Use `waitinglist add -p <package> -t apt` to add packages, then use `download` to install
+6. **BUILD THE PROJECT** (CRITICAL - MUST DO BEFORE runtest):
+    - Use the `build` command to automatically build the project
+    - The `build` command will detect the build system and execute:
+      * For autoconf projects (./configure exists): ./configure && make
+      * For CMake projects (CMakeLists.txt exists): mkdir build && cd build && cmake .. && make
+      * For Makefile projects (Makefile exists): make
+    - ⚠️ IMPORTANT: You MUST run `build` command after installing dependencies and BEFORE running `runtest`
+    - ⚠️ IMPORTANT: `runtest` does NOT build the project - it only verifies and tests!
+    - Alternative: You can also manually run build commands (./configure && make, or cmake .. && make)
+7. **Run tests**: Use `runtest` command to verify the environment and run tests
+    - `runtest` assumes the project is already built
+    - If build is incomplete, `runtest` will report errors
 8. **Error Handling**: After attempting to build or test, handle error messages:
     - Missing header files: Install corresponding -dev packages (e.g., fatal error: openssl/ssl.h → install libssl-dev)
     - Missing libraries: Install library packages (e.g., cannot find -lz → install zlib1g-dev)
@@ -235,10 +248,11 @@ VERY IMPORTANT TIPS:
         turn = 0
         cost_tokens = 0
         diff_no = 1
-        def manage_token_usage(messages, max_tokens=150000):
+        def manage_token_usage(messages, max_tokens=30000):
             """
             在消息列表超过Token限制时，从最老的消息开始删除，直到总Token数量低于max_tokens。
             使用切片操作来管理Token使用。
+            Max tokens set to 30000 to match LLM context limit.
             """
             total_tokens = sum(len(str(message)) for message in messages)
             if total_tokens <= max_tokens:

@@ -14,26 +14,48 @@
 
 
 from enum import Enum
-
 class Tools(Enum):
-    """C-specific build tools"""
-    
-    run_make = {
-        "command": "run_make",
-        "description": "Build C project using make command"
+    waiting_list_add = {
+        "command": "waitinglist add -p package_name -t apt [-v version_constraints]",
+        "description": "Add item into waiting list using apt-get. The -t apt flag is REQUIRED. Version constraints are optional (defaults to latest)."
     }
-    
-    run_cmake = {
-        "command": "run_cmake", 
-        "description": "Build C project using cmake (configure + make)"
+    waiting_list_add_file = {
+        "command": "waitinglist addfile file_path",
+        "description": "Add all entries from a file similar to requirements.txt format to the waiting list."
     }
-    
-    run_gcc = {
-        "command": "run_gcc",
-        "description": "Compile C project directly with gcc"
+    waiting_list_clear = {
+        "command": "waitinglist clear",
+        "description": "Used to clear all the items in the waiting list."
     }
-    
-    apt_install = {
-        "command": "apt_install package_name",
-        "description": "Install system packages using apt-get"
+    waiting_list_show = {
+        "command": "waitinglist show",
+        "description": "Used to show all the items in the waiting list."
+    }
+    conflict_solve_u = {
+        "command": "conflictlist solve -u",
+        "description": "Keep the original version constraint that exists in the waiting list, and discard the other version constraints with the same name and tool in the conflict list."
+    }
+    conflict_clear = {
+        "command": "conflictlist clear",
+        "description": "Used to clear all the items in the conflict list."
+    }
+    conflict_list_show = {
+        "command": "conflictlist show",
+        "description": "Used to show all the items in the conflict list."
+    }
+    download = {
+        "command": 'download',
+        "description": "Download all pending elements in the waiting list at once."
+    }
+    build = {
+        "command": 'build',
+        "description": "Build the C/C++ project (runs ./configure && make, or cmake .. && make, or just make). MUST run this after installing dependencies and BEFORE runtest."
+    }
+    runtest = {
+        "command": 'runtest',
+        "description": "Check if the configured environment is correct (runs tests only, does NOT build)."
+    }
+    clear_configuration = {
+        "command": 'clear_configuration',
+        "description": "Reset all the configuration to the initial clean C build environment."
     }
