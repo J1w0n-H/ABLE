@@ -114,14 +114,17 @@ WORK PROCESS:
     - Install build tools if needed (autoconf, automake, libtool, pkg-config, etc.)
     - Use `apt-get update -qq && apt-get install -y -qq <packages>` for quiet installation
 6. ⚠️ **MANDATORY: Run build configuration** (DO NOT SKIP THIS STEP!):
-    - If configure exists: You MUST run `cd /repo && ./configure` (or `./autogen.sh` if configure doesn't exist)
-    - If CMakeLists.txt exists: You MUST run `mkdir -p /repo/build && cd /repo/build && cmake ..`
+    - If configure exists: You MUST run `cd /repo && ./configure`
+    - If configure.ac exists but configure does not: Try `./autogen.sh` or `./bootstrap` first, then `./configure`
+    - If CMakeLists.txt exists: You MUST run `mkdir -p /repo/build && cd /repo/build && cmake .. -DCMAKE_BUILD_TYPE=Release`
+    - If build.sh or compile.sh exists: Check and run the build script: `chmod +x build.sh && ./build.sh`
     - Check for any missing dependencies reported by configure/cmake
 7. ⚠️ **MANDATORY: Build the project** (DO NOT SKIP THIS STEP!):
-    - For autoconf projects: You MUST run `make` in /repo
-    - For CMake projects: You MUST run `make` in /repo/build
+    - For autoconf projects: You MUST run `make -j4` in /repo (parallel build for speed)
+    - For CMake projects: You MUST run `make -j4` in /repo/build (parallel build for speed)
     - Fix any compilation errors by installing missing dependencies
     - This step compiles source code into executables and libraries
+    - Note: -j4 enables parallel compilation with 4 jobs; adjust based on available CPU cores
 8. **Error Handling**: After attempting to build or test, handle error messages:
     - Missing header files: Install corresponding -dev packages (e.g., fatal error: openssl/ssl.h → install libssl-dev)
     - Missing libraries: Install library packages (e.g., cannot find -lz → install zlib1g-dev)
