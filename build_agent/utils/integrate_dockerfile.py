@@ -212,69 +212,129 @@ def replace_versions(command, pipdeptree_data):
     return new_command
 
 def generate_statement(inner_command, pipdeptree_data):
-    # print(inner_command)
+    """
+    Convert executed command to Dockerfile RUN statement
+    
+    Args:
+        inner_command: {"command": str, "dir": str, "returncode": int}
+        pipdeptree_data: dict (for Python packages, unused for C)
+    
+    Returns:
+        str: "RUN ..." statement or -1 to skip
+    """
     command = inner_command['command']
     dir = inner_command['dir'] if 'dir' in inner_command else '/'
     returncode = inner_command['returncode']
-    action_name = command.split(' ')[0].strip()
+    
+    # Skip failed commands
     if str(returncode).strip() != '0':
         return -1
-    if action_name in ['pipdeptree']:
-        return -1
+    
+    action_name = command.split(' ')[0].strip() if command else ''
+    
+    # Skip read-only commands
     if action_name in safe_cmd and '>' not in command:
         return -1
-    # C 전용 도구들 처리
-    if command == 'python /home/tools/run_make.py':
-        return 'RUN make'
-    elif command == 'python /home/tools/run_cmake.py':
-        return 'RUN cmake . && make'
-    elif command == 'python /home/tools/run_gcc.py':
-        return 'RUN gcc -o hello *.c'
-    elif command.startswith('python /home/tools/apt_install.py'):
-        package_name = command.split()[-1]
-        return f'RUN apt-get update && apt-get install -y {package_name}'
-    elif command == 'python /home/tools/runtest.py' or command == 'python /home/tools/poetryruntest.py' or command == 'python /home/tools/runpipreqs.py' or command == 'python /home/tools/generate_diff.py':
+    
+    # Skip analysis tools
+    if action_name in ['pipdeptree'] or \
+       'runtest.py' in command or \
+       'runpipreqs.py' in command or \
+       'poetryruntest.py' in command or \
+       'generate_diff.py' in command:
         return -1
-    if action_name == 'change_python_version':
-        return f'FROM python:{command.split(" ")[1].strip()}'
+    
+    # ========================================
+    # C/C++ Specific Conversions
+    # ========================================
+    
+    # 1. apt_download.py → apt-get install
+    if 'apt_download.py' in command:
+        import re
+        match = re.search(r'-p\s+(\S+)', command)
+        if match:
+            package = match.group(1)
+            return f'RUN apt-get update -qq && apt-get install -y -qq {package}'
+        return -1
+    
+    # 2. apt-get (already correct format)
+    if command.startswith('apt-get'):
+        return f'RUN {command}'
+    
+    # 3. configure scripts
+    if './configure' in command or './autogen.sh' in command or './bootstrap' in command:
+        if command.startswith('cd '):
+            return f'RUN {command}'
+        if dir in ['/repo', '/repo/build']:
+            return f'RUN cd {dir} && {command}'
+        return f'RUN cd /repo && {command}'
+    
+    # 4. make commands (most common)
+    if command.startswith('make') or ' make' in command:
+        if command.startswith('cd '):
+            return f'RUN {command}'
+        if dir in ['/repo', '/repo/build']:
+            return f'RUN cd {dir} && {command}'
+        return f'RUN {command}'
+    
+    # 5. cmake commands
+    if 'cmake' in command:
+        if command.startswith('cd ') or command.startswith('mkdir'):
+            return f'RUN {command}'
+        if dir == '/repo/build':
+            return f'RUN cd {dir} && {command}'
+        return f'RUN {command}'
+    
+    # 6. gcc/g++ direct compilation
+    if action_name in ['gcc', 'g++', 'clang', 'clang++']:
+        if dir != '/' and not command.startswith('cd '):
+            return f'RUN cd {dir} && {command}'
+        return f'RUN {command}'
+    
+    # 7. Environment variables
+    if action_name == 'export':
+        var_assignment = command.replace('export ', '')
+        return f'ENV {var_assignment}'
+    
+    # 8. Change base image (rare)
     if action_name == 'change_base_image':
         return f'FROM {command.split(" ")[1].strip()}'
+    
+    # 9. Clear configuration (reset)
     if action_name == 'clear_configuration':
-        return 'FROM python:3.10'
-    if action_name == 'export':
-        return f'ENV {command.split("export ")[1]}'
+        return 'FROM gcr.io/oss-fuzz-base/base-builder'
+    
+    # ========================================
+    # Python (legacy, keep for compatibility)
+    # ========================================
     
     if command.startswith('python /home/tools/pip_download.py'):
-        # print(command)
         args = parse_arguments(command)
-        # print(args.package_name)
         package_name = args.package_name
         package_version = find_package_version(package_name, pipdeptree_data)
-        if package_version is None:
-            return -1
-        else:
+        if package_version:
             return f'RUN pip install {package_name}=={package_version}'
-    # requirements = list()
-    # if command.startswith('pip install'):
-    #     args = parse_pip_install_arguments(command)
-    #     for requirement in args.requirements:
-    #         package_name = extract_package_info(requirement)
-    #         package_version = find_package_version(package_name, pipdeptree_data)
-    #         if package_version is None:
-    #             # return -1c
-    #             continue
-    #         else:
-    #             # return f'RUN pip install {package_name}=={package_version}'
-    #             requirements.append(f'{package_name}=={package_version}')
+        return -1
+    
     if command.startswith('pip install'):
         if dir != '/':
             return f'RUN cd {dir} && {replace_versions(command, pipdeptree_data)}'
-        else:
-            return f'RUN {replace_versions(command, pipdeptree_data)}'
-    if dir != '/':
-        return f'RUN cd {dir} && {command}'
-    else:
+        return f'RUN {replace_versions(command, pipdeptree_data)}'
+    
+    # ========================================
+    # Generic commands
+    # ========================================
+    
+    # Already has cd in command
+    if command.startswith('cd '):
         return f'RUN {command}'
+    
+    # Add cd if needed
+    if dir != '/' and dir != '/src':
+        return f'RUN cd {dir} && {command}'
+    
+    # Default: as-is
+    return f'RUN {command}'
 
 # root_path must be absolute path
 def integrate_dockerfile(root_path):
@@ -285,11 +345,13 @@ def integrate_dockerfile(root_path):
     # C 전용 이미지 사용
     base_image_st = 'FROM gcr.io/oss-fuzz-base/base-builder'
     workdir_st = f'WORKDIR /'
-    # 将patch文件夹移到根目录下，为/patch
-    copy_st = f'COPY search_patch /search_patch'
-    copy_edit_st = f'COPY code_edit.py /code_edit.py'
     # C 빌드 도구는 base-builder에 이미 포함됨
     pre_download = '# C build tools already included in base-builder'
+    
+    # Note: search_patch and code_edit.py are legacy from Python version
+    # For C-only projects, these files don't exist and aren't needed
+    # Removed: COPY search_patch /search_patch
+    # Removed: COPY code_edit.py /code_edit.py
     git_st = f'RUN git clone https://github.com/{author_name}/{repo_name}.git'
     mkdir_st = 'RUN mkdir /repo'
     git_save_st = 'RUN git config --global --add safe.directory /repo'
@@ -332,10 +394,7 @@ def integrate_dockerfile(root_path):
     # 组合最后的顺序
     dockerfile.append(base_image_st)
     dockerfile.append(workdir_st)
-    if os.path.exists(f'{root_path}/patch'):
-        dockerfile.append(copy_st)
-    if len(outer_command) > 0:
-        dockerfile.append(copy_edit_st)
+    # Note: Legacy COPY statements removed (search_patch, code_edit.py not needed for C projects)
     dockerfile.extend(pip_st.splitlines())
     dockerfile.extend(pre_download.splitlines())
     dockerfile.append(git_st)
@@ -343,6 +402,7 @@ def integrate_dockerfile(root_path):
     dockerfile.append(git_save_st)
     dockerfile.append(mv_st)
     dockerfile.append(rm_st)
+    dockerfile.append(checkout_st)  # 🆕 CRITICAL: Checkout specific commit SHA
     dockerfile.extend(container_run_set)
     with open(f'{root_path}/Dockerfile', 'w') as w1:
         w1.write('\n'.join(dockerfile))

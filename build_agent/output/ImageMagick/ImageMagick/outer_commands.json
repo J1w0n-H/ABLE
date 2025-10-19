@@ -1,91 +1,103 @@
 [
     {
-        "GPT_time": 0.9183919429779053
+        "GPT_time": 0.8131685256958008
     },
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6660704612731934
+        "time": 0.6656262874603271
     },
     {
-        "GPT_time": 2.967719078063965
+        "GPT_time": 1.111137866973877
     },
     {
         "command": "cat /repo/configure.ac",
         "returncode": 0,
-        "time": 0.6687848567962646
+        "time": 0.6682145595550537
     },
     {
-        "GPT_time": 0.9942374229431152
+        "GPT_time": 1.3067412376403809
     },
     {
         "command": "grep -E \"AC_CHECK_LIB|PKG_CHECK_MODULES\" /repo/configure.ac",
         "returncode": 0,
-        "time": 0.6657791137695312
+        "time": 0.6657860279083252
     },
     {
-        "GPT_time": 1.7610082626342773
+        "GPT_time": 1.8179657459259033
     },
     {
         "command": "waitinglist add -p libwebp-dev -t apt",
         "returncode": 0,
-        "time": 0.0033643245697021484
+        "time": 0.003202676773071289
     },
     {
         "command": "waitinglist add -p libxml2-dev -t apt",
         "returncode": 0,
-        "time": 0.0030336380004882812
+        "time": 0.0027947425842285156
     },
     {
         "command": "waitinglist add -p libtiff-dev -t apt",
         "returncode": 0,
-        "time": 0.002809762954711914
+        "time": 0.0032961368560791016
+    },
+    {
+        "command": "waitinglist add -p libjpeg-dev -t apt",
+        "returncode": 0,
+        "time": 0.002949953079223633
+    },
+    {
+        "command": "waitinglist add -p libopenmpi-dev -t apt",
+        "returncode": 0,
+        "time": 0.002862691879272461
     },
     {
         "command": "waitinglist add -p libjemalloc-dev -t apt",
         "returncode": 0,
-        "time": 0.0026984214782714844
+        "time": 0.0028314590454101562
     },
     {
-        "command": "waitinglist add -p libgoogle-perftools-dev -t apt",
+        "command": "waitinglist add -p libtcmalloc-minimal4 -t apt",
         "returncode": 0,
-        "time": 0.002798318862915039
+        "time": 0.002663850784301758
     },
     {
-        "GPT_time": 0.7939207553863525
+        "command": "waitinglist add -p libwmf-dev -t apt",
+        "returncode": 0,
+        "time": 0.002516031265258789
     },
     {
         "command": "download",
         "returncode": 0,
-        "time": 35.962220430374146
+        "time": 121.1840238571167
     },
     {
-        "GPT_time": 1.3693490028381348
+        "GPT_time": 2.214688301086426
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6632838249206543
+        "time": 0.6632354259490967
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 18.945515394210815
+        "time": 29.916540145874023
     },
     {
-        "GPT_time": 0.6597616672515869
+        "GPT_time": 0.9163012504577637
     },
     {
-        "command": "make",
+        "command": "make -j4",
         "returncode": 0,
-        "time": 101.53904604911804
+        "time": 43.7673020362854
     },
     {
-        "GPT_time": 0.583033561706543
+        "GPT_time": 1.3633308410644531
     },
     {
         "command": "runtest",
         "returncode": 0,
-        "time": 123.1140832901001
+        "time": 13.777125597000122
     }
 ]

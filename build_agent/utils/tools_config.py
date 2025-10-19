@@ -45,7 +45,7 @@ class Tools(Enum):
     }
     download = {
         "command": 'download',
-        "description": "Download all pending elements in the waiting list at once."
+        "description": "Install ALL packages in the waiting list at once using apt-get. IMPORTANT: (1) Call download ONLY ONCE after adding all packages to waiting list. (2) Do NOT call download multiple times in a row - it processes the entire list each time. (3) After download completes, do NOT call it again unless you add NEW packages to waiting list."
     }
     runtest = {
         "command": 'runtest',

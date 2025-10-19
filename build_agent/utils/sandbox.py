@@ -26,43 +26,13 @@ from parser.parse_command import match_download, match_runtest, match_conflict_s
 from download import download
 from outputcollector import OutputCollector
 from show_msg import show_msg
+from helpers import truncate_msg, SAFE_COMMANDS
 
-# 这部分bash语句通常认为不会对于系统产生影响，如果下面safe_cmd打头，且不存在">"这样的重定向符，则不commit
-safe_cmd = [
-    "cd", "ls", "cat", "echo", "pwd", "whoami", "who", "date", "cal", "df", "du",
-    "free", "uname", "uptime", "w", "ps", "pgrep", "top", "htop", "vmstat", "iostat",
-    "dmesg", "tail", "head", "more", "less", "grep", "find", "locate", "whereis", "which",
-    "file", "stat", "cmp", "diff", "md5sum", "sha256sum", "gzip", "gunzip", "bzip2", "bunzip2",
-    "xz", "unxz", "sort", "uniq", "wc", "tr", "cut", "paste", "tee", "awk", "sed", "env", "printenv",
-    "hostname", "ping", "traceroute", "ssh", "journalctl","lsblk", "blkid", "uptime",
-    "lscpu", "lsusb", "lspci", "lsmod", "dmidecode", "ip", "ifconfig", "netstat", "ss", "route", "nmap",
-    "strace", "ltrace", "time", "nice", "renice", "killall", "printf"
-    ]
+# Feature flag for Command Pattern refactoring
+USE_COMMAND_PATTERN = os.getenv('ARVO_USE_COMMAND_PATTERN', 'false').lower() == 'true'
 
-# 用来截断，传入result_message为字符串，command为运行指令，truncate为正常阈值，bar_truncate为保留疑似进度条数量
-def truncate_msg(result_message, command, truncate=1000, bar_truncate=20, returncode=0):
-    """
-    Truncate command output intelligently:
-    - <= 20 lines: Show full output (regardless of returncode)
-    - > 20 lines && returncode=0: Show first 10 + last 10 lines
-    - > 20 lines && returncode!=0: Show full output (errors need full context)
-    """
-    lines = result_message.splitlines()
-    lines = [x for x in lines if len(x.strip()) > 0]
-    line_count = len(lines)
-    
-    # 1. 20줄 이하 -> 전체 출력 (리턴코드 무관)
-    if line_count <= 20:
-        return result_message
-    
-    # 2. 20줄 이상
-    if returncode == 0:
-        # 성공이면 앞뒤 10줄씩만 (토큰 절약)
-        truncated_output = '\n'.join(lines[:10] + [f'... ({line_count - 20} lines omitted) ...'] + lines[-10:])
-        return truncated_output
-    else:
-        # 실패면 전체 출력 (디버깅 필요)
-        return result_message
+# Legacy: keep for reference (now imported from helpers)
+safe_cmd = SAFE_COMMANDS
 
 def delete_dangling_image():
     # 获取所有 dangling 镜像的 ID
@@ -279,6 +249,17 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
         class Session:
             def __init__(self, sandbox):
                 self.sandbox = sandbox
+                
+                # Initialize CommandExecutor if feature flag is enabled
+                self.command_executor = None
+                if USE_COMMAND_PATTERN:
+                    try:
+                        from command_handlers import CommandExecutor
+                        self.command_executor = CommandExecutor()
+                        print('[INFO] Command Pattern enabled')
+                    except ImportError as e:
+                        print(f'[WARNING] Command Pattern not available: {e}')
+                        self.command_executor = None
             
             def get_returncode(self):
                 echo_returncode = '''echo $?'''
@@ -346,7 +327,24 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                     return False, res
 
             def execute(self, command, waiting_list, conflict_list, timeout=600):
+                """
+                Execute command with optional Command Pattern routing.
+                
+                If USE_COMMAND_PATTERN=true, uses CommandExecutor for cleaner code.
+                Otherwise, uses original logic for stability.
+                """
                 try:
+                    # ========================================
+                    # NEW: Try Command Pattern first (if enabled)
+                    # ========================================
+                    if USE_COMMAND_PATTERN and self.command_executor:
+                        return self.command_executor.execute(
+                            command, self, waiting_list, conflict_list, timeout
+                        )
+                    
+                    # ========================================
+                    # ORIGINAL: Legacy logic (stable)
+                    # ========================================
                     if 'hatch shell' == command.lower().strip():
                         return 'You are not allowed to use commands like `hatch shell` that would open a new shell!!!', -1
                     # 在持久shell中执行명령

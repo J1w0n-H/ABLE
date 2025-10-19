@@ -192,6 +192,77 @@ def main():
         with open(f'{output_root}/output/{full_name}/track.txt', 'a') as a1:
             a1.write(msg + '\n')
     
+    # 🆕 P3.3: Verify Dockerfile can be built
+    def verify_dockerfile(output_path, full_name):
+        """
+        Verify that the generated Dockerfile can actually be built.
+        Returns True if build succeeds, False otherwise.
+        """
+        dockerfile_path = f"{output_path}/Dockerfile"
+        if not os.path.exists(dockerfile_path):
+            return False, "Dockerfile not found"
+        
+        # Create a unique test image name (must be lowercase for Docker)
+        test_image = f"arvo_test_{full_name.replace('/', '_').lower()}_{int(time.time())}"
+        build_cmd = ["docker", "build", "-t", test_image, output_path]
+        
+        try:
+            print(f"\n{'='*70}")
+            print(f"🔍 Verifying Dockerfile build...")
+            print(f"{'='*70}")
+            
+            result = subprocess.run(
+                build_cmd,
+                timeout=600,  # 10 minutes timeout
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode == 0:
+                print(f"✅ Dockerfile builds successfully!")
+                
+                # Clean up test image
+                cleanup_cmd = ["docker", "rmi", test_image]
+                subprocess.run(cleanup_cmd, capture_output=True)
+                
+                return True, "Build successful"
+            else:
+                print(f"❌ Dockerfile build failed!")
+                print(f"Error output (last 50 lines):")
+                error_lines = result.stderr.split('\n')[-50:]
+                print('\n'.join(error_lines))
+                
+                return False, f"Build failed: {result.stderr[-500:]}"
+                
+        except subprocess.TimeoutExpired:
+            msg = "Dockerfile build timed out (>10 minutes)"
+            print(f"⏱️  {msg}")
+            return False, msg
+            
+        except Exception as e:
+            msg = f"Dockerfile verification error: {str(e)}"
+            print(f"❌ {msg}")
+            return False, msg
+    
+    # Run verification
+    dockerfile_valid, verification_msg = verify_dockerfile(
+        f'{output_root}/output/{full_name}',
+        full_name
+    )
+    
+    # Save verification result
+    with open(f'{output_root}/output/{full_name}/dockerfile_verification.txt', 'w') as f:
+        f.write(f"Valid: {dockerfile_valid}\n")
+        f.write(f"Message: {verification_msg}\n")
+        f.write(f"Timestamp: {datetime.now().isoformat()}\n")
+    
+    # Also append to track.txt
+    with open(f'{output_root}/output/{full_name}/track.txt', 'a') as a1:
+        status = "✅ VERIFIED" if dockerfile_valid else "❌ FAILED"
+        a1.write(f'Dockerfile verification: {status}\n')
+        if not dockerfile_valid:
+            a1.write(f'Reason: {verification_msg}\n')
+    
     # 🆕 Close log file
     if hasattr(sys.stdout, 'close') and hasattr(sys.stdout, 'terminal'):
         sys.stdout.close()

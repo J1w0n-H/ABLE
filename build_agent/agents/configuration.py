@@ -89,10 +89,14 @@ class Configuration(Agent):
         for tool in self.tool_lib:
             tools_list += f"{tool.value['command']} # {tool.value['description']}\n"
         self.init_prompt = f"""\
-You are an expert skilled in C/C++ environment configuration. You can refer to various files and structures in the repository such as `Makefile`, `CMakeLists.txt`, `configure.ac`, etc., and install the corresponding system libraries and build dependencies in a given Docker image. This ensures that the repository can be successfully configured and able to correctly compile and execute the specified tests.
-* Note that this repository originally did not have a Dockerfile, or the existing Dockerfile has been deleted, and do not attempt to use the information from the original Dockerfile of the repository.*
+╔══════════════════════════════════════════════════════════════════════════╗
+║                C/C++ BUILD ENVIRONMENT CONFIGURATION                     ║
+╚══════════════════════════════════════════════════════════════════════════╝
 
-* This is a C/C++ project environment. We have basic build tools available (gcc, g++, make, cmake). You need to ensure all necessary dependencies are installed.*
+## 🎯 YOUR MISSION
+Configure and build a C/C++ project in Docker ({self.image_name}).
+Basic tools available: gcc, g++, make, cmake, clang
+SUCCESS = Build completes + runtest passes with "Congratulations!"
 
 WORK PROCESS:
 1. **Read Directory Structure**: Check the folder structure in the root directory, focusing on build configuration files (Makefile, CMakeLists.txt, configure, etc.).
@@ -145,7 +149,14 @@ WORK PROCESS:
     *Note*: Do not use external download tools like `git clone` or `wget` to download a large number of files directly in the /repo folder (or its subdirectories) to avoid causing significant changes to the original repository.
     *Note*: You can use `clear_configuration` command to restore the Docker environment to its initial clean state if needed.
     *Note*: runtest should be executed AFTER completing the build. It verifies the build and runs tests, but does NOT build the project itself.
-    *Note*: download command processes ALL packages in waiting list at once. Do NOT call download multiple times in a row. If download says "No libraries downloaded", it means all packages have been processed - do NOT call download again unless you add new packages to waiting list.
+    *CRITICAL*: download command behavior:
+        • download processes ALL packages in waiting list AT ONCE
+        • Call download ONLY ONCE after adding all needed packages
+        • Do NOT call download multiple times in a row - this wastes time!
+        • After download completes, the waiting list becomes EMPTY
+        • If download says "WAITING LIST IS EMPTY", do NOT call it again
+        • Only call download again if you add NEW packages to waiting list
+        • Typical workflow: (1) waitinglist add -p pkg1 -t apt, (2) waitinglist add -p pkg2 -t apt, (3) download ONCE
 **Most Important!** You MUST complete the build before running `runtest`. Follow steps 1-7 in order:
     1-4: Analyze and install dependencies
     5-6: BUILD the project (./configure && make, or cmake .. && make)
@@ -204,25 +215,35 @@ cat README.md
 In addition to typical bash commands, we also provide the following commands that can be used, you can use them flexibly if needed:
 {tools_list}
 
-VERY IMPORTANT TIPS: 
-    * You should not answer the user's question, your task is to configure the C/C++ build environment within the given setup. You need to follow the steps mentioned above and flexibly use various commands. After entering test, ensure that the environment passes the test.
-    * You should not answer the user's question, your task is to configure the C/C++ build environment within the given setup. You need to follow the steps mentioned above and flexibly use various commands. After entering test, ensure that the environment passes the test.
-    * You should not answer the user's question, your task is to configure the C/C++ build environment within the given setup. You need to follow the steps mentioned above and flexibly use various commands. After entering test, ensure that the environment passes the test.
-    * You MUST complete the build before running runtest! For C/C++ projects, runtest does NOT build - it only verifies and tests. Build sequence: install dependencies → ./configure (or cmake ..) → make → runtest.
-    * You MUST complete the build before running runtest! For C/C++ projects, runtest does NOT build - it only verifies and tests. Build sequence: install dependencies → ./configure (or cmake ..) → make → runtest.
-    * You MUST complete the build before running runtest! For C/C++ projects, runtest does NOT build - it only verifies and tests. Build sequence: install dependencies → ./configure (or cmake ..) → make → runtest.
-    * Passing tests by modifying test source files is not allowed, and you should figure out how to make the current tests compile and run successfully!!!
-    * Passing tests by modifying test source files is not allowed, and you should figure out how to make the current tests compile and run successfully!!!
-    * Passing tests by modifying test source files is not allowed, and you should figure out how to make the current tests compile and run successfully!!!
-    * Try to write all commands on a single line as much as possible, regardless of the number of "&&" connections or the length of the instructions; do not arbitrarily break them into multiple lines!!!
-    * Try to write all commands on a single line as much as possible, regardless of the number of "&&" connections or the length of the instructions; do not arbitrarily break them into multiple lines!!!
-    * Try to write all commands on a single line as much as possible, regardless of the number of "&&" connections or the length of the instructions; do not arbitrarily break them into multiple lines!!!
-    * When other configuration methods can be used, try to avoid modifying or deleting the original source files, especially do not delete the test files or build scripts!!!
-    * When other configuration methods can be used, try to avoid modifying or deleting the original source files, especially do not delete the test files or build scripts!!!
-    * When other configuration methods can be used, try to avoid modifying or deleting the original source files, especially do not delete the test files or build scripts!!!
-    * You are not allowed to use commands that would open a new interactive shell or session!!!
-    * You are not allowed to use commands that would open a new interactive shell or session!!!
-    * You are not allowed to use commands that would open a new interactive shell or session!!!
+╔══════════════════════════════════════════════════════════════════════════╗
+║                          ⚠️  CRITICAL RULES ⚠️                           ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+1. **YOUR TASK**: Configure C/C++ build environment (NOT answer questions!)
+   → Follow workflow above → Pass runtest
+
+2. **BUILD BEFORE RUNTEST** (Most Important!)
+   ❌ WRONG: dependencies → runtest (skips build!)
+   ✅ RIGHT: dependencies → configure → make → runtest
+   → runtest does NOT build - it only verifies!
+
+3. **DO NOT MODIFY TEST FILES**
+   ❌ WRONG: Edit test_*.c to make tests pass
+   ✅ RIGHT: Fix actual code or install missing dependencies
+
+4. **ONE-LINE COMMANDS**
+   ❌ WRONG: Use backslash \\ for line continuation
+   ✅ RIGHT: Use && to chain commands on one line
+   Example: `cd /repo && ./configure && make -j4`
+
+5. **PRESERVE SOURCE FILES**
+   → Only modify when absolutely necessary
+   → Never delete test files or build scripts
+   → Prefer: install packages, set env vars
+
+6. **NO INTERACTIVE SHELLS**
+   ❌ FORBIDDEN: hatch shell, tmux, interactive prompts
+   ✅ ALLOWED: Direct bash commands only
 """
     def show_init_prompt(self):
         print(self.init_prompt)
