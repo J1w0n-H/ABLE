@@ -1,2 +1,2 @@
-For this simple project, the environment is considered correctly configured.
+Simple project detected. No tests to run.
 Congratulations, you have successfully configured the environment!

@@ -1,44 +1,42 @@
 [
     {
-        "GPT_time": 1.412367343902588
+        "GPT_time": 1.038813591003418
     },
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.66571044921875
+        "time": 0.66461181640625
     },
     {
-        "GPT_time": 1.5744528770446777
+        "GPT_time": 1.766841173171997
     },
     {
         "command": "cat /repo/hello.c",
         "returncode": 0,
-        "time": 0.6660130023956299
+        "time": 0.665414571762085
     },
     {
-        "GPT_time": 0.7976405620574951
+        "GPT_time": 0.866084098815918
     },
     {
-        "command": "cd /repo",
+        "command": "gcc /repo/hello.c -o /repo/hello",
         "returncode": 0,
-        "time": 0.6645979881286621
+        "time": 0.8513729572296143
     },
     {
-        "command": "gcc hello.c -o hello",
+        "GPT_time": 0.6405425071716309
+    },
+    {
+        "command": "/repo/hello",
         "returncode": 0,
-        "time": 0.8060171604156494
+        "time": 0.7781562805175781
     },
     {
-        "command": "./hello",
-        "returncode": 0,
-        "time": 0.7775213718414307
-    },
-    {
-        "GPT_time": 1.1798498630523682
+        "GPT_time": 0.8922920227050781
     },
     {
         "command": "runtest",
         "returncode": 0,
-        "time": 0.8116416931152344
+        "time": 0.7908022403717041
     }
 ]

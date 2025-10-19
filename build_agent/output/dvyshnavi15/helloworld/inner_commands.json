@@ -2,61 +2,61 @@
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6086163520812988,
+        "time": 0.6086983680725098,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6287167072296143,
+        "time": 0.6318626403808594,
         "dir": "/src"
     },
     {
         "command": "cat /repo/hello.c",
         "returncode": 0,
-        "time": 0.6096124649047852,
+        "time": 0.6087543964385986,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6300458908081055,
+        "time": 0.6249871253967285,
         "dir": "/src"
     },
     {
-        "command": "cd /repo",
+        "command": "gcc /repo/hello.c -o /repo/hello",
         "returncode": 0,
-        "time": 0.6078691482543945,
+        "time": 0.6846282482147217,
         "dir": "/src"
-    },
-    {
-        "command": "gcc hello.c -o hello",
-        "returncode": 0,
-        "time": 0.6317269802093506,
-        "dir": "/repo"
-    },
-    {
-        "command": "./hello",
-        "returncode": 0,
-        "time": 0.6076173782348633,
-        "dir": "/repo"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6275436878204346,
-        "dir": "/repo"
+        "time": 0.6253523826599121,
+        "dir": "/src"
+    },
+    {
+        "command": "/repo/hello",
+        "returncode": 0,
+        "time": 0.6082534790039062,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6267120838165283,
+        "dir": "/src"
     },
     {
         "command": "python /home/tools/runtest.py",
         "returncode": 0,
-        "time": 0.625605583190918,
-        "dir": "/repo"
+        "time": 0.6237807273864746,
+        "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6300842761993408,
-        "dir": "/repo"
+        "time": 0.6253001689910889,
+        "dir": "/src"
     }
 ]

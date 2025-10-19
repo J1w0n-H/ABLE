@@ -1,3 +1,11 @@
+✅ Essential files found (Makefile exists).
+
+Running tests: ctest --output-on-failure || make test
+------------------------------------------------------------
+------------------------------------------------------------
+✅ Tests passed!
+
 Congratulations, you have successfully configured the environment!
+
 Test output:
 Test project /repo/build

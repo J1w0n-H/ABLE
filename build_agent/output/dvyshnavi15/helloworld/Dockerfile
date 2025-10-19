@@ -6,5 +6,5 @@ RUN mkdir /repo
 RUN git config --global --add safe.directory /repo
 RUN cp -r /helloworld/. /repo && rm -rf /helloworld/
 RUN rm -rf /helloworld
-RUN cd /repo && gcc hello.c -o hello
-RUN cd /repo && ./hello
+RUN cd /src && gcc /repo/hello.c -o /repo/hello
+RUN cd /src && /repo/hello

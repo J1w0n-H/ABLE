@@ -1,401 +1,339 @@
 [
     {
-        "GPT_time": 1.7455477714538574
+        "GPT_time": 0.8625104427337646
     },
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6652965545654297
+        "time": 0.6678614616394043
     },
     {
-        "GPT_time": 1.4286112785339355
-    },
-    {
-        "command": "head -50 /repo/CMakeLists.txt",
-        "returncode": 0,
-        "time": 0.6645822525024414
-    },
-    {
-        "GPT_time": 1.6398637294769287
-    },
-    {
-        "command": "grep -n \"find_package\\|pkg_check_modules\" /repo/CMakeLists.txt",
-        "returncode": 0,
-        "time": 0.6644291877746582
-    },
-    {
-        "GPT_time": 1.896592140197754
-    },
-    {
-        "command": "waitinglist add -p libcares-dev -t apt",
-        "returncode": 0,
-        "time": 0.0035414695739746094
-    },
-    {
-        "command": "waitinglist add -p libssl-dev -t apt",
-        "returncode": 0,
-        "time": 0.003451108932495117
-    },
-    {
-        "command": "waitinglist add -p libmbedtls-dev -t apt",
-        "returncode": 0,
-        "time": 0.002665996551513672
-    },
-    {
-        "command": "waitinglist add -p libwolfssl-dev -t apt",
-        "returncode": 0,
-        "time": 0.0027964115142822266
-    },
-    {
-        "command": "waitinglist add -p libgnutls28-dev -t apt",
-        "returncode": 0,
-        "time": 0.002755403518676758
-    },
-    {
-        "command": "waitinglist add -p libnghttp2-dev -t apt",
-        "returncode": 0,
-        "time": 0.0029904842376708984
-    },
-    {
-        "command": "waitinglist add -p libnghttp3-dev -t apt",
-        "returncode": 0,
-        "time": 0.002700328826904297
-    },
-    {
-        "command": "waitinglist add -p libldap2-dev -t apt",
-        "returncode": 0,
-        "time": 0.002693653106689453
-    },
-    {
-        "command": "waitinglist add -p libidn2-0-dev -t apt",
-        "returncode": 0,
-        "time": 0.0027103424072265625
-    },
-    {
-        "command": "waitinglist add -p libpsl-dev -t apt",
-        "returncode": 0,
-        "time": 0.0027222633361816406
-    },
-    {
-        "command": "waitinglist add -p libssh2-1-dev -t apt",
-        "returncode": 0,
-        "time": 0.002684354782104492
-    },
-    {
-        "command": "waitinglist add -p libssh-dev -t apt",
-        "returncode": 0,
-        "time": 0.0032224655151367188
-    },
-    {
-        "command": "waitinglist add -p libgsasl7-dev -t apt",
-        "returncode": 0,
-        "time": 0.0028247833251953125
-    },
-    {
-        "command": "waitinglist add -p libuv1-dev -t apt",
-        "returncode": 0,
-        "time": 0.002944469451904297
-    },
-    {
-        "command": "waitinglist add -p librtmp-dev -t apt",
-        "returncode": 0,
-        "time": 0.002709627151489258
-    },
-    {
-        "GPT_time": 2.064318895339966
-    },
-    {
-        "command": "download",
-        "returncode": 0,
-        "time": 66.76342296600342
-    },
-    {
-        "GPT_time": 0.7323629856109619
-    },
-    {
-        "command": "apt-cache search c-ares",
-        "returncode": 0,
-        "time": 1.5631422996520996
-    },
-    {
-        "GPT_time": 1.0673964023590088
-    },
-    {
-        "command": "waitinglist add -p libc-ares-dev -t apt",
-        "returncode": 0,
-        "time": 0.0032880306243896484
-    },
-    {
-        "command": "download",
-        "returncode": 0,
-        "time": 2.3997037410736084
-    },
-    {
-        "GPT_time": 0.90213942527771
-    },
-    {
-        "command": "runtest",
-        "returncode": 0,
-        "time": 0.7134003639221191
-    },
-    {
-        "GPT_time": 1.350750207901001
-    },
-    {
-        "command": "mkdir /repo/build",
-        "returncode": 0,
-        "time": 0.747910737991333
-    },
-    {
-        "command": "cd /repo/build",
-        "returncode": 0,
-        "time": 0.6638658046722412
-    },
-    {
-        "command": "cmake ..",
-        "returncode": 0,
-        "time": 7.170278072357178
-    },
-    {
-        "command": "make",
-        "returncode": 0,
-        "time": 11.922731876373291
-    },
-    {
-        "GPT_time": 1.7136814594268799
-    },
-    {
-        "command": "grep -n \"find_package\\|PKG_CHECK\" /repo/CMakeLists.txt",
-        "returncode": 0,
-        "time": 0.665658712387085
-    },
-    {
-        "GPT_time": 2.1996185779571533
-    },
-    {
-        "command": "waitinglist add -p libssl-dev -t apt",
-        "returncode": 0,
-        "time": 0.0037734508514404297
-    },
-    {
-        "command": "waitinglist add -p libmbedtls-dev -t apt",
-        "returncode": 0,
-        "time": 0.003275156021118164
-    },
-    {
-        "command": "waitinglist add -p libwolfssl-dev -t apt",
-        "returncode": 0,
-        "time": 0.0030074119567871094
-    },
-    {
-        "command": "waitinglist add -p libgnutls28-dev -t apt",
-        "returncode": 0,
-        "time": 0.0029757022857666016
-    },
-    {
-        "command": "waitinglist add -p libnghttp2-dev -t apt",
-        "returncode": 0,
-        "time": 0.0027098655700683594
-    },
-    {
-        "command": "waitinglist add -p libldap2-dev -t apt",
-        "returncode": 0,
-        "time": 0.0026564598083496094
-    },
-    {
-        "command": "waitinglist add -p libidn2-0-dev -t apt",
-        "returncode": 0,
-        "time": 0.0028257369995117188
-    },
-    {
-        "command": "waitinglist add -p libpsl-dev -t apt",
-        "returncode": 0,
-        "time": 0.003330707550048828
-    },
-    {
-        "command": "waitinglist add -p libssh2-1-dev -t apt",
-        "returncode": 0,
-        "time": 0.002810239791870117
-    },
-    {
-        "command": "waitinglist add -p libssh-dev -t apt",
-        "returncode": 0,
-        "time": 0.0026557445526123047
-    },
-    {
-        "command": "waitinglist add -p libgsasl7-dev -t apt",
-        "returncode": 0,
-        "time": 0.0028235912322998047
-    },
-    {
-        "command": "waitinglist add -p libuv1-dev -t apt",
-        "returncode": 0,
-        "time": 0.0026941299438476562
-    },
-    {
-        "command": "waitinglist add -p librtmp-dev -t apt",
-        "returncode": 0,
-        "time": 0.0028426647186279297
-    },
-    {
-        "GPT_time": 0.7271378040313721
-    },
-    {
-        "command": "download",
-        "returncode": 0,
-        "time": 38.34833526611328
-    },
-    {
-        "GPT_time": 0.7718501091003418
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.663637638092041
-    },
-    {
-        "command": "mkdir build",
-        "returncode": 0,
-        "time": 0.7241652011871338
-    },
-    {
-        "command": "cd build",
-        "returncode": 0,
-        "time": 0.16153836250305176
-    },
-    {
-        "command": "cmake ..",
-        "returncode": 0,
-        "time": 0.6952013969421387
-    },
-    {
-        "GPT_time": 0.6603658199310303
-    },
-    {
-        "command": "cd /repo/build",
-        "returncode": 0,
-        "time": 0.662196159362793
-    },
-    {
-        "command": "cmake ..",
-        "returncode": 0,
-        "time": 1.2551677227020264
-    },
-    {
-        "GPT_time": 0.7465212345123291
-    },
-    {
-        "command": "make",
-        "returncode": 0,
-        "time": 11.708139419555664
-    },
-    {
-        "GPT_time": 1.1136820316314697
-    },
-    {
-        "command": "head -50 /repo/CMakeLists.txt",
-        "returncode": 0,
-        "time": 0.6650197505950928
-    },
-    {
-        "GPT_time": 1.0939629077911377
-    },
-    {
-        "command": "grep -n \"find_package\\|pkg_check_modules\" /repo/CMakeLists.txt",
-        "returncode": 0,
-        "time": 0.6657848358154297
-    },
-    {
-        "GPT_time": 1.8527531623840332
-    },
-    {
-        "command": "head -50 /repo/configure.ac",
-        "returncode": 0,
-        "time": 0.6635417938232422
-    },
-    {
-        "GPT_time": 0.8637580871582031
+        "GPT_time": 0.9433319568634033
     },
     {
         "command": "grep -n \"AC_CHECK_LIB\\|PKG_CHECK_MODULES\" /repo/configure.ac",
         "returncode": 0,
-        "time": 0.6651966571807861
+        "time": 0.6654469966888428
     },
     {
-        "GPT_time": 1.8448519706726074
+        "GPT_time": 1.699655294418335
+    },
+    {
+        "command": "waitinglist add -p libnsl-dev -t apt",
+        "returncode": 0,
+        "time": 0.003929615020751953
+    },
+    {
+        "command": "waitinglist add -p libsockets-dev -t apt",
+        "returncode": 0,
+        "time": 0.0028285980224609375
+    },
+    {
+        "command": "waitinglist add -p libwatt-dev -t apt",
+        "returncode": 0,
+        "time": 0.0030791759490966797
+    },
+    {
+        "command": "waitinglist add -p libnetwork-dev -t apt",
+        "returncode": 0,
+        "time": 0.0027523040771484375
     },
     {
         "command": "waitinglist add -p zlib1g-dev -t apt",
         "returncode": 0,
-        "time": 0.0032694339752197266
+        "time": 0.0025985240936279297
     },
     {
         "command": "waitinglist add -p libbrotli-dev -t apt",
         "returncode": 0,
-        "time": 0.0028192996978759766
+        "time": 0.0027391910552978516
     },
     {
         "command": "waitinglist add -p libzstd-dev -t apt",
         "returncode": 0,
-        "time": 0.0027909278869628906
+        "time": 0.002950429916381836
+    },
+    {
+        "command": "waitinglist add -p libpsl-dev -t apt",
+        "returncode": 0,
+        "time": 0.0026895999908447266
     },
     {
         "command": "waitinglist add -p libngtcp2-dev -t apt",
         "returncode": 0,
-        "time": 0.0028336048126220703
+        "time": 0.0027294158935546875
     },
     {
         "command": "waitinglist add -p libnghttp3-dev -t apt",
         "returncode": 0,
-        "time": 0.0030753612518310547
+        "time": 0.002544403076171875
     },
     {
         "command": "waitinglist add -p libquiche-dev -t apt",
         "returncode": 0,
-        "time": 0.002705097198486328
+        "time": 0.0026721954345703125
+    },
+    {
+        "command": "waitinglist add -p libuv1-dev -t apt",
+        "returncode": 0,
+        "time": 0.0028810501098632812
     },
     {
         "command": "waitinglist add -p libpthread-stubs0-dev -t apt",
         "returncode": 0,
-        "time": 0.003131389617919922
+        "time": 0.0026226043701171875
     },
     {
-        "command": "waitinglist show",
-        "returncode": 0,
-        "time": 0.0027861595153808594
-    },
-    {
-        "GPT_time": 1.0059843063354492
+        "GPT_time": 0.9907557964324951
     },
     {
         "command": "download",
         "returncode": 0,
-        "time": 29.438610792160034
+        "time": 77.63597559928894
     },
     {
-        "GPT_time": 0.9745762348175049
+        "GPT_time": 1.373427391052246
     },
     {
-        "command": "waitinglist clear",
+        "command": "apt-cache search libnsl-dev libsockets-dev libwatt-dev libnetwork-dev libngtcp2-dev libnghttp3-dev libquiche-dev",
         "returncode": 0,
-        "time": 0.0032601356506347656
+        "time": 1.6368041038513184
     },
     {
-        "command": "waitinglist add -p libngtcp2-0 -t apt",
+        "GPT_time": 1.5730345249176025
+    },
+    {
+        "command": "grep -n \"AC_CHECK_LIB\" /repo/configure.ac",
         "returncode": 0,
-        "time": 0.0026979446411132812
+        "time": 0.6641919612884521
+    },
+    {
+        "GPT_time": 32.24558067321777
+    },
+    {
+        "command": "grep -n \"find_package\\|pkg_check_modules\" /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.666273832321167
+    },
+    {
+        "GPT_time": 1.0433375835418701
+    },
+    {
+        "command": "waitinglist add -p libnghttp3-dev -t apt",
+        "returncode": 0,
+        "time": 0.003416776657104492
+    },
+    {
+        "command": "waitinglist add -p libngtcp2-dev -t apt",
+        "returncode": 0,
+        "time": 0.0027916431427001953
+    },
+    {
+        "command": "waitinglist add -p libquiche-dev -t apt",
+        "returncode": 0,
+        "time": 0.0027272701263427734
     },
     {
         "command": "download",
         "returncode": 0,
-        "time": 7.372295141220093
+        "time": 23.508105754852295
     },
     {
-        "GPT_time": 0.8728513717651367
+        "GPT_time": 0.9392735958099365
+    },
+    {
+        "command": "apt-cache search libnghttp3-dev libngtcp2-dev libquiche-dev",
+        "returncode": 0,
+        "time": 1.6203017234802246
+    },
+    {
+        "GPT_time": 1.0406532287597656
+    },
+    {
+        "command": "grep -n \"AC_CHECK_LIB\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6661245822906494
+    },
+    {
+        "GPT_time": 1.9189414978027344
+    },
+    {
+        "command": "# Checking the official repositories for installation instructions curl -s https://github.com/ngtcp2/ngtcp2 | grep -i \"installation\" curl -s https://github.com/ngtcp2/nghttp3 | grep -i \"installation\" curl -s https://github.com/cloudflare/quiche | grep -i \"installation\"",
+        "returncode": 0,
+        "time": 0.2525155544281006
+    },
+    {
+        "GPT_time": 1.2443861961364746
+    },
+    {
+        "command": "curl -s https://raw.githubusercontent.com/ngtcp2/ngtcp2/master/README.md | grep -i \"installation\" curl -s https://raw.githubusercontent.com/ngtcp2/nghttp3/master/README.md | grep -i \"installation\" curl -s https://raw.githubusercontent.com/cloudflare/quiche/master/README.md | grep -i \"installation\"",
+        "returncode": 0,
+        "time": 0.7799689769744873
+    },
+    {
+        "GPT_time": 0.7763581275939941
+    },
+    {
+        "command": "curl -s https://raw.githubusercontent.com/ngtcp2/ngtcp2/master/README.md | grep -i \"installation\"",
+        "returncode": 0,
+        "time": 0.7650103569030762
+    },
+    {
+        "GPT_time": 0.7072019577026367
+    },
+    {
+        "command": "curl -s https://raw.githubusercontent.com/ngtcp2/ngtcp2/master/README.md",
+        "returncode": 0,
+        "time": 0.7904212474822998
+    },
+    {
+        "GPT_time": 0.9231626987457275
+    },
+    {
+        "command": "curl -s https://raw.githubusercontent.com/ngtcp2/ngtcp2/master/README.md | grep -i \"installation\"",
+        "returncode": 0,
+        "time": 0.722480058670044
+    },
+    {
+        "GPT_time": 0.9105856418609619
+    },
+    {
+        "command": "curl -s https://raw.githubusercontent.com/ngtcp2/ngtcp2/master/README.md",
+        "returncode": 0,
+        "time": 0.7921023368835449
+    },
+    {
+        "GPT_time": 2.646726369857788
+    },
+    {
+        "command": "curl -s https://raw.githubusercontent.com/ngtcp2/ngtcp2/master/README.md | less",
+        "returncode": 1,
+        "time": 1200.294442653656
+    },
+    {
+        "GPT_time": 0.9697597026824951
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6644821166992188
+    },
+    {
+        "GPT_time": 0.9872934818267822
+    },
+    {
+        "command": "grep -n \"AC_CHECK_LIB\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6656465530395508
+    },
+    {
+        "GPT_time": 0.8751339912414551
+    },
+    {
+        "command": "grep -n \"PKG_CHECK_MODULES\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.16111207008361816
+    },
+    {
+        "GPT_time": 1.1850461959838867
+    },
+    {
+        "command": "cat /repo/Makefile.am",
+        "returncode": 0,
+        "time": 0.6656219959259033
+    },
+    {
+        "GPT_time": 0.8073000907897949
+    },
+    {
+        "command": "grep -n \"find_package\" /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6110889911651611
+    },
+    {
+        "GPT_time": 1.5916869640350342
+    },
+    {
+        "command": "cat /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6685140132904053
+    },
+    {
+        "GPT_time": 0.7776138782501221
+    },
+    {
+        "command": "grep -A5 -B5 \"find_package\" /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.664440393447876
+    },
+    {
+        "GPT_time": 1.616323709487915
+    },
+    {
+        "command": "grep -A5 -B5 \"pkg_check_modules\" /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6647598743438721
+    },
+    {
+        "GPT_time": 0.9533343315124512
+    },
+    {
+        "command": "waitinglist add -p libgnutls28-dev -t apt",
+        "returncode": 0,
+        "time": 0.003381967544555664
+    },
+    {
+        "command": "waitinglist add -p libc-ares-dev -t apt",
+        "returncode": 0,
+        "time": 0.002900362014770508
+    },
+    {
+        "command": "waitinglist add -p librtmp-dev -t apt",
+        "returncode": 0,
+        "time": 0.0028078556060791016
+    },
+    {
+        "command": "download",
+        "returncode": 0,
+        "time": 10.643156051635742
+    },
+    {
+        "GPT_time": 0.6709432601928711
+    },
+    {
+        "command": "mkdir -p /repo/build",
+        "returncode": 0,
+        "time": 0.9786579608917236
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6627676486968994
+    },
+    {
+        "command": "cmake ..",
+        "returncode": 0,
+        "time": 7.293182849884033
+    },
+    {
+        "GPT_time": 0.9981889724731445
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6636903285980225
+    },
+    {
+        "command": "make",
+        "returncode": 0,
+        "time": 14.974757194519043
+    },
+    {
+        "GPT_time": 1.032679557800293
     },
     {
         "command": "runtest",
         "returncode": 0,
-        "time": 0.7708797454833984
+        "time": 2.3305957317352295
     }
 ]
