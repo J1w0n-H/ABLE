@@ -160,7 +160,7 @@ See `docs/analysis/FINAL_PIPELINE_REVIEW.md` for details.
 
 ## 🙏 Acknowledgments
 
-- Based on HereNThere project by Bytedance
+- Based on Repo2Run project by Bytedance
 - Tested on OSS-Fuzz base-builder image
 - LLM: OpenAI GPT-4o-2024-05-13
 
@@ -230,7 +230,7 @@ python3 build_agent/main.py dvyshnavi15/helloworld 2449df7 .
 
 ## 📝 Changelog
 
-See [CHANGES.md](CHANGES.md) for detailed changes from HereNThere.  
+See [CHANGES.md](CHANGES.md) for detailed changes from Repo2Run.  
 See [VERSION_HISTORY.md](VERSION_HISTORY.md) for version comparison.  
 See [v2.2/02_IMPROVEMENTS.md](v2.2/02_IMPROVEMENTS.md) for improvement details.
 

@@ -63,7 +63,7 @@ ARVO2.0/
 
 ### 3. FILE_CHANGES_SUMMARY.md
 **내용**: 수정/삭제/추가된 파일 목록
-- HereNThere에서 복사된 파일
+- Repo2Run에서 복사된 파일
 - 수정된 파일 (6개)
 - 삭제/추가된 파일
 - 코드 라인 통계

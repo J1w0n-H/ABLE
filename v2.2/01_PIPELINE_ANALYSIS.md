@@ -57,7 +57,7 @@
 #### 3. integrate_dockerfile.py - 존재하지 않는 도구 체크
 - **문제**: `run_make.py`, `apt_install.py` 체크 (실제로 없음)
 - **영향**: apt_download.py가 Dockerfile에 그대로 → 빌드 실패
-- **근본 원인**: HereNThere에서 복사한 코드 (실제 패턴과 미스매치)
+- **근본 원인**: Repo2Run에서 복사한 코드 (실제 패턴과 미스매치)
 
 ---
 

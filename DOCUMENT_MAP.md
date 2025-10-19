@@ -14,7 +14,7 @@
 | **README.md** | Project overview, quick start | ~300 |
 | **QUICK_START.md** | 5-minute quick start guide | ~100 |
 | **VERSION_HISTORY.md** | Version history and changes | ~150 |
-| **CHANGES.md** | Detailed changes from HereNThere | ~1680 |
+| **CHANGES.md** | Detailed changes from Repo2Run | ~1680 |
 
 ---
 

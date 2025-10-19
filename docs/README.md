@@ -6,7 +6,7 @@
 - **README.md** - Project overview and quick start
 - **QUICK_START.md** - Quick start guide
 - **VERSION_HISTORY.md** - Version history
-- **CHANGES.md** - Detailed changes from HereNThere
+- **CHANGES.md** - Detailed changes from Repo2Run
 
 ### `v2.2/` (Current Version) ⭐
 - Latest version documentation

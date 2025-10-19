@@ -50,7 +50,7 @@
 **[03_MIGRATION.md](03_MIGRATION.md)**
 
 **내용:**
-- HereNThere (Python) → ARVO2.0 (C/C++)
+- Repo2Run (Python) → ARVO2.0 (C/C++)
 - Docker 환경 변경
 - 프롬프트 철학 전환
 - 빌드 시스템 지원

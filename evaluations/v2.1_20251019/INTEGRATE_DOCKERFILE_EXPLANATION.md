@@ -201,11 +201,11 @@ if 'cmake' in command:  # ← 매칭됨!
 
 ## 🎯 왜 이런 코드가 있었나?
 
-### 추측: HereNThere (Python 버전)에서 복사
+### 추측: Repo2Run (Python 버전)에서 복사
 
-HereNThere 프로젝트에는 실제로 이런 도구들이 있었을 가능성:
+Repo2Run 프로젝트에는 실제로 이런 도구들이 있었을 가능성:
 ```python
-# HereNThere/build_agent/tools/
+# Repo2Run/build_agent/tools/
 run_make.py          # ← 있었음?
 run_cmake.py         # ← 있었음?
 pip_download.py      # ← 있음 (실제 사용)

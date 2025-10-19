@@ -273,7 +273,7 @@ Net: +10,523 lines
 ## 🙏 Credits
 
 **Developed by:** ARVO Team  
-**Based on:** HereNThere (Python) → ARVO2.0 (C/C++)  
+**Based on:** Repo2Run (Python) → ARVO2.0 (C/C++)  
 **Testing:** ImageMagick, curl, helloworld  
 **Period:** 2025-10-17 ~ 2025-10-19
 

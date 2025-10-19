@@ -1,6 +1,6 @@
 # 🔄 3. Python → C/C++ 마이그레이션
 
-> HereNThere (Python) → ARVO2.0 (C/C++) 전환 작업
+> Repo2Run (Python) → ARVO2.0 (C/C++) 전환 작업
 
 ---
 
@@ -17,7 +17,7 @@
 ### **1.1 기본 원칙**
 
 ```
-"기존 레포 HereNThere에서 어떻게 했는지 확인하고 똑같이 구현해, 
+"기존 레포 Repo2Run에서 어떻게 했는지 확인하고 똑같이 구현해, 
  파이썬 의존인 부분만 고치고"
 ```
 
@@ -48,7 +48,7 @@ Option A: 하나의 시스템에 Python + C/C++ 지원
   → 유지보수 어려움
   
 Option B: 언어별 전문 시스템 ✅ (선택)
-  - HereNThere: Python 전문
+  - Repo2Run: Python 전문
   - ARVO2.0: C/C++ 전문
   → 단순함
   → 명확함
@@ -62,7 +62,7 @@ Option B: 언어별 전문 시스템 ✅ (선택)
 
 #### **Base Image**
 
-| 항목 | HereNThere | ARVO2.0 |
+| 항목 | Repo2Run | ARVO2.0 |
 |------|------------|---------|
 | **이미지** | `python:3.10` | `gcr.io/oss-fuzz-base/base-builder` |
 | **목적** | Python 환경 | C/C++ 빌드 환경 |
@@ -70,7 +70,7 @@ Option B: 언어별 전문 시스템 ✅ (선택)
 
 **변경 코드:**
 ```python
-# Before (HereNThere)
+# Before (Repo2Run)
 FROM python:3.10
 RUN pip install poetry pytest pipdeptree
 
@@ -87,7 +87,7 @@ FROM gcr.io/oss-fuzz-base/base-builder
 
 **해결:**
 ```python
-# Before (HereNThere)
+# Before (Repo2Run)
 self.container = self.client.containers.run(...)
 
 # After (ARVO2.0)
@@ -103,7 +103,7 @@ self.container = self.client.containers.run(
 
 #### **Python → C/C++ 철학 전환**
 
-| 측면 | Python (HereNThere) | C/C++ (ARVO2.0) |
+| 측면 | Python (Repo2Run) | C/C++ (ARVO2.0) |
 |------|---------------------|-----------------|
 | **테스트** | "Try testing (optional)" | "⚠️ MANDATORY: Build first!" |
 | **유연성** | "Be flexible" | "Follow steps 1-7 in order" |
@@ -112,7 +112,7 @@ self.container = self.client.containers.run(
 
 **핵심 변경:**
 ```diff
-# Before (HereNThere - Python)
+# Before (Repo2Run - Python)
 - "Try testing (optional)"
 - "You can directly run runtest"
 - "Be flexible"
@@ -131,7 +131,7 @@ self.container = self.client.containers.run(
 
 #### **패키지 관리**
 
-| 작업 | HereNThere | ARVO2.0 |
+| 작업 | Repo2Run | ARVO2.0 |
 |------|------------|---------|
 | **의존성 분석** | pipreqs | CMakeLists.txt/configure.ac 분석 |
 | **설치 도구** | pip/Poetry | apt-get |
@@ -140,7 +140,7 @@ self.container = self.client.containers.run(
 
 **변경:**
 ```python
-# Before (HereNThere)
+# Before (Repo2Run)
 Tools.pip_download        # pip install
 Tools.poetry_download     # poetry install
 Tools.pipfreeze           # pip freeze
@@ -154,7 +154,7 @@ Tools.download            # apt-get install (from waiting list)
 
 #### **테스트 실행**
 
-| 항목 | HereNThere | ARVO2.0 |
+| 항목 | Repo2Run | ARVO2.0 |
 |------|------------|---------|
 | **테스트 도구** | pytest | ctest / make test |
 | **실행 명령** | `pytest` | `runtest` → ctest or make test |
@@ -162,7 +162,7 @@ Tools.download            # apt-get install (from waiting list)
 
 **runtest.py 완전 재작성:**
 ```python
-# Before (HereNThere - pytest)
+# Before (Repo2Run - pytest)
 def run_python_tests():
     result = subprocess.run(['pytest', '-v'])
     return result.returncode
@@ -213,7 +213,7 @@ def run_c_tests():
 
 ### **3.1 "빌드" 개념**
 
-#### **Python (HereNThere)**
+#### **Python (Repo2Run)**
 
 ```python
 # Python에서 "빌드"는 없음
@@ -279,7 +279,7 @@ C/C++:
 
 **실행 1-2: 모순된 프롬프트**
 ```python
-# Python 철학 (HereNThere)
+# Python 철학 (Repo2Run)
 "Try testing (optional)"
 "Be flexible"
 
@@ -323,7 +323,7 @@ C/C++:
 
 ### **3.4 "runtest" 역할 변화**
 
-| 항목 | Python (HereNThere) | C/C++ (ARVO2.0) |
+| 항목 | Python (Repo2Run) | C/C++ (ARVO2.0) |
 |------|---------------------|-----------------|
 | **역할** | 테스트 실행 | **빌드 검증 + 테스트 실행** |
 | **빌드** | 불필요 (import만) | **필수** (먼저 빌드) |
@@ -463,7 +463,7 @@ ARVO2.0에 Rust, Go 추가?
 
 **Option B: 새 전문 시스템 (권장)**
 ```
-- HereNThere: Python 전문
+- Repo2Run: Python 전문
 - ARVO2.0: C/C++ 전문
 - ARVO-Rust: Rust 전문
 - ARVO-Go: Go 전문
@@ -492,6 +492,6 @@ ARVO2.0에 Rust, Go 추가?
 ---
 
 **작성일**: 2025-10-19  
-**마이그레이션**: HereNThere (Python) → ARVO2.0 (C/C++)  
+**마이그레이션**: Repo2Run (Python) → ARVO2.0 (C/C++)  
 **결과**: 성공적인 철학 전환 ⭐⭐⭐⭐⭐
 

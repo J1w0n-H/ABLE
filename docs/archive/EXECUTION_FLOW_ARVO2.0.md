@@ -3,7 +3,7 @@
 ## Overview
 This document provides a comprehensive mapping of the entire ARVO2.0 execution flow for **C/C++ projects**, showing exactly which file and function is called at each step.
 
-**🆕 ARVO2.0 Changes from HereNThere:**
+**🆕 ARVO2.0 Changes from Repo2Run:**
 - ✅ C/C++ project support (CMake, Makefile, configure)
 - ✅ Build method reuse optimization
 - ✅ apt-get package management instead of pip
@@ -42,7 +42,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║      └─ def timer(): (lines 132-140)                                   ║
 ║          └─ threading.Thread(target=timer).start()                     ║
 ║              └─ time.sleep(7200) → os._exit(1) after 2 hours           ║
-║      ⚠️ UNCHANGED from HereNThere                                      ║
+║      ⚠️ UNCHANGED from Repo2Run                                      ║
 ╚═══════════════════════════════┬════════════════════════════════════════╝
                                 │
                                 ▼
@@ -70,7 +70,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║          │   │                                                          ║
 ║          │   ├─ subprocess.run("rm -rf Dockerfile") (line 75)          ║
 ║          │   │   └─ Remove existing Dockerfile                         ║
-║          │   │   ⚠️ UNCHANGED from HereNThere                          ║
+║          │   │   ⚠️ UNCHANGED from Repo2Run                          ║
 ║          │   │                                                          ║
 ║          │   ├─ 🆕 C/C++ ONLY - NO LANGUAGE DETECTION (lines 76-77)    ║
 ║          │   │   └─ print('C project detected, skipping pipreqs')     ║
@@ -80,7 +80,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║          │   │                                                          ║
 ║          │   └─ subprocess.run("git checkout sha") (line 88)           ║
 ║          │       └─ Checkout specific commit                           ║
-║          │       ⚠️ UNCHANGED from HereNThere                          ║
+║          │       ⚠️ UNCHANGED from Repo2Run                          ║
 ╚═══════════════════════════════┬════════════════════════════════════════╝
                                 │
                                 ▼
@@ -148,7 +148,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║              │                                                          ║
 ║              └─ subprocess.run("docker cp repo/ ...")                  ║
 ║                  └─ Copy /repo/ into container                         ║
-║                  ⚠️ UNCHANGED from HereNThere                          ║
+║                  ⚠️ UNCHANGED from Repo2Run                          ║
 ╚═══════════════════════════════┬════════════════════════════════════════╝
                                 │
                                 ▼
@@ -162,7 +162,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║      │   ↓ CALLS: build_agent/agents/configuration.py                  ║
 ║      │   └─ class Configuration.__init__(): (lines 66-224)             ║
 ║      │       ├─ self.model = "gpt-4o-2024-05-13"                       ║
-║      │       │   ⚠️ UNCHANGED from HereNThere                          ║
+║      │       │   ⚠️ UNCHANGED from Repo2Run                          ║
 ║      │       │                                                          ║
 ║      │       ├─ 🆕 C/C++ SPECIFIC TOOL LIBRARY                         ║
 ║      │       │   self.tool_lib = [                                     ║
@@ -181,7 +181,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║      │       │   └─ def get_session(): (lines 307-669)                 ║
 ║      │       │       ├─ self.start_shell()                             ║
 ║      │       │       │   └─ pexpect.spawn("docker exec -it ...")       ║
-║      │       │       │       ⚠️ UNCHANGED from HereNThere              ║
+║      │       │       │       ⚠️ UNCHANGED from Repo2Run              ║
 ║      │       │       │                                                  ║
 ║      │       │       └─ class Session: (inner class)                   ║
 ║      │       │           └─ return Session(self)                       ║
@@ -209,14 +209,14 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║                  ├─ ① GPT CALL (line 284)                              ║
 ║                  │   ├─ manage_token_usage(self.messages)              ║
 ║                  │   │   └─ Truncate if > 150K tokens                  ║
-║                  │   │       ⚠️ UNCHANGED from HereNThere              ║
+║                  │   │       ⚠️ UNCHANGED from Repo2Run              ║
 ║                  │   │                                                  ║
 ║                  │   ├─ get_llm_response(model, messages) ←─── CALL    ║
 ║                  │   │   ↓ CALLS: build_agent/utils/llm.py             ║
 ║                  │   │   └─ def get_llm_response():                    ║
 ║                  │   │       └─ openai.ChatCompletion.create()         ║
 ║                  │   │           └─ Return GPT-4 response              ║
-║                  │   │           ⚠️ UNCHANGED from HereNThere          ║
+║                  │   │           ⚠️ UNCHANGED from Repo2Run          ║
 ║                  │   │                                                  ║
 ║                  │   ├─ 🆕 NONE RESPONSE HANDLING                      ║
 ║                  │   │   if configuration_agent is None:               ║
@@ -232,13 +232,13 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║                  │   │   ↓ CALLS: build_agent/utils/agent_util.py     ║
 ║                  │   │   └─ def extract_commands():                    ║
 ║                  │   │       └─ Find ```bash ... ``` blocks            ║
-║                  │   │       ⚠️ UNCHANGED from HereNThere              ║
+║                  │   │       ⚠️ UNCHANGED from Repo2Run              ║
 ║                  │   │                                                  ║
 ║                  │   └─ diffs = extract_diffs(response)                ║
 ║                  │       ↓ CALLS: build_agent/utils/agent_util.py     ║
 ║                  │       └─ def extract_diffs():                       ║
 ║                  │           └─ Find ```diff ... ``` blocks            ║
-║                  │           ⚠️ UNCHANGED from HereNThere              ║
+║                  │           ⚠️ UNCHANGED from Repo2Run              ║
 ║                  │                                                      ║
 ║                  └─ ③ EXECUTE COMMANDS (lines 315-481)                 ║
 ║                      │                                                  ║
@@ -284,7 +284,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║          │   ├─ self.sandbox.shell.sendline('pwd')                     ║
 ║          │   ├─ self.sandbox.shell.expect([r'root@.*:.*# '])           ║
 ║          │   └─ return output, 0                                       ║
-║          │   ⚠️ UNCHANGED from HereNThere                              ║
+║          │   ⚠️ UNCHANGED from Repo2Run                              ║
 ║          │                                                              ║
 ║          ├─ ❌ REMOVED: if cmd == '$pip list --format json$':          ║
 ║          │   # Python-specific, not needed for C                       ║
@@ -306,7 +306,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║              │                                                          ║
 ║              ├─ B. if match_waitinglist_addfile(cmd): (444-457)        ║
 ║              │   └─ waiting_list.addfile(file_path, conflict_list)     ║
-║              │       ⚠️ UNCHANGED from HereNThere                      ║
+║              │       ⚠️ UNCHANGED from Repo2Run                      ║
 ║              │                                                          ║
 ║              ├─ C. if match_download(cmd): (458-476)                   ║
 ║              │   └─ download(self, waiting_list, conflict_list)        ║
@@ -326,7 +326,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║              │                       │   build_agent/tools/apt_download.py║
 ║              │                       └─ def run_apt():                 ║
 ║              │                           └─ subprocess.run('apt-get install')║
-║              │                           ⚠️ UNCHANGED from HereNThere  ║
+║              │                           ⚠️ UNCHANGED from Repo2Run  ║
 ║              │                                                          ║
 ║              ├─ ❌ REMOVED: if 'pytest' in cmd: (479-482)              ║
 ║              │   # Not applicable for C projects                       ║
@@ -400,17 +400,17 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║      ├─ with open('.../track.json', 'w') as w1:                        ║
 ║      │   └─ w1.write(json.dumps(msg, indent=4))                        ║
 ║      │       └─ Agent conversation history                             ║
-║      │       ⚠️ UNCHANGED from HereNThere                              ║
+║      │       ⚠️ UNCHANGED from Repo2Run                              ║
 ║      │                                                                  ║
 ║      ├─ with open('.../inner_commands.json', 'w') as w2:               ║
 ║      │   └─ w2.write(json.dumps(commands, indent=4))                   ║
 ║      │       └─ Commands executed inside container                     ║
-║      │       ⚠️ UNCHANGED from HereNThere                              ║
+║      │       ⚠️ UNCHANGED from Repo2Run                              ║
 ║      │                                                                  ║
 ║      ├─ with open('.../outer_commands.json', 'w') as w3:               ║
 ║      │   └─ w3.write(json.dumps(outer_commands, indent=4))             ║
 ║      │       └─ External control commands                              ║
-║      │       ⚠️ UNCHANGED from HereNThere                              ║
+║      │       ⚠️ UNCHANGED from Repo2Run                              ║
 ║      │                                                                  ║
 ║      ├─ 🆕 with open('.../dpkg_list.txt', 'w'):                        ║
 ║      │   └─ w1.write(dpkg_list)                                        ║
@@ -447,7 +447,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║              ├─ subprocess.run("docker rmi ...tmp")                    ║
 ║              │   └─ Remove temporary images                            ║
 ║              └─ return self.commands                                   ║
-║              ⚠️ UNCHANGED from HereNThere                              ║
+║              ⚠️ UNCHANGED from Repo2Run                              ║
 ╚═══════════════════════════════┬════════════════════════════════════════╝
                                 │
                                 ▼
@@ -469,7 +469,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║          │      │                                                       ║
 ║          │      ├─ with open('.../inner_commands.json') as r1:         ║
 ║          │      │   commands_data = json.load(r1)                      ║
-║          │      │   ⚠️ UNCHANGED from HereNThere                       ║
+║          │      │   ⚠️ UNCHANGED from Repo2Run                       ║
 ║          │      │                                                       ║
 ║          │      ├─ 🆕 NO PIPDEPTREE REQUIRED                           ║
 ║          │      │   # C projects don't need pipdeptree.json            ║
@@ -494,7 +494,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║          │      │           │                                           ║
 ║          │      │           ├─ if cmd.startswith('apt-get install'):  ║
 ║          │      │           │   return f'RUN {cmd}'                    ║
-║          │      │           │   ⚠️ UNCHANGED from HereNThere           ║
+║          │      │           │   ⚠️ UNCHANGED from Repo2Run           ║
 ║          │      │           │                                           ║
 ║          │      │           └─ else:                                   ║
 ║          │      │               return f'RUN {command}'                ║
@@ -505,11 +505,11 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ║          │      │                                                       ║
 ║          │      └─ with open('.../Dockerfile', 'w') as w1:             ║
 ║          │          w1.write('\n'.join(dockerfile))                    ║
-║          │          ⚠️ UNCHANGED from HereNThere                       ║
+║          │          ⚠️ UNCHANGED from Repo2Run                       ║
 ║          │                                                              ║
 ║          └─ except Exception as e:                                     ║
 ║              msg = f'integrate_docker failed: {e}'                     ║
-║              ⚠️ UNCHANGED from HereNThere                              ║
+║              ⚠️ UNCHANGED from Repo2Run                              ║
 ╚═══════════════════════════════┬════════════════════════════════════════╝
                                 │
                                 ▼
@@ -554,14 +554,14 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 | **7** | `integrate_dockerfile.py` | `generate_statement()` | 214-267 | Convert commands | 🆕 C commands |
 
 **Legend:**
-- ⚠️ = Unchanged from HereNThere
+- ⚠️ = Unchanged from Repo2Run
 - 🆕 = Modified for C/C++ support
 - ✅ = Newly added for C/C++
 - ❌ = Removed (Python-only)
 
 ---
 
-## Summary of Changes from HereNThere
+## Summary of Changes from Repo2Run
 
 ### ✅ Major Additions
 
@@ -650,7 +650,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 - ✅ Cost per turn: ~$0.17 → ~$0.05 (**-70%**)
 - ✅ Completed successfully in 99 seconds
 
-### Key Improvements Over HereNThere
+### Key Improvements Over Repo2Run
 1. **Faster**: 31s (cJSON) vs 40-60s (Python typical)
 2. **Smarter**: Reuses successful builds (Priority system)
 3. **Resilient**: Handles API errors gracefully (60s retry)
@@ -661,7 +661,7 @@ This document provides a comprehensive mapping of the entire ARVO2.0 execution f
 ---
 
 **Current State**: C/C++ fully supported with advanced optimizations  
-**Compatibility**: Maintains HereNThere's core architecture  
+**Compatibility**: Maintains Repo2Run's core architecture  
 **Testing**: Verified with hello.c, cJSON, tinyxml2  
 **Optimization Level**: Production-ready with 70% cost reduction
 

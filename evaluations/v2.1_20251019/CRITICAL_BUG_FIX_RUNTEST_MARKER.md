@@ -87,7 +87,7 @@ print('=' * 70)  # 마커 없이 시작
 
 ## 🎯 왜 이 마커가 있었나?
 
-### 추측 1: HereNThere에서 상속
+### 추측 1: Repo2Run에서 상속
 - Python 버전 runtest.py에서 이 마커 사용
 - 목적: runtest 실행 중인지 감지
 - ARVO2.0으로 복사하면서 그대로 유지

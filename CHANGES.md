@@ -2,7 +2,7 @@
 
 ## 📌 개요
 - **프로젝트명**: ARVO2.0
-- **기반**: HereNThere 프로젝트
+- **기반**: Repo2Run 프로젝트
 - **목표**: Python 지원 제거, C 전용 빌드 시스템 구축
 - **생성일**: 2025-10-17
 
@@ -14,7 +14,7 @@
 
 #### **1.1. build_agent 디렉토리 (전체 복사)**
 ```
-HereNThere/build_agent/ → ARVO2.0/build_agent/
+Repo2Run/build_agent/ → ARVO2.0/build_agent/
 ```
 
 **복사된 파일들:**
@@ -47,7 +47,7 @@ HereNThere/build_agent/ → ARVO2.0/build_agent/
 
 #### **1.2. utils 디렉토리 (전체 복사)**
 ```
-HereNThere/utils/ → ARVO2.0/utils/
+Repo2Run/utils/ → ARVO2.0/utils/
 ```
 
 **복사된 내용:**
@@ -55,9 +55,9 @@ HereNThere/utils/ → ARVO2.0/utils/
 
 #### **1.3. 기타 파일들**
 ```
-HereNThere/requirements.txt → ARVO2.0/requirements.txt
-HereNThere/README.md → ARVO2.0/README.md
-HereNThere/EXECUTION_FLOW.md → ARVO2.0/EXECUTION_FLOW.md
+Repo2Run/requirements.txt → ARVO2.0/requirements.txt
+Repo2Run/README.md → ARVO2.0/README.md
+Repo2Run/EXECUTION_FLOW.md → ARVO2.0/EXECUTION_FLOW.md
 ```
 
 ---
@@ -682,7 +682,7 @@ if __name__ == "__main__":
 | parse_command.py | 286줄 | 310줄 | +24줄 (매칭 함수 추가) |
 
 ### **기능 변화**
-| 구분 | Python 기반 (HereNThere) | C 전용 (ARVO2.0) |
+| 구분 | Python 기반 (Repo2Run) | C 전용 (ARVO2.0) |
 |------|-------------------------|------------------|
 | 지원 언어 | Python | C |
 | 베이스 이미지 | python:3.10 | gcr.io/oss-fuzz-base/base-builder |
@@ -738,7 +738,7 @@ python build_agent/main.py \
 
 ## 📝 8. 주요 차이점 요약
 
-| 항목 | HereNThere (Python) | ARVO2.0 (C) |
+| 항목 | Repo2Run (Python) | ARVO2.0 (C) |
 |------|---------------------|-------------|
 | **언어** | Python | C |
 | **이미지** | python:3.10 | gcr.io/oss-fuzz-base/base-builder |
@@ -767,7 +767,7 @@ python build_agent/main.py \
 
 ## 🎉 10. 결론
 
-**ARVO2.0은 HereNThere 프로젝트를 기반으로 Python 지원을 완전히 제거하고 C 전용 빌드 시스템으로 재구성한 프로젝트입니다.**
+**ARVO2.0은 Repo2Run 프로젝트를 기반으로 Python 지원을 완전히 제거하고 C 전용 빌드 시스템으로 재구성한 프로젝트입니다.**
 
 ### **핵심 성과:**
 1. **복잡도 67% 감소** - 12개 도구 → 4개 도구
@@ -1412,16 +1412,16 @@ waitinglist command usage error, the following command formats are leagal:
 
 ---
 
-### 12.6. Align runtest.py Philosophy with HereNThere (Critical Refactor)
+### 12.6. Align runtest.py Philosophy with Repo2Run (Critical Refactor)
 
 **날짜**: 2025-10-17  
 **발견**: ImageMagick False Positive 분석 중 runtest 철학 불일치 발견
 
 #### 문제 (Philosophy Mismatch):
 
-**HereNThere (Python) 철학**:
+**Repo2Run (Python) 철학**:
 ```python
-# HereNThere runtest.py
+# Repo2Run runtest.py
 def run_pytest():
     # ✅ 테스트만 실행 (빌드 없음!)
     result = subprocess.run(['pytest', '--collect-only', ...])
@@ -1441,7 +1441,7 @@ def run_c_tests():
 ```
 
 **문제점**:
-1. ❌ **철학 불일치**: HereNThere는 "검증만", ARVO2.0은 "빌드까지"
+1. ❌ **철학 불일치**: Repo2Run는 "검증만", ARVO2.0은 "빌드까지"
 2. ❌ **LLM 학습 저해**: LLM이 직접 make 실행 안해도 runtest가 알아서 빌드
 3. ❌ **False Positive**: configure 안했어도 runtest가 CMake 빌드 시도 → 성공
 4. ❌ **책임 불명확**: LLM vs runtest 중 누가 빌드 책임?
@@ -1454,7 +1454,7 @@ Turn 19: runtest 실행
 → runtest: "No build system detected" → False Positive 성공
 ```
 
-#### 해결 (HereNThere Philosophy):
+#### 해결 (Repo2Run Philosophy):
 
 **새로운 철학** ✅:
 ```
@@ -1471,7 +1471,7 @@ elif os.path.exists('/repo/CMakeLists.txt'):
     result = subprocess.run('cmake .. && make', ...)  # 빌드!
     sys.exit(result.returncode)
 
-# After ✅ (HereNThere 방식):
+# After ✅ (Repo2Run 방식):
 elif os.path.exists('/repo/CMakeLists.txt'):
     print('Error: This is a CMake project, but no build was found.')
     print('Please run: mkdir /repo/build && cd /repo/build && cmake .. && make')
@@ -1557,7 +1557,7 @@ Turn 22: runtest
 - ✅ **직접 경험**: LLM이 ./configure, make를 직접 실행
 - ✅ **에러 해결**: 빌드 에러 발생 시 LLM이 직접 해결
 - ✅ **완전한 학습**: 전체 빌드 프로세스 이해
-- ✅ **HereNThere 일관성**: Python과 동일한 철학
+- ✅ **Repo2Run 일관성**: Python과 동일한 철학
 
 **프로젝트별 시나리오**:
 
@@ -1569,9 +1569,9 @@ Turn 22: runtest
 | **ImageMagick (LLM configure)** | ./configure, make | runtest → Pass | runtest → make test → Pass | **개선** ✅ |
 | **ImageMagick (LLM 안함)** | - | runtest → Pass (False!) | runtest → Error: run ./configure | **False Positive 방지** ✅ |
 
-#### HereNThere 철학 준수:
+#### Repo2Run 철학 준수:
 
-**Python (HereNThere)**:
+**Python (Repo2Run)**:
 ```
 LLM: pip install, poetry install
 runtest: pytest --collect-only (검증만)
@@ -1594,7 +1594,7 @@ runtest: make test, ctest (검증만)
 1. ✅ **LLM 학습 향상**: 빌드 명령을 직접 실행하며 학습
 2. ✅ **에러 처리 개선**: 빌드 에러 → LLM이 직접 해결
 3. ✅ **False Positive 방지**: 빌드 안했으면 runtest 실패
-4. ✅ **HereNThere 일관성**: Python과 C 동일한 철학
+4. ✅ **Repo2Run 일관성**: Python과 C 동일한 철학
 5. ✅ **더 명확한 피드백**: "Please run ./configure" 등 구체적 가이드
 
 **핵심 설계 원칙**:
@@ -1618,7 +1618,7 @@ runtest simply runs the test command for that built state.
 - ✅ **Critical**: 모든 C 프로젝트의 빌드 책임을 LLM으로 완전 이전
 - ✅ **Better Learning**: LLM이 빌드 과정 직접 경험 (configure, cmake, make)
 - ✅ **False Positive 방지**: 빌드 안했으면 명확하게 실패
-- ✅ **HereNThere 일관성**: Python과 C 동일한 "검증만" 철학
+- ✅ **Repo2Run 일관성**: Python과 C 동일한 "검증만" 철학
 - ✅ **단순함**: runtest는 이미 빌드된 것을 테스트만
 
 **ImageMagick 재실행 예상**:

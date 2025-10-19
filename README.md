@@ -1,6 +1,6 @@
 # ARVO2.0 - Automated C/C++ Build Environment Configuration
 
-**ARVO2.0** is an automated tool that configures C/C++ build environments in Docker containers using LLM agents. It's a C-only fork of the HereNThere project, optimized for C/C++ projects without Python dependencies.
+**ARVO2.0** is an automated tool that configures C/C++ build environments in Docker containers using LLM agents. It's a C-only fork of the Repo2Run project, optimized for C/C++ projects without Python dependencies.
 
 ---
 
@@ -9,7 +9,7 @@
 - **Quick Start**: [QUICK_START.md](QUICK_START.md)
 - **Latest Version**: [v2.2/00_INDEX.md](v2.2/00_INDEX.md)
 - **Version History**: [VERSION_HISTORY.md](VERSION_HISTORY.md)
-- **Changes from HereNThere**: [CHANGES.md](CHANGES.md)
+- **Changes from Repo2Run**: [CHANGES.md](CHANGES.md)
 
 ---
 
@@ -236,7 +236,7 @@ Licensed under the Apache License, Version 2.0. See LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
-- Based on **HereNThere** project by Bytedance
+- Based on **Repo2Run** project by Bytedance
 - Optimized for C/C++ projects at OSS-Fuzz
 - LLM: OpenAI GPT-4
 

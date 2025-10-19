@@ -4,7 +4,7 @@
 
 **ARVO2.0** is an autonomous C/C++ build environment configuration system powered by GPT-4. It automatically detects build systems (CMake, Makefile, configure), installs dependencies, and ensures projects compile and pass tests — all within isolated Docker containers.
 
-**Based on**: [HereNThere (Python-focused)](https://github.com/original/herenthere)  
+**Based on**: [Repo2Run (Python-focused)](https://github.com/original/herenthere)  
 **Adapted for**: C/C++ projects, especially OSS-Fuzz targets
 
 ### Key Statistics
@@ -47,7 +47,7 @@ LLM analyzes:
 
 ### 4. **Dual Architecture Support**
 
-| Feature | ARVO2.0 (C/C++) | HereNThere (Python) |
+| Feature | ARVO2.0 (C/C++) | Repo2Run (Python) |
 |---------|-----------------|---------------------|
 | Base Image | `gcr.io/oss-fuzz-base/base-builder` | `python:3.10` |
 | Package Manager | apt-get | pip, Poetry |
@@ -482,7 +482,7 @@ def clear_configuration(self):
 ### 4. **Token Management** - Prevent Overflow
 
 ```python
-# Original HereNThere:
+# Original Repo2Run:
 truncate_msg(output, command, truncate=2000)
 # Max output: 6000 characters
 
@@ -654,9 +654,9 @@ if configuration_agent is None:
 
 ---
 
-## 🆚 ARVO2.0 vs HereNThere Comparison
+## 🆚 ARVO2.0 vs Repo2Run Comparison
 
-| Feature | HereNThere | ARVO2.0 | Notes |
+| Feature | Repo2Run | ARVO2.0 | Notes |
 |---------|------------|---------|-------|
 | **Language Support** | Python only | C/C++ | Completely adapted |
 | **Base Docker Image** | `python:3.10` | `gcr.io/oss-fuzz-base/base-builder` | OSS-Fuzz compatible |
@@ -695,7 +695,7 @@ if configuration_agent is None:
 ## 📚 Further Reading
 
 1. **EXECUTION_FLOW_ARVO2.0.md** - Detailed execution flow with file/function mapping
-2. **HereNThere README** - Original Python-focused system
+2. **Repo2Run README** - Original Python-focused system
 3. **OSS-Fuzz Documentation** - Understanding base-builder images
 4. **GPT-4o API Docs** - LLM integration details
 
@@ -755,7 +755,7 @@ For issues, questions, or contributions:
 
 ## 📄 License
 
-Based on HereNThere (License: TBD)  
+Based on Repo2Run (License: TBD)  
 ARVO2.0 Modifications: Apache 2.0
 
 ---
