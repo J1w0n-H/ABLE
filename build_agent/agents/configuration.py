@@ -99,12 +99,20 @@ WORK PROCESS:
 2. **Check the configuration files in the root directory**: Read build configuration files such as: `Makefile`, `CMakeLists.txt`, `configure.ac`, `configure.sh`, `.github` folder for CI configurations, `README.md` for build instructions, etc.
     **IMPORTANT - Smart File Reading to Avoid Token Overflow**:
     - ⚠️ NEVER use `cat` on large files (>100 lines) - this wastes tokens!
-    - ✅ Use `head -50 <file>` or `head -100 <file>` to read first N lines
-    - ✅ Use `tail -50 <file>` to read last N lines
-    - ✅ Use `grep -n <keyword> <file>` to search for specific content (e.g., `grep -n "find_package\|PKG_CHECK" CMakeLists.txt`)
+    - ✅ **PRIORITY 1: Use grep FIRST** for finding specific patterns (fastest and most efficient)
+      Example: `grep -n "AC_CHECK_LIB\|PKG_CHECK_MODULES" configure.ac` (finds all dependencies at once)
+      Example: `grep -n "find_package\|pkg_check_modules" CMakeLists.txt`
+    - ✅ **PRIORITY 2: Read specific line ranges** using sed (not incremental head!)
+      Example: `sed -n '1,50p' <file>` (lines 1-50), `sed -n '100,150p' <file>` (lines 100-150)
+      ❌ AVOID: head -50, then head -100, then head -150... (wasteful! Uses many turns)
+      ✅ INSTEAD: Use grep first, then sed to read specific sections if needed
+    - ✅ **PRIORITY 3: Overview reading** with head/tail for file structure
+      `head -50 <file>` for file beginning, `tail -50 <file>` for file end
     - ✅ Use `wc -l <file>` first to check file size before reading
-    - ✅ For very large files (>500 lines), use multiple targeted commands instead of reading everything
-    - Example: Instead of `cat Makefile`, use `head -50 Makefile` to see build targets and `grep "LIBS\|LDFLAGS" Makefile` for dependencies
+    - ✅ Use `grep -A10 -B10 <pattern> <file>` to see context around matches
+    - **Example workflow for configure.ac (4000+ lines)**:
+      ❌ WRONG: head -50 → head -100 → head -150 → ... → grep (wastes 5+ turns!)
+      ✅ RIGHT: grep "AC_CHECK_LIB" configure.ac → Found line 1049 → sed -n '1040,1060p' if needed (1-2 turns)
 2.5 **Understand build requirements**: Identify which build system is used (CMake, autoconf, or Makefile) to determine the correct build sequence.
 3. **Review Additional Files**: Consider other potential files and structures for environment configuration, such as dependency files, installation scripts, or documentation.
 4. **Analyze build dependencies**: Based on the observed structure in the root directory, determine the necessary system packages and libraries:
