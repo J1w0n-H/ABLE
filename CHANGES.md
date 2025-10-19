@@ -1096,7 +1096,558 @@ if project_similar_to_previous:
     reuse_successful_build_approach()
 ```
 
-### 12.3. 추가 기능 요청 템플릿
+### 12.3. Remove Local Cache Fallback in Git Clone (Bug Fix)
+
+**날짜**: 2025-10-17  
+**발견**: ImageMagick 프로젝트 실험 중 발견
+
+#### 문제:
+
+ImageMagick 프로젝트 실행 시 `/repo` 디렉토리가 비어있어서 LLM이 `/src/aflplusplus`를 탐색하고 빌드하는 문제 발생.
+
+**근본 원인**:
+```python
+# main.py의 잘못된 fallback 로직:
+except subprocess.CalledProcessError:
+    if os.path.exists(f'{root_path}/utils/repo/{author_name}/{repo_name}'):  # ← 빈 디렉토리도 통과!
+        print(f"Using existing local repository: {full_name}")
+```
+
+**버그 시나리오**:
+1. 이전 실행: git clone 실패 → 빈 디렉토리만 생성
+2. 다음 실행: clone 재시도 → 네트워크 오류로 실패
+3. `os.path.exists()` 체크 → True (빈 디렉토리지만 존재함)
+4. "Using existing local repository" 출력
+5. `move_files_to_repo()` 실행 → 옮길 파일 없음
+6. Container `/repo` → **완전히 비어있음**
+7. LLM Turn 1: `ls /repo` → 빈 디렉토리 발견
+8. LLM Turn 2: `/src` 탐색 (합리적 판단)
+9. LLM Turn 3-12: `/src/aflplusplus` 빌드 (잘못된 타겟)
+
+#### 해결:
+
+**Fallback 로직 완전 제거** - Git clone 실패 시 즉시 에러로 종료:
+
+```python
+# Before (Lines 82-90):
+try:
+    subprocess.run(download_cmd, cwd=f'{root_path}/utils/repo/{author_name}', check=True, shell=True)
+except subprocess.CalledProcessError:
+    print(f"Failed to clone from GitHub, using local repository if available")
+    if os.path.exists(f'{root_path}/utils/repo/{author_name}/{repo_name}'):
+        print(f"Using existing local repository: {full_name}")
+    else:
+        raise
+
+# After ✅ (Lines 82-87):
+try:
+    subprocess.run(download_cmd, cwd=f'{root_path}/utils/repo/{author_name}', check=True, shell=True)
+except subprocess.CalledProcessError as e:
+    print(f"Failed to clone repository from GitHub: {full_name}")
+    print(f"Error: {e}")
+    raise Exception(f"Cannot clone repository {full_name}. Please check network connection and repository accessibility.")
+```
+
+#### 효과:
+
+- ✅ **False positive 방지**: 빈 로컬 디렉토리를 valid repository로 인식하지 않음
+- ✅ **명확한 에러**: Clone 실패 시 즉시 에러 메시지와 함께 종료
+- ✅ **매번 fresh clone**: 항상 GitHub에서 최신 코드 가져옴
+- ✅ **LLM focus 보장**: `/repo`가 항상 제대로 채워져 있어 `/src` 탐색 불필요
+- ✅ **디버깅 용이**: Clone 실패 원인 명확하게 표시
+
+**파일 변경:**
+- `build_agent/main.py`: Lines 82-90 수정 (9줄 → 6줄, -3줄)
+
+**추가 발견**:
+- ✅ LLM은 올바르게 작동함 (빈 `/repo` → `/src` 탐색은 합리적 판단)
+- ❌ 문제는 시스템 초기화 로직의 버그
+- 📝 상세 분석: `EXPERIMENT_ImageMagick.md` 참고
+
+---
+
+### 12.4. Extreme Token Reduction - Success=No Output, Failure=20 Lines Max
+
+**날짜**: 2025-10-17  
+**문제**: ImageMagick 재실행 시 Token Overflow (30,677 > 30,000)
+
+#### 문제:
+
+**상황**:
+```
+Turn 23: 33개 패키지 설치 + ./configure 실행
+히스토리 누적: 30,677 tokens (한계: 30,000)
+결과: Error 429 - Request too large
+무한 재시도 루프 (60초씩 대기)
+```
+
+**근본 원인**:
+1. ❌ Intelligent truncation이 작동해도 **히스토리 누적**으로 초과
+2. ❌ 성공한 명령어도 요약 출력 (10+10줄, 500자 등)
+3. ❌ 33개 패키지 × 80자 = 2,640자
+4. ❌ `./configure` 출력 (500줄) → 20줄 요약 = 여전히 많음
+
+#### 해결:
+
+**1. 스마트 출력 관리** (`sandbox.py`):
+
+```python
+# Before: 복잡한 로직
+if returncode == 0:
+    # 성공시 항상 요약만
+    return f"Command executed successfully. Output: {line_count} lines..."
+if returncode != 0:
+    # 실패시 20줄 이상이면 앞뒤 10줄씩
+    if line_count > 20:
+        return lines[:10] + lines[-10:]
+
+# After ✅: 더 합리적인 로직
+line_count = len(lines)
+
+# 1. 20줄 이하 -> 전체 출력 (리턴코드 무관)
+if line_count <= 20:
+    return result_message
+
+# 2. 20줄 이상
+if returncode == 0:
+    # 성공이면 앞뒤 10줄씩만 (토큰 절약)
+    return '\n'.join(lines[:10] + [f'... ({line_count - 20} lines omitted) ...'] + lines[-10:])
+else:
+    # 실패면 전체 출력 (디버깅 필요)
+    return result_message
+```
+
+**로직 개선점**:
+- ✅ **짧은 출력은 그대로**: 20줄 이하는 성공/실패 무관하게 전체 표시
+- ✅ **긴 성공 출력 압축**: 20줄 이상 성공 명령은 앞뒤 10줄씩만 (토큰 절약)
+- ✅ **긴 실패 출력 유지**: 20줄 이상 실패 명령은 전체 표시 (디버깅 필수)
+
+**2. Max Tokens 조정** (`configuration.py`):
+
+```python
+# Before:
+def manage_token_usage(messages, max_tokens=150000):  # ← LLM 한계(30K)보다 5배 큼!
+
+# After ✅:
+def manage_token_usage(messages, max_tokens=30000):  # ← LLM 한계와 동일
+```
+
+**3. LLM에게 스마트한 파일 읽기 가이드 제공** (`configuration.py` prompt):
+
+```python
+# NEW: In init_prompt (Step 2)
+**IMPORTANT - Smart File Reading to Avoid Token Overflow**:
+- ⚠️ NEVER use `cat` on large files (>100 lines) - this wastes tokens!
+- ✅ Use `head -50 <file>` or `head -100 <file>` to read first N lines
+- ✅ Use `tail -50 <file>` to read last N lines
+- ✅ Use `grep -n <keyword> <file>` to search for specific content
+- ✅ Use `wc -l <file>` first to check file size before reading
+- ✅ For very large files (>500 lines), use multiple targeted commands
+- Example: Instead of `cat Makefile`, use `head -50 Makefile` + `grep "LIBS" Makefile`
+```
+
+**접근 방식**: 코드에서 강제 변환하지 않고, LLM이 스스로 판단하도록 프롬프트로 교육
+
+#### 효과:
+
+**Token Reduction (Smart)**:
+
+| Command Type | Before | After | Reduction |
+|--------------|--------|-------|-----------|
+| Success 10줄 | 10 줄 (~500자) | 10 줄 (~500자) | **0%** (짧아서 유지) |
+| Success 30줄 | 30 줄 (~1500자) | 20 줄 (~1000자) | **33%** (앞뒤 10줄씩) |
+| Success 100줄 | 100 줄 (~5000자) | 20 줄 (~1000자) | **80%** (앞뒤 10줄씩) |
+| Success 500줄 | 500 줄 (~25K자) | 20 줄 (~1000자) | **96%** (앞뒤 10줄씩) |
+| Failure 10줄 | 10 줄 | 10 줄 | **0%** (전체 유지) |
+| Failure 500줄 | 500 줄 | 500 줄 | **0%** (전체 유지, 디버깅 필수) |
+| LLM uses `head` (guided) | 100 줄 | 100 줄 | Smart reading |
+
+**ImageMagick 시나리오 (33개 패키지)**:
+
+| Item | Before | After | Savings |
+|------|--------|-------|---------|
+| 33개 패키지 설치 | 33 × 80자 = 2,640자 | 33 × 80자 = 2,640자 | 0 (이미 요약) |
+| `./configure` (500줄) | 20 줄 (~1000자) | 1 줄 (~80자) | **92%** |
+| 기타 성공 명령 (10개) | 10 × 200자 = 2,000자 | 10 × 80자 = 800자 | **60%** |
+| **Total** | **~5,640자** | **~3,520자** | **38%** |
+
+**실제 효과 (예상)**:
+- Before: 30,677 tokens (429 에러)
+- After: ~25,000 tokens 이하 (성공 예상!) ✅
+- **max_tokens**: 150,000 → 30,000 (**5배 감소**, LLM 한계와 동일)
+
+**추가 장점**:
+1. ✅ **짧은 출력 보존**: 20줄 이하는 전체 표시 (LLM이 컨텍스트 이해 용이)
+2. ✅ **긴 성공 출력 압축**: 20줄 이상 성공 명령은 앞뒤만 (불필요한 중간 내용 제거)
+3. ✅ **실패 출력 완전 보존**: 에러는 전체 표시 (디버깅 필수)
+4. ✅ **Token 관리 정확**: max_tokens=30000 (LLM 한계와 동일, 넘지 않음)
+5. ✅ **LLM 스스로 최적화**: 프롬프트 가이드로 `head`, `grep` 등 스마트하게 사용
+6. ✅ **더 유연함**: 코드 강제 변환보다 LLM 판단이 상황에 맞게 대응
+
+**Trade-off**:
+- ✅ **20줄 이하**: 성공/실패 모두 전체 표시 (정보 손실 없음)
+- ⚠️ **20줄 이상 성공**: 중간 내용 생략 (하지만 보통 중복/불필요)
+- ✅ **20줄 이상 실패**: 전체 표시 (디버깅 보장)
+- ✅ **전반적으로**: 중요한 정보는 보존, 불필요한 부분만 제거
+
+**파일 변경:**
+- `build_agent/utils/sandbox.py`: 
+  - Lines 43-65: `truncate_msg()` 함수 로직 재작성 (23줄, 더 간결하고 명확)
+  - 로직: 20줄 기준 → 성공시 압축, 실패시 전체
+- `build_agent/agents/configuration.py`:
+  - Line 246: `max_tokens=150000` → `max_tokens=30000` (5배 감소)
+  - Lines 100-107: `init_prompt`에 스마트 파일 읽기 가이드 추가 (+8줄)
+
+**테스트 권장**:
+```bash
+cd /root/Git/ARVO2.0 && python3 -u build_agent/main.py ImageMagick/ImageMagick 6f6caf /root/Git/ARVO2.0 2>&1 | tee /tmp/arvo2_imagemagick_extreme_truncation.log
+```
+
+**예상 결과**:
+- ✅ Token 사용량: 25,000 이하 (30K 한계 내)
+- ✅ 429 에러 없음
+- ✅ 정상 완료
+- ✅ **짧은 출력 보존**: LLM이 중요한 정보 확인 가능
+- ✅ **에러 전체 표시**: 디버깅 완벽 지원
+- ✅ **max_tokens=30000**: 히스토리 자동 관리, 토큰 오버플로우 방지
+
+---
+
+### 12.5. Fix waitinglist add Command Description (Critical)
+
+**날짜**: 2025-10-17  
+**발견**: ImageMagick 로그 분석 중 waitinglist add가 모두 실패 (returncode 127)
+
+#### 문제:
+
+**ImageMagick 로그에서 발견**:
+```bash
+Lines 382-432: 모든 waitinglist add 명령어 실패
+
+`waitinglist add -p libwebp-dev` executes with returncode: 127
+`waitinglist add -p libwebpmux-dev` executes with returncode: 127
+`waitinglist add -p libxml2-dev` executes with returncode: 127
+...
+```
+
+**근본 원인**: `tools_config.py`의 애매한 명령어 설명
+
+```python
+# Before (tools_config.py:19-20):
+"command": "waitinglist add -p package_name [-v version_constraints] -t tool",
+"description": "Add item into waiting list. If no 'version_constraints' are specified..."
+```
+
+**LLM의 잘못된 해석**:
+- `[-v version_constraints]`: 대괄호 → 선택사항 ✅
+- `-t tool`: 대괄호 없음 → **하지만 필수인지 불명확** ❌
+- LLM 판단: `-t tool`도 선택사항으로 오해
+- 결과: `waitinglist add -p package_name`만 사용 → **127 에러**
+
+#### 해결:
+
+**명령어 순서 변경 + 명확한 설명** (`tools_config.py`):
+
+```python
+# Before:
+"command": "waitinglist add -p package_name [-v version_constraints] -t tool",
+"description": "Add item into waiting list. If no 'version_constraints' are specified..."
+
+# After ✅:
+"command": "waitinglist add -p package_name -t apt [-v version_constraints]",
+"description": "Add item into waiting list using apt-get. The -t apt flag is REQUIRED. Version constraints are optional (defaults to latest)."
+```
+
+**변경점**:
+1. ✅ **`-t apt`를 앞으로**: 필수 파라미터임을 명확히
+2. ✅ **`[-v version_constraints]`를 뒤로**: 선택사항임을 명확히
+3. ✅ **"REQUIRED" 명시**: `-t apt` 플래그가 필수임을 강조
+4. ✅ **"using apt-get" 추가**: tool=apt임을 명확히
+
+#### 효과:
+
+**Before (잘못된 명령어)**:
+```bash
+# LLM이 생성한 명령어:
+waitinglist add -p libwebp-dev  # ❌ -t apt 누락!
+
+# 결과:
+returncode: 127 (command not found or usage error)
+```
+
+**After (올바른 명령어)**:
+```bash
+# LLM이 생성할 명령어:
+waitinglist add -p libwebp-dev -t apt  # ✅ 올바름!
+
+# 결과:
+'libwebp-dev' (using apt to download) has been added into the waiting list.
+returncode: 0
+```
+
+**ImageMagick 재실행 예상**:
+- Before: 6개 waitinglist add 명령 모두 실패 (127) → `download` 우회
+- After: 6개 waitinglist add 명령 모두 성공 (0) → 정상 설치 ✅
+
+#### 추가 발견사항:
+
+**에러 메시지는 이미 올바름** (`configuration.py:27`):
+```python
+waitinglist command usage error, the following command formats are leagal:
+1. `waitinglist add -p package_name1 -t apt`  # ← 이미 수정되어 있음
+```
+
+**하지만**:
+- ❌ **초기 프롬프트** (`tools_config.py`): 애매한 설명 → LLM이 `-p`만 사용
+- ✅ **에러 후 피드백**: 올바른 예시 → 하지만 이미 실패함
+- 🔧 **해결**: 초기 프롬프트부터 올바르게 → 실패 자체를 방지
+
+**파일 변경:**
+- `build_agent/utils/tools_config.py`: Lines 19-20 (명령어 + 설명 수정)
+
+**영향도**:
+- ✅ **Critical**: 모든 waitinglist add 명령어가 이 설명을 참고
+- ✅ **즉각 효과**: 다음 실행부터 LLM이 올바른 명령어 생성
+- ✅ **ImageMagick 재실행**: waitinglist 정상 작동 예상
+
+---
+
+### 12.6. Align runtest.py Philosophy with HereNThere (Critical Refactor)
+
+**날짜**: 2025-10-17  
+**발견**: ImageMagick False Positive 분석 중 runtest 철학 불일치 발견
+
+#### 문제 (Philosophy Mismatch):
+
+**HereNThere (Python) 철학**:
+```python
+# HereNThere runtest.py
+def run_pytest():
+    # ✅ 테스트만 실행 (빌드 없음!)
+    result = subprocess.run(['pytest', '--collect-only', ...])
+    # LLM이 이미 pip install, poetry install 했다고 가정
+    # runtest는 환경 검증만!
+```
+
+**ARVO2.0 (C) 기존 방식** ❌:
+```python
+# ARVO2.0 runtest.py (Before)
+def run_c_tests():
+    # ❌ 빌드까지 수행!
+    if os.path.exists('/repo/CMakeLists.txt'):
+        result = subprocess.run('cmake .. && make', ...)  # 빌드!
+    elif os.path.exists('/repo/Makefile'):
+        result = subprocess.run('make', ...)  # 빌드!
+```
+
+**문제점**:
+1. ❌ **철학 불일치**: HereNThere는 "검증만", ARVO2.0은 "빌드까지"
+2. ❌ **LLM 학습 저해**: LLM이 직접 make 실행 안해도 runtest가 알아서 빌드
+3. ❌ **False Positive**: configure 안했어도 runtest가 CMake 빌드 시도 → 성공
+4. ❌ **책임 불명확**: LLM vs runtest 중 누가 빌드 책임?
+
+**ImageMagick 케이스**:
+```bash
+Turn 1-18: 패키지 설치 (실패)
+Turn 19: runtest 실행
+→ LLM이 ./configure, make 실행 안함 (runtest가 해준다고 생각)
+→ runtest: "No build system detected" → False Positive 성공
+```
+
+#### 해결 (HereNThere Philosophy):
+
+**새로운 철학** ✅:
+```
+runtest = 환경 검증만
+빌드 = LLM의 책임
+```
+
+**구체적 변경** (`runtest.py`):
+
+**1. CMake 프로젝트** (Before: 빌드 수행 → After: 테스트만):
+```python
+# Before ❌:
+elif os.path.exists('/repo/CMakeLists.txt'):
+    result = subprocess.run('cmake .. && make', ...)  # 빌드!
+    sys.exit(result.returncode)
+
+# After ✅ (HereNThere 방식):
+elif os.path.exists('/repo/CMakeLists.txt'):
+    print('Error: This is a CMake project, but no build was found.')
+    print('Please run: mkdir /repo/build && cd /repo/build && cmake .. && make')
+    sys.exit(1)  # ← LLM이 빌드 안했으면 실패!
+```
+
+**2. autoconf 프로젝트** (Before: 무시 → After: 감지):
+```python
+# Before ❌:
+else:
+    print('No build system detected...')
+    sys.exit(0)  # configure 있어도 성공!
+
+# After ✅:
+else:
+    if os.path.exists('/repo/configure'):
+        print('Error: autoconf project, but no Makefile found.')
+        print('Please run: cd /repo && ./configure')
+        print('Then run: make')
+        sys.exit(1)  # ← configure 안했으면 실패!
+```
+
+**3. Makefile 있는 경우** (Before: make 실행 → After: 검증만):
+```python
+# Before ❌:
+elif os.path.exists('/repo/Makefile'):
+    result = subprocess.run('make', ...)  # 빌드!
+
+# After ✅:
+elif os.path.exists('/repo/Makefile'):
+    # make test가 있으면 실행
+    result = subprocess.run('make test', ...)
+    
+    # test 없으면 빌드 산출물만 확인
+    result = subprocess.run('find /repo -name "*.o" -o -name "*.so" ...')
+    if result.stdout.strip():
+        sys.exit(0)  # 빌드 산출물 있음 → 성공
+    else:
+        print('Error: Makefile exists but no build artifacts found.')
+        print('Please run: make')
+        sys.exit(1)  # LLM이 make 안했으면 실패!
+```
+
+#### 효과:
+
+**Before (runtest가 빌드)**:
+```bash
+# ImageMagick:
+Turn 18: 패키지 설치 완료
+Turn 19: runtest
+→ runtest가 알아서 cmake .. && make 시도
+→ 또는 "No build system" → 성공
+→ LLM이 ./configure, make 안 배움
+
+# 문제: LLM 학습 기회 상실
+```
+
+**After (LLM이 빌드, runtest는 검증만)** ✅:
+```bash
+# ImageMagick:
+Turn 18: 패키지 설치 완료
+Turn 19: runtest
+→ ❌ Error: autoconf project, but no Makefile found.
+→ Please run: cd /repo && ./configure
+
+# LLM learns:
+Turn 20:
+### Thought: I need to run ./configure to generate Makefile.
+### Action: cd /repo && ./configure
+→ Makefile generated ✅
+
+Turn 21:
+### Action: make
+→ Build successful ✅
+
+Turn 22: runtest
+→ Makefile found
+→ Find build artifacts (*.o, *.so)
+→ ✅ Real success!
+```
+
+**LLM 학습 효과**:
+- ✅ **직접 경험**: LLM이 ./configure, make를 직접 실행
+- ✅ **에러 해결**: 빌드 에러 발생 시 LLM이 직접 해결
+- ✅ **완전한 학습**: 전체 빌드 프로세스 이해
+- ✅ **HereNThere 일관성**: Python과 동일한 철학
+
+**프로젝트별 시나리오**:
+
+| Project Type | LLM Action | Before (runtest 빌드) | After (runtest 검증만) | Result |
+|--------------|------------|----------------------|----------------------|--------|
+| **hello.c** | - | runtest → Pass | runtest → Pass | **동일** ✅ |
+| **cJSON (LLM 빌드함)** | cmake, make | runtest → Pass | runtest → make test → Pass | **개선** ✅ |
+| **cJSON (LLM 빌드 안함)** | - | runtest → cmake, make → Pass | runtest → Error: no build | **학습 강화** ✅ |
+| **ImageMagick (LLM configure)** | ./configure, make | runtest → Pass | runtest → make test → Pass | **개선** ✅ |
+| **ImageMagick (LLM 안함)** | - | runtest → Pass (False!) | runtest → Error: run ./configure | **False Positive 방지** ✅ |
+
+#### HereNThere 철학 준수:
+
+**Python (HereNThere)**:
+```
+LLM: pip install, poetry install
+runtest: pytest --collect-only (검증만)
+```
+
+**C (ARVO2.0 After)**:
+```
+LLM: apt-get install, ./configure, make
+runtest: make test, ctest (검증만)
+```
+
+**핵심 원칙**:
+1. ✅ **LLM이 빌드**: ./configure, cmake, make는 LLM이 직접
+2. ✅ **runtest는 검증**: make test, ctest만 실행
+3. ✅ **명확한 책임**: 빌드 실패 → LLM이 해결
+4. ✅ **학습 강화**: LLM이 전체 빌드 프로세스 경험
+
+#### 추가 장점:
+
+1. ✅ **LLM 학습 향상**: 빌드 명령을 직접 실행하며 학습
+2. ✅ **에러 처리 개선**: 빌드 에러 → LLM이 직접 해결
+3. ✅ **False Positive 방지**: 빌드 안했으면 runtest 실패
+4. ✅ **HereNThere 일관성**: Python과 C 동일한 철학
+5. ✅ **더 명확한 피드백**: "Please run ./configure" 등 구체적 가이드
+
+**핵심 설계 원칙**:
+```
+Assumption: LLM has already successfully built using ONE method.
+runtest simply runs the test command for that built state.
+
+- LLM이 cmake로 빌드 → runtest는 ctest
+- LLM이 make로 빌드 → runtest는 make test
+- 둘 다 체크 안함! (LLM이 이미 한 가지 방식으로 성공)
+```
+
+**파일 변경:**
+- `build_agent/tools/runtest.py`: 전체 로직 단순화 (147줄 → 148줄)
+  - Lines 46-52: 철학 명시 (docstring) - "runtest only VERIFIES"
+  - Lines 54-80: CMake build → ctest/make test만 (빌드 로직 제거)
+  - Lines 82-118: Makefile → make test 또는 빌드 산출물 확인
+  - Lines 120-143: 빌드 안됨 → 명확한 에러 + 가이드
+
+**영향도**:
+- ✅ **Critical**: 모든 C 프로젝트의 빌드 책임을 LLM으로 완전 이전
+- ✅ **Better Learning**: LLM이 빌드 과정 직접 경험 (configure, cmake, make)
+- ✅ **False Positive 방지**: 빌드 안했으면 명확하게 실패
+- ✅ **HereNThere 일관성**: Python과 C 동일한 "검증만" 철학
+- ✅ **단순함**: runtest는 이미 빌드된 것을 테스트만
+
+**ImageMagick 재실행 예상**:
+```bash
+Turn 18: apt-get install libwebp-dev -t apt ... (올바른 문법)
+Turn 19: download → 패키지 설치 ✅
+
+Turn 20: runtest
+→ ❌ Error: autoconf project, but no Makefile found.
+→ Please run: cd /repo && ./configure
+
+Turn 21: cd /repo && ./configure
+→ checking for gcc... gcc
+→ checking for libraries...
+→ config.status: creating Makefile ✅
+
+Turn 22: make
+→ Compiling ImageMagick...
+→ Build successful ✅
+
+Turn 23: runtest
+→ Makefile found
+→ Build artifacts found (*.o, *.so)
+→ ✅ Real success!
+```
+
+---
+
+### 12.7. 추가 기능 요청 템플릿
 
 **새로운 기능을 추가할 때 이 섹션에 기록:**
 

@@ -1,0 +1,2 @@
+For this simple project, the environment is considered correctly configured.
+Congratulations, you have successfully configured the environment!

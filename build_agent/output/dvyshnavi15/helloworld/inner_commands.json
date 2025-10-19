@@ -1,0 +1,62 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6086163520812988,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6287167072296143,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/hello.c",
+        "returncode": 0,
+        "time": 0.6096124649047852,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6300458908081055,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6078691482543945,
+        "dir": "/src"
+    },
+    {
+        "command": "gcc hello.c -o hello",
+        "returncode": 0,
+        "time": 0.6317269802093506,
+        "dir": "/repo"
+    },
+    {
+        "command": "./hello",
+        "returncode": 0,
+        "time": 0.6076173782348633,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6275436878204346,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.625605583190918,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6300842761993408,
+        "dir": "/repo"
+    }
+]

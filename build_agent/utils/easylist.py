@@ -15,72 +15,73 @@
 
 class EasyList:
     def __init__(self, initial_items=None):
-        """Initialize a new EasyList, optionally with initial items"""
+        """初始化一个新的 EasyList，可以选择提供初始元素列表"""
         self.items = initial_items if initial_items is not None else list()
 
     def add(self, item):
-        """Add an element to the list"""
+        """向列表添加一个元素"""
         self.items.append(item)
 
     def remove(self, item):
-        """Remove an element from the list"""
+        """从列表中移除一个元素"""
         if item in self.items:
             self.items.remove(item)
 
     def get(self, index):
-        """Get element at specified index"""
+        """获取指定索引的元素"""
         if 0 <= index < len(self.items):
             return self.items[index]
-        return None
+        return None  # 如果索引超出范围，返回 None
 
     def size(self):
-        """Return the size of the list"""
+        """返回列表的大小"""
         return len(self.items)
 
     def clear(self):
-        """Clear the list"""
+        """清空列表"""
         self.items = []
 
     def sort(self):
-        """Sort the list"""
+        """对列表进行排序"""
         self.items.sort()
 
     def reverse(self):
-        """Reverse the order of elements in the list"""
+        """将列表中的元素顺序翻转"""
         self.items.reverse()
 
     def contains(self, item):
-        """Check if the list contains an item"""
+        """检查列表是否包含某个元素"""
         return item in self.items
 
     def extend(self, other):
-        """Extend the list with elements from another list"""
+        """扩展列表，添加另一个列表中的所有元素"""
         self.items.extend(other)
 
     def index_of(self, item):
-        """Return the index of an item, -1 if not found"""
+        """返回元素在列表中的索引，如果不存在则返回 -1"""
         try:
             return self.items.index(item)
         except ValueError:
             return -1
 
     def insert(self, index, item):
-        """Insert a new element at specified index"""
+        """在指定索引位置插入一个新元素"""
         self.items.insert(index, item)
 
     def pop(self, index=-1):
-        """Remove and return element at specified position, default last"""
+        """移除并返回指定位置的元素，默认为最后一个"""
         if 0 <= index < len(self.items):
             return self.items.pop(index)
         return None
 
     def replace(self, index, item):
-        """Replace element at specified index if index is valid"""
+        """替换指定索引位置的元素，如果索引有效"""
         if 0 <= index < len(self.items):
             self.items[index] = item
         else:
             print("Index out of bounds") 
 
     def __str__(self):
-        """Return string representation of the list"""
+        """返回列表的字符串表示形式"""
         return str(self.items)
+    

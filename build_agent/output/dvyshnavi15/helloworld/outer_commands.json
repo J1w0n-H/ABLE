@@ -1,0 +1,44 @@
+[
+    {
+        "GPT_time": 1.412367343902588
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.66571044921875
+    },
+    {
+        "GPT_time": 1.5744528770446777
+    },
+    {
+        "command": "cat /repo/hello.c",
+        "returncode": 0,
+        "time": 0.6660130023956299
+    },
+    {
+        "GPT_time": 0.7976405620574951
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645979881286621
+    },
+    {
+        "command": "gcc hello.c -o hello",
+        "returncode": 0,
+        "time": 0.8060171604156494
+    },
+    {
+        "command": "./hello",
+        "returncode": 0,
+        "time": 0.7775213718414307
+    },
+    {
+        "GPT_time": 1.1798498630523682
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 0.8116416931152344
+    }
+]

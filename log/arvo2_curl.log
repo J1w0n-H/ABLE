@@ -1,0 +1,10 @@
+/curl/curl
+7e12139719e310e68b7eb2729eff859b4a5d3883
+Traceback (most recent call last):
+  File "/root/Git/ARVO2.0/build_agent/main.py", line 170, in <module>
+    main()
+  File "/root/Git/ARVO2.0/build_agent/main.py", line 138, in main
+    download_repo(root_path, full_name, sha)
+  File "/root/Git/ARVO2.0/build_agent/main.py", line 57, in download_repo
+    raise Exception("full_name Wrong!!!")
+Exception: full_name Wrong!!!

@@ -1,0 +1,554 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6086506843566895,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.7776920795440674,
+        "dir": "/src"
+    },
+    {
+        "command": "head -50 /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6087486743927002,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.628061056137085,
+        "dir": "/src"
+    },
+    {
+        "command": "grep -n \"find_package\\|pkg_check_modules\" /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6082580089569092,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6298496723175049,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6544029712677002,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libcares-dev",
+        "returncode": 1,
+        "time": 2.5095694065093994,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libssl-dev",
+        "returncode": 0,
+        "time": 2.860419750213623,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libmbedtls-dev",
+        "returncode": 0,
+        "time": 2.9438745975494385,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libwolfssl-dev",
+        "returncode": 0,
+        "time": 3.6014046669006348,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libgnutls28-dev",
+        "returncode": 0,
+        "time": 4.724339723587036,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libnghttp2-dev",
+        "returncode": 0,
+        "time": 6.078120231628418,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libnghttp3-dev",
+        "returncode": 1,
+        "time": 1.8658006191253662,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libldap2-dev",
+        "returncode": 0,
+        "time": 2.76918625831604,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libidn2-0-dev",
+        "returncode": 0,
+        "time": 2.8871116638183594,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libpsl-dev",
+        "returncode": 0,
+        "time": 3.1186232566833496,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libssh2-1-dev",
+        "returncode": 0,
+        "time": 3.019073963165283,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libssh-dev",
+        "returncode": 0,
+        "time": 2.768921136856079,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libgsasl7-dev",
+        "returncode": 0,
+        "time": 4.416461944580078,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libuv1-dev",
+        "returncode": 0,
+        "time": 3.2763452529907227,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p librtmp-dev",
+        "returncode": 0,
+        "time": 2.7653017044067383,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libcares-dev",
+        "returncode": 1,
+        "time": 1.8533124923706055,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libnghttp3-dev",
+        "returncode": 1,
+        "time": 1.9009337425231934,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libcares-dev",
+        "returncode": 1,
+        "time": 1.9153213500976562,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.7915341854095459,
+        "dir": "/src"
+    },
+    {
+        "command": "apt-cache search c-ares",
+        "returncode": 0,
+        "time": 1.4162566661834717,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6294076442718506,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libnghttp3-dev",
+        "returncode": 1,
+        "time": 1.8517961502075195,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6439216136932373,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 1,
+        "time": 0.1220102310180664,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6444687843322754,
+        "dir": "/src"
+    },
+    {
+        "command": "mkdir /repo/build",
+        "returncode": 0,
+        "time": 0.6090450286865234,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.607105016708374,
+        "dir": "/src"
+    },
+    {
+        "command": "cmake ..",
+        "returncode": 0,
+        "time": 7.030962228775024,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "make",
+        "returncode": 2,
+        "time": 10.556471586227417,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6309695243835449,
+        "dir": "/src"
+    },
+    {
+        "command": "grep -n \"find_package\\|PKG_CHECK\" /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6090536117553711,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6297740936279297,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6290230751037598,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libc-ares-dev",
+        "returncode": 0,
+        "time": 2.9172871112823486,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libssl-dev",
+        "returncode": 0,
+        "time": 2.5492115020751953,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libmbedtls-dev",
+        "returncode": 0,
+        "time": 2.5636143684387207,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libwolfssl-dev",
+        "returncode": 0,
+        "time": 2.545496702194214,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libgnutls28-dev",
+        "returncode": 0,
+        "time": 2.579735279083252,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libnghttp2-dev",
+        "returncode": 0,
+        "time": 2.515925645828247,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libldap2-dev",
+        "returncode": 0,
+        "time": 2.44357967376709,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libidn2-0-dev",
+        "returncode": 0,
+        "time": 2.7421231269836426,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libpsl-dev",
+        "returncode": 0,
+        "time": 2.5177433490753174,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libssh2-1-dev",
+        "returncode": 0,
+        "time": 2.5079801082611084,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libssh-dev",
+        "returncode": 0,
+        "time": 2.385234832763672,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libgsasl7-dev",
+        "returncode": 0,
+        "time": 2.4428963661193848,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libuv1-dev",
+        "returncode": 0,
+        "time": 2.5418753623962402,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p librtmp-dev",
+        "returncode": 0,
+        "time": 2.5115413665771484,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6294927597045898,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6068379878997803,
+        "dir": "/src"
+    },
+    {
+        "command": "mkdir build",
+        "returncode": 1,
+        "time": 0.10602355003356934,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd build",
+        "returncode": 1,
+        "time": 0.10558414459228516,
+        "dir": "/src"
+    },
+    {
+        "command": "cmake ..",
+        "returncode": 1,
+        "time": 0.1073598861694336,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6438381671905518,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6063685417175293,
+        "dir": "/src"
+    },
+    {
+        "command": "cmake ..",
+        "returncode": 0,
+        "time": 1.1117823123931885,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6305289268493652,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "make",
+        "returncode": 2,
+        "time": 10.750262022018433,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6406567096710205,
+        "dir": "/src"
+    },
+    {
+        "command": "head -50 /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6088237762451172,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6318087577819824,
+        "dir": "/src"
+    },
+    {
+        "command": "grep -n \"find_package\\|pkg_check_modules\" /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6091423034667969,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6272892951965332,
+        "dir": "/src"
+    },
+    {
+        "command": "head -50 /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.607600212097168,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6276752948760986,
+        "dir": "/src"
+    },
+    {
+        "command": "grep -n \"AC_CHECK_LIB\\|PKG_CHECK_MODULES\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6093025207519531,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6282103061676025,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6298494338989258,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p zlib1g-dev",
+        "returncode": 0,
+        "time": 2.4334890842437744,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libbrotli-dev",
+        "returncode": 0,
+        "time": 3.2054693698883057,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libzstd-dev",
+        "returncode": 0,
+        "time": 2.76853609085083,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libngtcp2-dev",
+        "returncode": 1,
+        "time": 2.020312547683716,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libnghttp3-dev",
+        "returncode": 1,
+        "time": 1.9128005504608154,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libquiche-dev",
+        "returncode": 1,
+        "time": 1.961226463317871,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libpthread-stubs0-dev",
+        "returncode": 0,
+        "time": 2.7677383422851562,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libngtcp2-dev",
+        "returncode": 1,
+        "time": 1.972839117050171,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libnghttp3-dev",
+        "returncode": 1,
+        "time": 1.953453540802002,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libquiche-dev",
+        "returncode": 1,
+        "time": 1.8430874347686768,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libngtcp2-dev",
+        "returncode": 1,
+        "time": 1.9409270286560059,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6433296203613281,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libngtcp2-0",
+        "returncode": 1,
+        "time": 1.8312060832977295,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libngtcp2-0",
+        "returncode": 1,
+        "time": 1.9674336910247803,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libngtcp2-0",
+        "returncode": 1,
+        "time": 1.8389933109283447,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6456615924835205,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.6273751258850098,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6288197040557861,
+        "dir": "/src"
+    }
+]

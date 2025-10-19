@@ -51,19 +51,18 @@ pip install -r requirements.txt
 
 ### Basic Usage
 
-**For real-time output** (recommended):
+**Recommended** (real-time output with automatic logging):
 
 ```bash
-python3 -u build_agent/main.py <repository_full_name> <sha> <root_path> 2>&1 | tee ./log/output.log
+python3 build_agent/main.py <repository_full_name> <sha> <root_path>
 ```
 
-**Or without logging**:
+**Features**:
+- ✅ **Automatic logging**: Output saved to `build_agent/log/<repo>_<sha>.log`
+- ✅ **Real-time display**: Unbuffered output to console
+- ✅ **Dual output**: Both console and log file simultaneously
 
-```bash
-python3 -u build_agent/main.py <repository_full_name> <sha> <root_path>
-```
-
-**Note**: The `-u` flag enables unbuffered output for real-time display. Without it, output may be buffered and appear delayed.
+**Note**: Logging is automatic. No need for `| tee` or `-u` flag.
 
 ### Arguments
 
@@ -73,22 +72,27 @@ python3 -u build_agent/main.py <repository_full_name> <sha> <root_path>
 
 ### Examples
 
-**Simple C project**:
+**Simple C project** (~15 seconds):
 ```bash
 cd /root/Git/ARVO2.0
-python3 -u build_agent/main.py dvyshnavi15/helloworld 2449df7 /root/Git/ARVO2.0 2>&1 | tee ./log/hello.log
+python3 build_agent/main.py dvyshnavi15/helloworld 2449df7 /root/Git/ARVO2.0
+# Log auto-saved to: build_agent/log/dvyshnavi15_helloworld_2449df7.log
 ```
 
-**CMake project (cJSON)**:
+**CMake project** (~30 seconds):
 ```bash
 cd /root/Git/ARVO2.0
-python3 -u build_agent/main.py DaveGamble/cJSON c859b25 /root/Git/ARVO2.0 2>&1 | tee ./log/cjson.log
+python3 build_agent/main.py DaveGamble/cJSON c859b25 /root/Git/ARVO2.0
+# Log auto-saved to: build_agent/log/DaveGamble_cJSON_c859b25.log
+# Result: 19/19 tests passed
 ```
 
-**Complex project (curl)**:
+**Complex project** (~4 minutes):
 ```bash
 cd /root/Git/ARVO2.0  
-python3 -u build_agent/main.py curl/curl 7e12139 /root/Git/ARVO2.0 2>&1 | tee ./log/curl.log
+python3 build_agent/main.py curl/curl 7e12139 /root/Git/ARVO2.0
+# Log auto-saved to: build_agent/log/curl_curl_7e12139.log
+# Features: 17 dependencies, source builds, rollback recovery
 ```
 
 ## Project Structure

@@ -47,13 +47,9 @@ class Tools(Enum):
         "command": 'download',
         "description": "Download all pending elements in the waiting list at once."
     }
-    build = {
-        "command": 'build',
-        "description": "Build the C/C++ project (runs ./configure && make, or cmake .. && make, or just make). MUST run this after installing dependencies and BEFORE runtest."
-    }
     runtest = {
         "command": 'runtest',
-        "description": "Check if the configured environment is correct (runs tests only, does NOT build)."
+        "description": "Check if the configured environment is correct."
     }
     clear_configuration = {
         "command": 'clear_configuration',

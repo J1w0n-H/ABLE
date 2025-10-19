@@ -1,0 +1,104 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6089010238647461,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.638519287109375,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6087660789489746,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6255667209625244,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6078870296478271,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.624305248260498,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6081912517547607,
+        "dir": "/src"
+    },
+    {
+        "command": "mkdir build",
+        "returncode": 0,
+        "time": 0.6089932918548584,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd build",
+        "returncode": 0,
+        "time": 0.6076693534851074,
+        "dir": "/repo"
+    },
+    {
+        "command": "cmake ..",
+        "returncode": 0,
+        "time": 1.872009038925171,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "make",
+        "returncode": 0,
+        "time": 5.75104546546936,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.625474214553833,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6062595844268799,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "ctest",
+        "returncode": 0,
+        "time": 0.6404359340667725,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6268088817596436,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.6560351848602295,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6253182888031006,
+        "dir": "/repo/build"
+    }
+]

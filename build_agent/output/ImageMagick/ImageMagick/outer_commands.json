@@ -1,0 +1,91 @@
+[
+    {
+        "GPT_time": 0.9183919429779053
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6660704612731934
+    },
+    {
+        "GPT_time": 2.967719078063965
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6687848567962646
+    },
+    {
+        "GPT_time": 0.9942374229431152
+    },
+    {
+        "command": "grep -E \"AC_CHECK_LIB|PKG_CHECK_MODULES\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6657791137695312
+    },
+    {
+        "GPT_time": 1.7610082626342773
+    },
+    {
+        "command": "waitinglist add -p libwebp-dev -t apt",
+        "returncode": 0,
+        "time": 0.0033643245697021484
+    },
+    {
+        "command": "waitinglist add -p libxml2-dev -t apt",
+        "returncode": 0,
+        "time": 0.0030336380004882812
+    },
+    {
+        "command": "waitinglist add -p libtiff-dev -t apt",
+        "returncode": 0,
+        "time": 0.002809762954711914
+    },
+    {
+        "command": "waitinglist add -p libjemalloc-dev -t apt",
+        "returncode": 0,
+        "time": 0.0026984214782714844
+    },
+    {
+        "command": "waitinglist add -p libgoogle-perftools-dev -t apt",
+        "returncode": 0,
+        "time": 0.002798318862915039
+    },
+    {
+        "GPT_time": 0.7939207553863525
+    },
+    {
+        "command": "download",
+        "returncode": 0,
+        "time": 35.962220430374146
+    },
+    {
+        "GPT_time": 1.3693490028381348
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6632838249206543
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 18.945515394210815
+    },
+    {
+        "GPT_time": 0.6597616672515869
+    },
+    {
+        "command": "make",
+        "returncode": 0,
+        "time": 101.53904604911804
+    },
+    {
+        "GPT_time": 0.583033561706543
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 123.1140832901001
+    }
+]

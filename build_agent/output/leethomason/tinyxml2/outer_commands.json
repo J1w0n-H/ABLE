@@ -1,0 +1,70 @@
+[
+    {
+        "GPT_time": 1.4264824390411377
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6651697158813477
+    },
+    {
+        "GPT_time": 1.434305191040039
+    },
+    {
+        "command": "cat /repo/readme.md",
+        "returncode": 0,
+        "time": 0.6661784648895264
+    },
+    {
+        "GPT_time": 1.096566915512085
+    },
+    {
+        "command": "cat /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6656253337860107
+    },
+    {
+        "GPT_time": 1.723825454711914
+    },
+    {
+        "command": "mkdir -p /repo/build",
+        "returncode": 0,
+        "time": 0.9438767433166504
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6627788543701172
+    },
+    {
+        "command": "cmake ..",
+        "returncode": 0,
+        "time": 1.224012851715088
+    },
+    {
+        "command": "make",
+        "returncode": 0,
+        "time": 2.260099411010742
+    },
+    {
+        "GPT_time": 0.8177883625030518
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6628491878509521
+    },
+    {
+        "command": "ctest",
+        "returncode": 0,
+        "time": 1.08485746383667
+    },
+    {
+        "GPT_time": 0.7485966682434082
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 1.1105563640594482
+    }
+]

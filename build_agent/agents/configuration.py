@@ -98,21 +98,10 @@ WORK PROCESS:
 1. **Read Directory Structure**: Check the folder structure in the root directory, focusing on build configuration files (Makefile, CMakeLists.txt, configure, etc.).
 2. **Check the configuration files in the root directory**: Read build configuration files such as: `Makefile`, `CMakeLists.txt`, `configure.ac`, `configure.sh`, `.github` folder for CI configurations, `README.md` for build instructions, etc.
     **IMPORTANT - Smart File Reading to Avoid Token Overflow**:
-    - ⚠️ NEVER use `cat` on large files (>100 lines) - this wastes tokens!
-    - ✅ **PRIORITY 1: Use grep FIRST** for finding specific patterns (fastest and most efficient)
-      Example: `grep -n "AC_CHECK_LIB\|PKG_CHECK_MODULES" configure.ac` (finds all dependencies at once)
-      Example: `grep -n "find_package\|pkg_check_modules" CMakeLists.txt`
-    - ✅ **PRIORITY 2: Read specific line ranges** using sed (not incremental head!)
-      Example: `sed -n '1,50p' <file>` (lines 1-50), `sed -n '100,150p' <file>` (lines 100-150)
-      ❌ AVOID: head -50, then head -100, then head -150... (wasteful! Uses many turns)
-      ✅ INSTEAD: Use grep first, then sed to read specific sections if needed
-    - ✅ **PRIORITY 3: Overview reading** with head/tail for file structure
-      `head -50 <file>` for file beginning, `tail -50 <file>` for file end
-    - ✅ Use `wc -l <file>` first to check file size before reading
-    - ✅ Use `grep -A10 -B10 <pattern> <file>` to see context around matches
-    - **Example workflow for configure.ac (4000+ lines)**:
-      ❌ WRONG: head -50 → head -100 → head -150 → ... → grep (wastes 5+ turns!)
-      ✅ RIGHT: grep "AC_CHECK_LIB" configure.ac → Found line 1049 → sed -n '1040,1060p' if needed (1-2 turns)
+    - ✅ **Use grep for finding patterns** (fastest): `grep -n "AC_CHECK_LIB" configure.ac`, `grep -A5 -B5 "pattern" file`
+    - ✅ **Use sed for specific ranges** when you know line numbers: `sed -n '100,200p' file` (lines 100-200)
+    - ✅ **Use cat for complete file** if small (<200 lines) or you need everything: `cat Makefile`, `cat config.txt`
+    - ⚠️ **AVOID incremental reading**: Do NOT do head -50, then head -100, then head -150... This wastes turns!
 2.5 **Understand build requirements**: Identify which build system is used (CMake, autoconf, or Makefile) to determine the correct build sequence.
 3. **Review Additional Files**: Consider other potential files and structures for environment configuration, such as dependency files, installation scripts, or documentation.
 4. **Analyze build dependencies**: Based on the observed structure in the root directory, determine the necessary system packages and libraries:
@@ -153,6 +142,7 @@ WORK PROCESS:
     *Note*: Do not use external download tools like `git clone` or `wget` to download a large number of files directly in the /repo folder (or its subdirectories) to avoid causing significant changes to the original repository.
     *Note*: You can use `clear_configuration` command to restore the Docker environment to its initial clean state if needed.
     *Note*: runtest should be executed AFTER completing the build. It verifies the build and runs tests, but does NOT build the project itself.
+    *Note*: download command processes ALL packages in waiting list at once. Do NOT call download multiple times in a row. If download says "No libraries downloaded", it means all packages have been processed - do NOT call download again unless you add new packages to waiting list.
 **Most Important!** You MUST complete the build before running `runtest`. Follow steps 1-7 in order:
     1-4: Analyze and install dependencies
     5-6: BUILD the project (./configure && make, or cmake .. && make)
@@ -304,7 +294,6 @@ VERY IMPORTANT TIPS:
             current_messages = manage_token_usage(self.messages)
 
             configuration_agent_list, usage = get_llm_response(self.model, current_messages)
-            # configuration_agent_list, usage = get_llm_response(self.model, self.messages)
             GPT_end_time = time.time()
             GPT_elasped_time = GPT_end_time - GPT_start_time
             self.outer_commands.append({"GPT_time": GPT_elasped_time})
@@ -368,42 +357,6 @@ VERY IMPORTANT TIPS:
                         if self.sandbox.commands[-1]['command'] == f'clear_configuration':
                             self.sandbox.commands[-1]["time"] = elasped_time
                         continue
-
-                    # # 切换到其他基础镜像
-                    # if commands[i].strip().startswith('change_base_image'):
-                    #     base_image = commands[i].strip().split('change_base_image')[1].strip().lower()
-                    #     try:
-                    #         sandbox = self.sandbox_session.sandbox.change_base_image(base_image)
-                    #         if not isinstance(sandbox, str):
-                    #             self.sandbox = sandbox
-                    #             self.sandbox_session = self.sandbox.get_session()
-                    #             res = f"You have successfully switched the docker container's base image to {base_image}. If you want to revert to the previous environment, you can enter `change_python_version` followed by the previous python version or `change_base_image` followed by the previous base image name."
-                    #             # 内部指令需要添加一个标志
-                    #             self.sandbox.commands.append({"command": f'change_base_image {base_image}', "returncode": 0, "time": -1})
-                    #             self.image_name = base_image
-                    #             print(res)
-                    #             system_res += res
-                    #         else:
-                    #             print(sandbox)
-                    #             end_time = time.time()
-                    #             elasped_time = end_time - start_time
-                    #             self.outer_commands[-1]["time"] = elasped_time
-                    #             self.outer_commands[-1]["returncode"] = 1
-                    #             if self.sandbox.commands[-1]['command'] == f'change_base_image {base_image}':
-                    #                 self.sandbox.commands[-1]["time"] = elasped_time
-                    #             continue
-                    #     except Exception as e:
-                    #         res = f"Error to change the docker container's base image to {base_image}, the error messages are: {e}"
-                    #         print(res)
-                    #         self.outer_commands[-1]["returncode"] = 1
-                    #         system_res += res
-                    #     end_time = time.time()
-                    #     elasped_time = end_time - start_time
-                    #     self.outer_commands[-1]["time"] = elasped_time
-                    #     self.outer_commands[-1]["returncode"] = 0
-                    #     if self.sandbox.commands[-1]['command'] == f'change_base_image {base_image}':
-                    #         self.sandbox.commands[-1]["time"] = elasped_time
-                    #     continue
 
                     sandbox_res, return_code =  self.sandbox_session.execute(commands[i], waiting_list, conflict_list)
                     sandbox_res = res_truncate(sandbox_res)

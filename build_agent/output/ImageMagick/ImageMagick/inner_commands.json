@@ -1,0 +1,122 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6093780994415283,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.9043078422546387,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6121890544891357,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6271500587463379,
+        "dir": "/src"
+    },
+    {
+        "command": "grep -E \"AC_CHECK_LIB|PKG_CHECK_MODULES\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6088836193084717,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6278536319732666,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6269471645355225,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libwebp-dev",
+        "returncode": 0,
+        "time": 4.011252164840698,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libxml2-dev",
+        "returncode": 0,
+        "time": 5.3768651485443115,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libtiff-dev",
+        "returncode": 0,
+        "time": 3.8902618885040283,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libjemalloc-dev",
+        "returncode": 0,
+        "time": 3.586919069290161,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/apt_download.py -p libgoogle-perftools-dev",
+        "returncode": 0,
+        "time": 3.135948657989502,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6274113655090332,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.607283353805542,
+        "dir": "/src"
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 15.380846738815308,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6299762725830078,
+        "dir": "/repo"
+    },
+    {
+        "command": "make",
+        "returncode": 0,
+        "time": 97.67042708396912,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6405525207519531,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 118.53953719139099,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6267075538635254,
+        "dir": "/repo"
+    }
+]

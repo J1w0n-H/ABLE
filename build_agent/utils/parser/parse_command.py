@@ -64,12 +64,6 @@ def match_runpipreqs(text):
     match = pattern.match(text)
     return bool(match)
 
-def match_build(text):
-    # 正则表达式 - match "build" command
-    pattern = re.compile(r'^\s*build\s*$', re.IGNORECASE | re.MULTILINE)
-    match = pattern.match(text)
-    return bool(match)
-
 def match_runtest(text):
     # 正则表达式
     pattern = re.compile(r'^\s*runtest\s*$', re.IGNORECASE | re.MULTILINE)

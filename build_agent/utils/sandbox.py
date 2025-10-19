@@ -22,7 +22,7 @@ import re
 import glob
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from parser.parse_command import match_download, match_runtest, match_build, match_conflict_solve, match_waitinglist_add, match_waitinglist_addfile, match_conflictlist_clear, match_waitinglist_clear, match_waitinglist_show, match_conflictlist_show, match_clear_configuration
+from parser.parse_command import match_download, match_runtest, match_conflict_solve, match_waitinglist_add, match_waitinglist_addfile, match_conflictlist_clear, match_waitinglist_clear, match_waitinglist_show, match_conflictlist_show, match_clear_configuration
 from download import download
 from outputcollector import OutputCollector
 from show_msg import show_msg
@@ -151,20 +151,6 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
             self.switch_to_pre_image()
             return f'Clear configuration wrong! We have already rollback to the previous state.\n{e}'
         return self
-    
-    # def change_base_image(self, base_image_name):
-    #     try:
-    #         self.commit_container()
-    #     except:
-    #         pass
-    #     self.namespace = base_image_name.strip().lower()
-    #     try:
-    #         self.start_container()
-    #     except Exception as e:
-    #         self.switch_to_pre_image()
-    #         return f'Change base image wrong! We have already rollback to the previous state. Please try another base image!\n{e}'
-    #     return self
-
 
     def commit_container(self):
         try:
@@ -458,7 +444,7 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                         result_message = f'Running `{command}`...\n' + collector.get_output() + '\n'
                         return truncate_msg(result_message, command), 'unknown'
                     elif 'pytest' in command.lower() and 'pip' not in command.lower():
-                        msg = 'Please do not use `pytest` directly, but use `runtest` or `poetryruntest`(When you configured in poetry environment) instead. If there are something wrong when running `runtest` or `poetryruntest`, please solve it and run it again!'
+                        msg = 'This is a C/C++ project. Use `runtest` instead (which runs ctest or make test for C/C++ projects).'
                         result_message = msg
                         return result_message, 1
                     elif command.split(' ')[0] == 'rm' and (command.split('/')[-1].startswith('test_') or command.split('/')[-1].endswith('_test.py')):
@@ -470,8 +456,6 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                         result_message = msg
                         return result_message, 1
                     else:
-                        if match_build(command):
-                            command = 'python /home/tools/build.py'
                         if match_runtest(command):
                             command = 'python /home/tools/runtest.py'
                         if command == 'generate_diff':
@@ -521,7 +505,7 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                             self.sandbox.commands[-1]["returncode"] = 111
                             self.sandbox.commands[-1]["error_msg"] = return_code
 
-                        if return_code != 0 and not ((command == 'python /home/tools/runtest.py' or command == 'python /home/tools/poetryruntest.py') and return_code == 5):
+                        if return_code != 0 and not (command == 'python /home/tools/runtest.py' and return_code == 5):
                             if command.strip().lower().startswith('conflict'):
                                 msg = '''conflictlist command usage error, the following command formats are legal:
 1. `conflictlist solve`
