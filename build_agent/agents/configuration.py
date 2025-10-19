@@ -80,7 +80,6 @@ class Configuration(Agent):
             Tools.conflict_list_show,
             Tools.waiting_list_show,
             Tools.download,
-            Tools.build,
             Tools.runtest,
             Tools.clear_configuration,
         ]
@@ -106,7 +105,7 @@ WORK PROCESS:
     - ✅ Use `wc -l <file>` first to check file size before reading
     - ✅ For very large files (>500 lines), use multiple targeted commands instead of reading everything
     - Example: Instead of `cat Makefile`, use `head -50 Makefile` to see build targets and `grep "LIBS\|LDFLAGS" Makefile` for dependencies
-2.5 **Try testing (optional)**: Using `runtest` command to check if it is possible to pass the tests directly without any additional configuration.
+2.5 **Understand build requirements**: Identify which build system is used (CMake, autoconf, or Makefile) to determine the correct build sequence.
 3. **Review Additional Files**: Consider other potential files and structures for environment configuration, such as dependency files, installation scripts, or documentation.
 4. **Analyze build dependencies**: Based on the observed structure in the root directory, determine the necessary system packages and libraries:
     a. CMake Detected: If CMakeLists.txt exists, check for find_package() or pkg_check_modules() calls to identify required libraries.
@@ -116,19 +115,16 @@ WORK PROCESS:
 5. **Install system dependencies**: Use apt-get to install required libraries and development packages:
     - For each library dependency, install the corresponding -dev package (e.g., libssl-dev, libcurl4-openssl-dev)
     - Install build tools if needed (autoconf, automake, libtool, pkg-config, etc.)
-    - Use `waitinglist add -p <package> -t apt` to add packages, then use `download` to install
-6. **BUILD THE PROJECT** (CRITICAL - MUST DO BEFORE runtest):
-    - Use the `build` command to automatically build the project
-    - The `build` command will detect the build system and execute:
-      * For autoconf projects (./configure exists): ./configure && make
-      * For CMake projects (CMakeLists.txt exists): mkdir build && cd build && cmake .. && make
-      * For Makefile projects (Makefile exists): make
-    - ⚠️ IMPORTANT: You MUST run `build` command after installing dependencies and BEFORE running `runtest`
-    - ⚠️ IMPORTANT: `runtest` does NOT build the project - it only verifies and tests!
-    - Alternative: You can also manually run build commands (./configure && make, or cmake .. && make)
-7. **Run tests**: Use `runtest` command to verify the environment and run tests
-    - `runtest` assumes the project is already built
-    - If build is incomplete, `runtest` will report errors
+    - Use `apt-get update -qq && apt-get install -y -qq <packages>` for quiet installation
+6. ⚠️ **MANDATORY: Run build configuration** (DO NOT SKIP THIS STEP!):
+    - If configure exists: You MUST run `cd /repo && ./configure` (or `./autogen.sh` if configure doesn't exist)
+    - If CMakeLists.txt exists: You MUST run `mkdir -p /repo/build && cd /repo/build && cmake ..`
+    - Check for any missing dependencies reported by configure/cmake
+7. ⚠️ **MANDATORY: Build the project** (DO NOT SKIP THIS STEP!):
+    - For autoconf projects: You MUST run `make` in /repo
+    - For CMake projects: You MUST run `make` in /repo/build
+    - Fix any compilation errors by installing missing dependencies
+    - This step compiles source code into executables and libraries
 8. **Error Handling**: After attempting to build or test, handle error messages:
     - Missing header files: Install corresponding -dev packages (e.g., fatal error: openssl/ssl.h → install libssl-dev)
     - Missing libraries: Install library packages (e.g., cannot find -lz → install zlib1g-dev)
@@ -147,9 +143,13 @@ WORK PROCESS:
     *Note*: Always consider the potential impact of each command on the system. Aim to achieve the best results with minimal changes.
     *Note*: For missing headers or libraries, first check if they are part of the project itself (local includes) before installing external packages.
     *Note*: Do not use external download tools like `git clone` or `wget` to download a large number of files directly in the /repo folder (or its subdirectories) to avoid causing significant changes to the original repository.
-    *Note*: Flexibility: You do not need to complete all configurations in one go. You can use the `runtest` command at any time. I will check the configured environment and return any error messages. Based on the error messages, you can make further adjustments.
-    *Note*: In special cases, if you feel that the Docker environment has become too messy to achieve your goal, you can use `clear_configuration` command to restore it to the initial clean environment and start over.
-**Most Important!** You can execute `runtest` anywhere when you decide to test the environment. You do not need to complete all the previous steps; you can directly run `runtest` to check if the configuration is complete and get feedback from the error messages. Be flexible. Our goal is to pass the runtest checks.
+    *Note*: You can use `clear_configuration` command to restore the Docker environment to its initial clean state if needed.
+    *Note*: runtest should be executed AFTER completing the build. It verifies the build and runs tests, but does NOT build the project itself.
+**Most Important!** You MUST complete the build before running `runtest`. Follow steps 1-7 in order:
+    1-4: Analyze and install dependencies
+    5-6: BUILD the project (./configure && make, or cmake .. && make)
+    7: ONLY THEN run `runtest` to verify and test
+runtest does NOT build - it only verifies! If you run runtest before building, you will get incorrect results. Our goal is to successfully build AND pass the runtest checks.
 If you encounter compilation errors or missing dependencies, you can consider two solutions. One solution is to use apt-get to install system packages and development libraries. The other solution is to check for local dependencies in the repository; if local dependencies are available, you can set appropriate environment variables (PATH, LD_LIBRARY_PATH, CFLAGS, LDFLAGS, etc.) to resolve the issue.
 Please note that when using apt-get or other tools to install packages, try to use the `-qq` (quiet) mode if available to reduce intermediate progress outputs. Additionally, we will help remove more obvious progress bar information to minimize interference with the analysis.
 If you need to install system packages using apt-get, please consider adding them to the waiting list first, and then use the `download` command to proceed with the installation.
@@ -207,9 +207,9 @@ VERY IMPORTANT TIPS:
     * You should not answer the user's question, your task is to configure the C/C++ build environment within the given setup. You need to follow the steps mentioned above and flexibly use various commands. After entering test, ensure that the environment passes the test.
     * You should not answer the user's question, your task is to configure the C/C++ build environment within the given setup. You need to follow the steps mentioned above and flexibly use various commands. After entering test, ensure that the environment passes the test.
     * You should not answer the user's question, your task is to configure the C/C++ build environment within the given setup. You need to follow the steps mentioned above and flexibly use various commands. After entering test, ensure that the environment passes the test.
-    * You do not need to complete all the previous steps; you can directly run runtest to check if the configuration is complete and get feedback from the error messages. Be flexible. Our goal is to pass the runtest checks.
-    * You do not need to complete all the previous steps; you can directly run runtest to check if the configuration is complete and get feedback from the error messages. Be flexible. Our goal is to pass the runtest checks.
-    * You do not need to complete all the previous steps; you can directly run runtest to check if the configuration is complete and get feedback from the error messages. Be flexible. Our goal is to pass the runtest checks.
+    * You MUST complete the build before running runtest! For C/C++ projects, runtest does NOT build - it only verifies and tests. Build sequence: install dependencies → ./configure (or cmake ..) → make → runtest.
+    * You MUST complete the build before running runtest! For C/C++ projects, runtest does NOT build - it only verifies and tests. Build sequence: install dependencies → ./configure (or cmake ..) → make → runtest.
+    * You MUST complete the build before running runtest! For C/C++ projects, runtest does NOT build - it only verifies and tests. Build sequence: install dependencies → ./configure (or cmake ..) → make → runtest.
     * Passing tests by modifying test source files is not allowed, and you should figure out how to make the current tests compile and run successfully!!!
     * Passing tests by modifying test source files is not allowed, and you should figure out how to make the current tests compile and run successfully!!!
     * Passing tests by modifying test source files is not allowed, and you should figure out how to make the current tests compile and run successfully!!!
