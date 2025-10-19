@@ -94,7 +94,7 @@
 | 문서 | 설명 |
 |------|------|
 | [CHANGES.md](CHANGES.md) | 전체 변경사항 이력 |
-| [MIGRATION_PYTHON_TO_C.md](MIGRATION_PYTHON_TO_C.md) | 마이그레이션 상세 (1700줄) |
+| [03_MIGRATION.md](03_MIGRATION.md) | 마이그레이션 (간결) |
 
 ---
 
@@ -108,7 +108,8 @@
 | TURN_INCREASE_ANALYSIS.md | 02_IMPROVEMENTS.md | ✅ 통합 완료 |
 | PROMPT_ISSUE_ANALYSIS.md | 02_IMPROVEMENTS.md | ✅ 통합 완료 |
 | CODE_REVIEW_PYTHON_REMNANTS.md | 02_IMPROVEMENTS.md | ✅ 통합 완료 |
-| IMAGEMAGICK_*.md (9개) | 04_EXPERIMENTS.md | ✅ 통합 완료 |
+| IMAGEMAGICK_*.md (10개) | 04_EXPERIMENTS.md | ✅ 통합 완료 |
+| MIGRATION_PYTHON_TO_C.md (1716줄) | 03_MIGRATION.md | ✅ 통합 완료 |
 | CURL_TEST_ANALYSIS.md | 04_EXPERIMENTS.md | ✅ 통합 완료 |
 | EXPERIMENT_RESULTS.md | 04_EXPERIMENTS.md | ✅ 통합 완료 |
 
@@ -133,16 +134,16 @@ ARVO2.0/
 │
 ├── 📂 참고 문서
 │   ├── CHANGES.md                 (변경 이력)
-│   ├── EXECUTION_FLOW_ARVO2.0.md  (실행 흐름)
-│   └── MIGRATION_PYTHON_TO_C.md   (마이그레이션 상세)
+│   └── EXECUTION_FLOW_ARVO2.0.md  (실행 흐름)
 │
-└── ❌ 삭제된 문서 (통합 완료)
-    ├── IMAGEMAGICK_*.md (9개)     → 04_EXPERIMENTS.md
+└── ❌ 삭제된 문서 (통합 완료, 28개)
+    ├── IMAGEMAGICK_*.md (10개)    → 04_EXPERIMENTS.md
+    ├── MIGRATION_PYTHON_TO_C.md   → 03_MIGRATION.md
     ├── RUNTEST_SIMPLIFIED.md      → 01_IMPLEMENTATION.md
     ├── DOWNLOAD_LOGIC_EXPLAINED.md→ 01_IMPLEMENTATION.md
     ├── TURN_INCREASE_ANALYSIS.md  → 02_IMPROVEMENTS.md
     ├── PROMPT_ISSUE_ANALYSIS.md   → 02_IMPROVEMENTS.md
-    └── 기타...
+    └── 기타 17개...
 ```
 
 ---
@@ -256,7 +257,8 @@ ImageMagick 관련: 9개
 ### **정리 후 (2025-10-19)**
 
 ```
-핵심 문서: 4개
+핵심 문서: 5개
+  - 00_INDEX.md (인덱스)
   - 01_IMPLEMENTATION.md
   - 02_IMPROVEMENTS.md
   - 03_MIGRATION.md
@@ -267,12 +269,15 @@ ImageMagick 관련: 9개
   - ARVO2.0_GUIDE.md
   - ARCHITECTURE_OVERVIEW.md
   - CHANGES.md
-  - MIGRATION_PYTHON_TO_C.md (상세)
+  - EXECUTION_FLOW_ARVO2.0.md
+
+총 10개 문서 (최적화 완료!)
 
 장점:
 ✅ 체계적
 ✅ 명확함
 ✅ 찾기 쉬움
+✅ 간결함
 ```
 
 ---
