@@ -78,8 +78,9 @@ def download_repo(root_path, full_name, sha):
     repo_name = full_name.split('/')[1]
     repo_path = f'{root_path}/utils/repo/{author_name}/{repo_name}/repo'
     
-    if not os.path.exists(f'{root_path}/utils/repo/{author_name}/{repo_name}'):
-        os.system(f'mkdir -p {root_path}/utils/repo/{author_name}/{repo_name}')
+    # Only create author directory, not repo_name directory (git clone will create it)
+    if not os.path.exists(f'{root_path}/utils/repo/{author_name}'):
+        os.system(f'mkdir -p {root_path}/utils/repo/{author_name}')
     
     # Increase git buffer for large repos (500MB buffer, no speed limits)
     git_config_cmd = "git config --global http.postBuffer 524288000 && git config --global http.lowSpeedLimit 0 && git config --global http.lowSpeedTime 999999"
@@ -240,11 +241,12 @@ def main():
         subprocess.run(rm_cmd, shell=True, check=True)
     if not os.path.exists(f'{output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}'):
         subprocess.run(f'mkdir -p {output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}', shell=True)
-    if os.path.exists(f'{root_path}/utils/repo/{full_name}'):
-        init_cmd = f"rm -rf {root_path}/utils/repo/{full_name} && mkdir -p {root_path}/utils/repo/{full_name}"
-    else:
-        init_cmd = f"mkdir -p {root_path}/utils/repo/{full_name}"
-    subprocess.run(init_cmd, check=True, shell=True)
+    
+    # Don't delete existing repo - let download_repo handle reuse logic
+    # Only create author directory if needed (download_repo will handle the rest)
+    author_name = full_name.split('/')[0]
+    if not os.path.exists(f'{root_path}/utils/repo/{author_name}'):
+        subprocess.run(f'mkdir -p {root_path}/utils/repo/{author_name}', shell=True)
     
     def timer():
         time.sleep(3600*2)  # Wait for 2 hours
