@@ -296,15 +296,25 @@ In addition to typical bash commands, we also provide the following commands tha
                 dir = inner_command['dir'] if 'dir' in inner_command else '/'
                 returncode = inner_command['returncode']
                 action_name = command.split(' ')[0].strip()
+                
+                # Skip failed commands
                 if str(returncode).strip() != '0':
                     continue
+                
+                # Skip safe commands (double check for safety)
                 if action_name in safe_cmd and '>' not in command:
                     continue
+                
+                # Skip analysis tools
                 if command == 'python /home/tools/runtest.py' or command == 'python /home/tools/generate_diff.py' or command == '$pwd$':
                     continue
+                
+                # Skip clear_configuration (resets history)
                 if action_name == 'clear_configuration':
                     res_cmd = list()
                     continue
+                
+                # Only include commands that actually modify system state
                 if dir != '/':
                     res_cmd.append(f'cd {dir} && {command}')
                 else:
@@ -399,6 +409,13 @@ In addition to typical bash commands, we also provide the following commands tha
                     runtest_check = '# This is $runtest.py$' not in sandbox_res
                     
                     if success_check and runtest_check:
+                        # ========================================
+                        # SUCCESS: Save final state without rollback
+                        # ========================================
+                        print("\n" + "="*70)
+                        print("🎉 BUILD SUCCESS!")
+                        print("="*70)
+                        
                         try:
                             # Generate package list from waiting_list instead of dpkg -l
                             installed_packages = []

@@ -463,22 +463,29 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                                 self.sandbox.commit_container()
                             start_time = time.time()
                             dir, return_code = self.execute('$pwd$', waiting_list, conflict_list)
-                            self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
+                            # Only record non-safe commands
+                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
+                                self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
                             self.sandbox.shell.sendline(command + " && sleep 0.5")
-                            self.sandbox.commands[-1]["returncode"] = -1
+                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
+                                self.sandbox.commands[-1]["returncode"] = -1
                         else:
                             if not (command.split()[0].strip() in safe_cmd and '>' not in command):
                                 self.sandbox.commit_container()
                             start_time = time.time()
                             dir, return_code = self.execute('$pwd$', waiting_list, conflict_list)
-                            self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
+                            # Only record non-safe commands
+                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
+                                self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
                             self.sandbox.shell.sendline(command)
-                            self.sandbox.commands[-1]["returncode"] = -1
+                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
+                                self.sandbox.commands[-1]["returncode"] = -1
 
                         self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600*2)  # 等待bash提示符，带超时
                         end_time = time.time()
                         elasped_time = end_time - start_time
-                        self.sandbox.commands[-1]["time"] = elasped_time
+                        if not (command.split()[0].strip() in safe_cmd and '>' not in command):
+                            self.sandbox.commands[-1]["time"] = elasped_time
 
                         # 获取 shell.before 中匹配到的模式之前的输出
                         output = self.sandbox.shell.before.decode('utf-8').strip()
@@ -497,11 +504,12 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                             return_code = self.get_returncode()
                         except:
                             return_code = 123
-                        try:
-                            self.sandbox.commands[-1]["returncode"] = return_code
-                        except:
-                            self.sandbox.commands[-1]["returncode"] = 111
-                            self.sandbox.commands[-1]["error_msg"] = return_code
+                        if not (command.split()[0].strip() in safe_cmd and '>' not in command):
+                            try:
+                                self.sandbox.commands[-1]["returncode"] = return_code
+                            except:
+                                self.sandbox.commands[-1]["returncode"] = 111
+                                self.sandbox.commands[-1]["error_msg"] = return_code
 
                         if return_code != 0 and not (command == 'python /home/tools/runtest.py' and return_code == 5):
                             if command.strip().lower().startswith('conflict'):
@@ -530,10 +538,10 @@ Explanation: Clear all the items in the waiting list.'''
                                 result_message = f'Running `{command}`...\n' + msg + '\n'
     
                                 return result_message, return_code
-                            # 如果是会改变状态的指令执行错误，则回退
+                            # Rollback to last checkpoint on failure - LLM can retry with different approach
                             if not (command.split()[0].strip() in safe_cmd and '>' not in command):
                                 self.sandbox.switch_to_pre_image()
-                                output_lines.append('The command execution failed, so I have reverted it back to the previous state, which is the environment before running this command.')
+                                output_lines.append('The command execution failed, so I have reverted it back to the previous state.')
                             else:
                                 output_lines.append('The command execution failed, please carefully check the output!')
                         result_message = '\n'.join(output_lines)

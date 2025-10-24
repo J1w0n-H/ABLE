@@ -265,7 +265,8 @@ def generate_statement(inner_command, pipdeptree_data):
     if './configure' in command or './autogen.sh' in command or './bootstrap' in command:
         if command.startswith('cd '):
             return f'RUN {command}'
-        if dir in ['/repo', '/repo/build']:
+        # Use actual directory if available, otherwise default to /repo
+        if dir != '/':
             return f'RUN cd {dir} && {command}'
         return f'RUN cd /repo && {command}'
     
@@ -273,7 +274,8 @@ def generate_statement(inner_command, pipdeptree_data):
     if command.startswith('make') or ' make' in command:
         if command.startswith('cd '):
             return f'RUN {command}'
-        if dir in ['/repo', '/repo/build']:
+        # Always include directory context if not root
+        if dir != '/' and not command.startswith('cd '):
             return f'RUN cd {dir} && {command}'
         return f'RUN {command}'
     
@@ -281,7 +283,8 @@ def generate_statement(inner_command, pipdeptree_data):
     if 'cmake' in command:
         if command.startswith('cd ') or command.startswith('mkdir'):
             return f'RUN {command}'
-        if dir == '/repo/build':
+        # Always include directory context if not root
+        if dir != '/' and not command.startswith('cd '):
             return f'RUN cd {dir} && {command}'
         return f'RUN {command}'
     
@@ -352,11 +355,12 @@ def integrate_dockerfile(root_path):
     # For C-only projects, these files don't exist and aren't needed
     # Removed: COPY search_patch /search_patch
     # Removed: COPY code_edit.py /code_edit.py
-    git_st = f'RUN git clone https://github.com/{author_name}/{repo_name}.git'
-    mkdir_st = 'RUN mkdir /repo'
+    
+    # USE COPY instead of git clone to avoid network issues during Dockerfile build
+    # The repo is already cloned locally in utils/repo/{author_name}/{repo_name}/repo
+    # Path is relative to build context (will be set to project root in main.py)
+    copy_repo_st = f'COPY utils/repo/{author_name}/{repo_name}/repo /repo'
     git_save_st = 'RUN git config --global --add safe.directory /repo'
-    mv_st = f'RUN cp -r /{repo_name}/. /repo && rm -rf /{repo_name}/'
-    rm_st = f'RUN rm -rf /{repo_name}'
     with open(f'{root_path}/sha.txt', 'r') as r1:
         sha = r1.read().strip()
     checkout_st = f'RUN cd /repo && git checkout {sha}'
@@ -397,11 +401,8 @@ def integrate_dockerfile(root_path):
     # Note: Legacy COPY statements removed (search_patch, code_edit.py not needed for C projects)
     dockerfile.extend(pip_st.splitlines())
     dockerfile.extend(pre_download.splitlines())
-    dockerfile.append(git_st)
-    dockerfile.append(mkdir_st)
+    dockerfile.append(copy_repo_st)  # COPY local repo instead of git clone
     dockerfile.append(git_save_st)
-    dockerfile.append(mv_st)
-    dockerfile.append(rm_st)
     dockerfile.append(checkout_st)  # 🆕 CRITICAL: Checkout specific commit SHA
     dockerfile.extend(container_run_set)
     with open(f'{root_path}/Dockerfile', 'w') as w1:

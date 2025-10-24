@@ -364,14 +364,15 @@ class CommandExecutor:
         # Get current directory
         dir, _ = session.execute('$pwd$', waiting_list, conflict_list)
         
-        # Record command
+        # Record command (only non-safe commands)
         start_time = time.time()
-        session.sandbox.commands.append({
-            "command": command,
-            "returncode": -2,
-            "time": -1,
-            "dir": dir
-        })
+        if not is_safe:
+            session.sandbox.commands.append({
+                "command": command,
+                "returncode": -2,
+                "time": -1,
+                "dir": dir
+            })
         
         # Execute command
         if command.endswith('&'):
@@ -379,13 +380,15 @@ class CommandExecutor:
         else:
             session.sandbox.shell.sendline(command + " && sleep 0.5")
         
-        session.sandbox.commands[-1]["returncode"] = -1
+        if not is_safe:
+            session.sandbox.commands[-1]["returncode"] = -1
         
         # Wait for completion
         session.sandbox.shell.expect([r'root@.*:.*# '], timeout=timeout*2)
         end_time = time.time()
         elapsed_time = end_time - start_time
-        session.sandbox.commands[-1]["time"] = elapsed_time
+        if not is_safe:
+            session.sandbox.commands[-1]["time"] = elapsed_time
         
         # Parse output
         output = session.sandbox.shell.before.decode('utf-8').strip()
@@ -405,11 +408,12 @@ class CommandExecutor:
         except:
             return_code = 123
         
-        try:
-            session.sandbox.commands[-1]["returncode"] = return_code
-        except:
-            session.sandbox.commands[-1]["returncode"] = 111
-            session.sandbox.commands[-1]["error_msg"] = return_code
+        if not is_safe:
+            try:
+                session.sandbox.commands[-1]["returncode"] = return_code
+            except:
+                session.sandbox.commands[-1]["returncode"] = 111
+                session.sandbox.commands[-1]["error_msg"] = return_code
         
         # Handle errors
         if return_code != 0 and not (command == 'python /home/tools/runtest.py' and return_code == 5):
@@ -423,7 +427,7 @@ class CommandExecutor:
                 result_message = f'Running `{command}`...\n' + msg + '\n'
                 return result_message, return_code
             
-            # Rollback if command failed and not safe
+            # Rollback to last checkpoint on failure - LLM can retry with different approach
             if not is_safe:
                 session.sandbox.switch_to_pre_image()
                 output_lines.append('The command execution failed, so I have reverted it back to the previous state.')

@@ -26,15 +26,20 @@ from pathlib import Path
 import tempfile
 from itertools import groupby
 
-safe_cmd = [
-    "cd", "ls", "cat", "echo", "pwd", "whoami", "who", "date", "cal", "df", "du",
-    "free", "uname", "uptime", "w", "ps", "pgrep", "top", "htop", "vmstat", "iostat",
-    "dmesg", "tail", "head", "more", "less", "grep", "find", "locate", "whereis", "which",
-    "file", "stat", "cmp", "diff", "md5sum", "sha256sum", "gzip", "gunzip", "bzip2", "bunzip2",
-    "xz", "unxz", "sort", "uniq", "wc", "tr", "cut", "paste", "tee", "awk", "sed", "env", "printenv",
-    "hostname", "ping", "traceroute", "ssh", "journalctl","lsblk", "blkid", "uptime",
-    "lscpu", "lsusb", "lspci", "lsmod", "dmidecode", "ip", "ifconfig", "netstat", "ss", "route", "nmap",
-    "strace", "ltrace", "time", "nice", "renice", "killall", "printf"
+# Import from helpers.py to avoid duplication
+try:
+    from helpers import SAFE_COMMANDS as safe_cmd
+except ImportError:
+    # Fallback if helpers.py not found (for backwards compatibility)
+    safe_cmd = [
+        "cd", "ls", "cat", "echo", "pwd", "whoami", "who", "date", "cal", "df", "du",
+        "free", "uname", "uptime", "w", "ps", "pgrep", "top", "htop", "vmstat", "iostat",
+        "dmesg", "tail", "head", "more", "less", "grep", "find", "locate", "whereis", "which",
+        "file", "stat", "cmp", "diff", "md5sum", "sha256sum", "gzip", "gunzip", "bzip2", "bunzip2",
+        "xz", "unxz", "sort", "uniq", "wc", "tr", "cut", "paste", "tee", "awk", "sed", "env", "printenv",
+        "hostname", "ping", "traceroute", "ssh", "journalctl","lsblk", "blkid", "uptime",
+        "lscpu", "lsusb", "lspci", "lsmod", "dmidecode", "ip", "ifconfig", "netstat", "ss", "route", "nmap",
+        "strace", "ltrace", "time", "nice", "renice", "killall", "printf"
     ]
 
 TIME_OUT_LABEL= ' seconds. Partial output:'
