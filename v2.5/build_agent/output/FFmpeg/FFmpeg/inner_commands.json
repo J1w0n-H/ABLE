@@ -1,0 +1,320 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6092877388000488,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 1.1740715503692627,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/INSTALL.md",
+        "returncode": 0,
+        "time": 0.6090068817138672,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6317005157470703,
+        "dir": "/src"
+    },
+    {
+        "command": "./repo/configure --help",
+        "returncode": 127,
+        "time": 0.10648250579833984,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6315536499023438,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6071152687072754,
+        "dir": "/src"
+    },
+    {
+        "command": "./configure --help",
+        "returncode": 0,
+        "time": 0.6707098484039307,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6300585269927979,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.26571106910705566,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6299295425415039,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat ffbuild/config.log",
+        "returncode": 0,
+        "time": 0.6169378757476807,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6313414573669434,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 1.5903637409210205,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq pkg-config gcc",
+        "returncode": 0,
+        "time": 5.177766799926758,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6311781406402588,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.25397539138793945,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.631356954574585,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq build-essential",
+        "returncode": 0,
+        "time": 1.4859814643859863,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6314561367034912,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.25285768508911133,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6316864490509033,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat ffbuild/config.log",
+        "returncode": 0,
+        "time": 0.6176750659942627,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6292166709899902,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq clang",
+        "returncode": 0,
+        "time": 16.747557640075684,
+        "dir": "/repo"
+    },
+    {
+        "command": "export CC=clang",
+        "returncode": 0,
+        "time": 0.6071808338165283,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.24914979934692383,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6302845478057861,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat INSTALL.md",
+        "returncode": 0,
+        "time": 0.6084928512573242,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6317586898803711,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq libx264-dev libvpx-dev",
+        "returncode": 0,
+        "time": 2.2376344203948975,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6306147575378418,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6078119277954102,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.2509269714355469,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6293890476226807,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat ffbuild/config.log",
+        "returncode": 0,
+        "time": 0.6185827255249023,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6295971870422363,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6077277660369873,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure --disable-debug",
+        "returncode": 1,
+        "time": 0.25510430335998535,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6332101821899414,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6075549125671387,
+        "dir": "/repo"
+    },
+    {
+        "command": "export CFLAGS=\"-O2\"",
+        "returncode": 0,
+        "time": 0.607567310333252,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.7202889919281006,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6309478282928467,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq nasm",
+        "returncode": 0,
+        "time": 1.7596821784973145,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6295936107635498,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.608797550201416,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.706922292709351,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6312084197998047,
+        "dir": "/repo"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 107.6192638874054,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6313257217407227,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.8205721378326416,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6301920413970947,
+        "dir": "/repo"
+    }
+]

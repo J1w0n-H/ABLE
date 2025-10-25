@@ -1,0 +1,683 @@
+[
+    {
+        "GPT_time": 1.5615863800048828
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6661529541015625
+    },
+    {
+        "GPT_time": 0.9533309936523438
+    },
+    {
+        "command": "cat /repo/WORKSPACE.bazel",
+        "returncode": 0,
+        "time": 0.6642146110534668
+    },
+    {
+        "GPT_time": 0.717116117477417
+    },
+    {
+        "command": "tail -100 /tmp/last_command_output.txt",
+        "returncode": 0,
+        "time": 0.16773581504821777
+    },
+    {
+        "GPT_time": 1.0371432304382324
+    },
+    {
+        "command": "head -50 /repo/WORKSPACE.bazel",
+        "returncode": 0,
+        "time": 0.6675243377685547
+    },
+    {
+        "GPT_time": 0.8657238483428955
+    },
+    {
+        "command": "head -100 /repo/WORKSPACE.bazel | tail -50",
+        "returncode": 0,
+        "time": 0.6649963855743408
+    },
+    {
+        "GPT_time": 0.7914040088653564
+    },
+    {
+        "command": "head -200 /repo/WORKSPACE.bazel | tail -100",
+        "returncode": 0,
+        "time": 0.6121525764465332
+    },
+    {
+        "GPT_time": 1.3255126476287842
+    },
+    {
+        "command": "grep -E \"load|http_archive|git_repository|local_repository\" /repo/WORKSPACE.bazel",
+        "returncode": 0,
+        "time": 0.16221284866333008
+    },
+    {
+        "GPT_time": 0.984417200088501
+    },
+    {
+        "command": "cat /repo/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6660094261169434
+    },
+    {
+        "GPT_time": 1.2170002460479736
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6637945175170898
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 28.96382212638855
+    },
+    {
+        "GPT_time": 1.486398696899414
+    },
+    {
+        "command": "cat /repo/bazel/external/dawn/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6681416034698486
+    },
+    {
+        "GPT_time": 1.3514938354492188
+    },
+    {
+        "command": "cat /repo/bazel/external/vello/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6122667789459229
+    },
+    {
+        "GPT_time": 1.0777904987335205
+    },
+    {
+        "command": "tail -100 /repo/bazel/external/vello/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6679503917694092
+    },
+    {
+        "GPT_time": 1.3991518020629883
+    },
+    {
+        "command": "tail -100 /tmp/last_command_output.txt",
+        "returncode": 0,
+        "time": 0.16248250007629395
+    },
+    {
+        "GPT_time": 1.3080036640167236
+    },
+    {
+        "command": "head -100 /repo/bazel/external/vello/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6649007797241211
+    },
+    {
+        "GPT_time": 1.4560675621032715
+    },
+    {
+        "command": "cat /repo/WORKSPACE.bazel",
+        "returncode": 0,
+        "time": 0.6651952266693115
+    },
+    {
+        "GPT_time": 1.2713093757629395
+    },
+    {
+        "command": "ls /repo/bazel",
+        "returncode": 0,
+        "time": 0.6661090850830078
+    },
+    {
+        "GPT_time": 1.0612378120422363
+    },
+    {
+        "command": "cat /repo/bazel/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6646425724029541
+    },
+    {
+        "GPT_time": 1.0798323154449463
+    },
+    {
+        "command": "cat /repo/bazel/external/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.1631605625152588
+    },
+    {
+        "GPT_time": 0.9690449237823486
+    },
+    {
+        "command": "cat /repo/BUILD.gn",
+        "returncode": 0,
+        "time": 0.6707465648651123
+    },
+    {
+        "GPT_time": 1.4944987297058105
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.1627204418182373
+    },
+    {
+        "GPT_time": 1.2867536544799805
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6632215976715088
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 24.784345865249634
+    },
+    {
+        "GPT_time": 1.592165231704712
+    },
+    {
+        "command": "cat /repo/bazel/external/dawn/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6671690940856934
+    },
+    {
+        "GPT_time": 1.26751708984375
+    },
+    {
+        "command": "ls /repo/bazel/external/dawn/include",
+        "returncode": 0,
+        "time": 0.16235828399658203
+    },
+    {
+        "GPT_time": 2.0968704223632812
+    },
+    {
+        "command": "cat /repo/WORKSPACE.bazel",
+        "returncode": 0,
+        "time": 0.6646370887756348
+    },
+    {
+        "GPT_time": 3.842787981033325
+    },
+    {
+        "command": "grep -i \"dawn\" /repo/WORKSPACE.bazel",
+        "returncode": 0,
+        "time": 0.16330409049987793
+    },
+    {
+        "GPT_time": 1.3799030780792236
+    },
+    {
+        "command": "cat /repo/DEPS",
+        "returncode": 0,
+        "time": 0.6646537780761719
+    },
+    {
+        "GPT_time": 0.9564800262451172
+    },
+    {
+        "command": "grep -i \"dawn\" /repo/DEPS",
+        "returncode": 0,
+        "time": 0.6641664505004883
+    },
+    {
+        "GPT_time": 1.171316385269165
+    },
+    {
+        "command": "ls /repo/third_party/externals",
+        "returncode": 0,
+        "time": 0.16399669647216797
+    },
+    {
+        "GPT_time": 1.4421732425689697
+    },
+    {
+        "command": "mkdir -p /repo/third_party/externals",
+        "returncode": 0,
+        "time": 24.74930715560913
+    },
+    {
+        "command": "cd /repo/third_party/externals",
+        "returncode": 0,
+        "time": 0.6646380424499512
+    },
+    {
+        "command": "git clone https://dawn.googlesource.com/dawn.git",
+        "returncode": 0,
+        "time": 76.57594919204712
+    },
+    {
+        "GPT_time": 1.2568025588989258
+    },
+    {
+        "command": "ls /repo/third_party/externals/dawn",
+        "returncode": 0,
+        "time": 0.6650242805480957
+    },
+    {
+        "GPT_time": 6.480983257293701
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6632752418518066
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 82.83421897888184
+    },
+    {
+        "GPT_time": 1.5176982879638672
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 82.0717420578003
+    },
+    {
+        "GPT_time": 1.8230023384094238
+    },
+    {
+        "command": "cat /repo/third_party/externals/dawn/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6648097038269043
+    },
+    {
+        "GPT_time": 1.777916669845581
+    },
+    {
+        "command": "ls /repo/third_party/externals/dawn/include",
+        "returncode": 0,
+        "time": 0.6675894260406494
+    },
+    {
+        "GPT_time": 1.5546715259552002
+    },
+    {
+        "command": "find /repo/third_party/externals/dawn/include -type f -name \"*.h\"",
+        "returncode": 0,
+        "time": 0.6695711612701416
+    },
+    {
+        "GPT_time": 1.7841386795043945
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645023822784424
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 82.63173604011536
+    },
+    {
+        "GPT_time": 2.4886891841888428
+    },
+    {
+        "diff": "\n/repo/bazel/external/dawn/BUILD.bazel\n<<<<<<< SEARCH\n    hdrs = glob(\n        [\"include/**/*.h\"],\n        exclude = [\"include/dawn/dawn_proc.h\"],\n    ),\n=======\n    hdrs = glob(\n        [\"include/**/*.h\"],\n        exclude = [\"include/dawn/dawn_proc.h\"],\n        allow_empty = True,\n    ),\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1641702651977539
+    },
+    {
+        "GPT_time": 1.186854362487793
+    },
+    {
+        "command": "grep -A5 -B5 'hdrs = glob(' /repo/bazel/external/dawn/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6642601490020752
+    },
+    {
+        "GPT_time": 2.0516085624694824
+    },
+    {
+        "diff": "\n/repo/bazel/external/dawn/BUILD.bazel\n<<<<<<< SEARCH\n    hdrs = glob(\n        [\n            \"include/**/*.h\",\n        ],\n        allow_empty = False,\n    ),\n=======\n    hdrs = glob(\n        [\n            \"include/**/*.h\",\n        ],\n        allow_empty = True,\n    ),\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1412811279296875
+    },
+    {
+        "GPT_time": 1.1883888244628906
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6652863025665283
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 83.36942386627197
+    },
+    {
+        "GPT_time": 1.4028527736663818
+    },
+    {
+        "command": "grep -r '//src/tint:flags.bzl' /repo/third_party/externals/dawn/src/utils",
+        "returncode": 0,
+        "time": 0.6657462120056152
+    },
+    {
+        "GPT_time": 1.193148136138916
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/utils/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"//src:tint/flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13765668869018555
+    },
+    {
+        "GPT_time": 0.8459892272949219
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6656975746154785
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 81.92414426803589
+    },
+    {
+        "GPT_time": 2.0900719165802
+    },
+    {
+        "command": "grep -r '//src/tint:flags.bzl' /repo/third_party/externals/dawn/src/tint/utils/text_generator",
+        "returncode": 0,
+        "time": 0.6657154560089111
+    },
+    {
+        "GPT_time": 1.200744390487671
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/utils/text_generator/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"//src:tint/flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13782596588134766
+    },
+    {
+        "GPT_time": 1.0820348262786865
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6641104221343994
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 81.97527360916138
+    },
+    {
+        "GPT_time": 1.2181811332702637
+    },
+    {
+        "command": "grep -r '//src/tint:flags.bzl' /repo/third_party/externals/dawn/src/tint/utils/text",
+        "returncode": 0,
+        "time": 0.6659016609191895
+    },
+    {
+        "GPT_time": 1.3607573509216309
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/utils/text/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"//src:tint/flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13796210289001465
+    },
+    {
+        "GPT_time": 1.7588117122650146
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 81.89322805404663
+    },
+    {
+        "GPT_time": 1.2839100360870361
+    },
+    {
+        "command": "find /repo -name \"flags.bzl\"",
+        "returncode": 0,
+        "time": 0.7154223918914795
+    },
+    {
+        "GPT_time": 2.104412794113159
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/utils/text/BUILD.bazel\n<<<<<<< SEARCH\nload(\"/src/tint/flags.bzl\", \"COPTS\")\n=======\nload(\"//third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13716697692871094
+    },
+    {
+        "GPT_time": 1.2816460132598877
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/utils/text/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"//third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.14366507530212402
+    },
+    {
+        "GPT_time": 1.1764743328094482
+    },
+    {
+        "command": "cat /repo/third_party/externals/dawn/src/tint/utils/text/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6655728816986084
+    },
+    {
+        "GPT_time": 1.9684545993804932
+    },
+    {
+        "command": "grep -n 'load(\"/src/tint/flags.bzl\", \"COPTS\")' /repo/third_party/externals/dawn/src/tint/utils/text/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.1644432544708252
+    },
+    {
+        "GPT_time": 2.0815060138702393
+    },
+    {
+        "command": "grep -n 'load' /repo/third_party/externals/dawn/src/tint/utils/text/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6678621768951416
+    },
+    {
+        "GPT_time": 1.9524035453796387
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/utils/text/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src:tint/flags.bzl\", \"COPTS\")\n=======\nload(\"//third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1403810977935791
+    },
+    {
+        "GPT_time": 1.119966745376587
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.663597583770752
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 82.73280644416809
+    },
+    {
+        "GPT_time": 1.2967500686645508
+    },
+    {
+        "command": "ls /repo/third_party/externals/dawn/src/tint",
+        "returncode": 0,
+        "time": 0.6651930809020996
+    },
+    {
+        "GPT_time": 1.4851126670837402
+    },
+    {
+        "command": "grep -r 'flags.bzl' /repo/third_party/externals/dawn/src/utils",
+        "returncode": 0,
+        "time": 0.665485143661499
+    },
+    {
+        "GPT_time": 1.2868361473083496
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/utils/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src:tint/flags.bzl\", \"COPTS\")\n=======\nload(\"//third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1373140811920166
+    },
+    {
+        "GPT_time": 1.176302433013916
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6627886295318604
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 82.56093192100525
+    },
+    {
+        "GPT_time": 1.451312780380249
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/api/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src:tint/flags.bzl\", \"COPTS\")\n=======\nload(\"//third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13761210441589355
+    },
+    {
+        "GPT_time": 1.1550145149230957
+    },
+    {
+        "command": "cat /repo/third_party/externals/dawn/src/tint/api/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6652815341949463
+    },
+    {
+        "GPT_time": 1.1512517929077148
+    },
+    {
+        "command": "grep -n \"flags.bzl\" /repo/third_party/externals/dawn/src/tint/api/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6654548645019531
+    },
+    {
+        "GPT_time": 0.9472391605377197
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/api/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"//third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13834023475646973
+    },
+    {
+        "GPT_time": 1.0972857475280762
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6639227867126465
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 83.02390956878662
+    },
+    {
+        "GPT_time": 1.3989698886871338
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/api/BUILD.bazel\n<<<<<<< SEARCH\nload(\"/third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"//third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.14116144180297852
+    },
+    {
+        "GPT_time": 1.1239092350006104
+    },
+    {
+        "command": "cat /repo/third_party/externals/dawn/src/tint/api/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.665219783782959
+    },
+    {
+        "GPT_time": 3.7145438194274902
+    },
+    {
+        "command": "grep -r 'load(\"/third_party/externals/dawn/src/tint:flags.bzl\"' /repo/third_party/externals/dawn/src/tint",
+        "returncode": 0,
+        "time": 0.1776142120361328
+    },
+    {
+        "GPT_time": 1.1254425048828125
+    },
+    {
+        "command": "grep -r 'load(' /repo/third_party/externals/dawn/src/tint",
+        "returncode": 0,
+        "time": 0.6873419284820557
+    },
+    {
+        "GPT_time": 1.869868278503418
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/api/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"//src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1416635513305664
+    },
+    {
+        "GPT_time": 1.3063185214996338
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6633434295654297
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 0,
+        "time": 83.00709891319275
+    },
+    {
+        "GPT_time": 1.2121670246124268
+    },
+    {
+        "command": "find /repo -name \"flags.bzl\"",
+        "returncode": 0,
+        "time": 0.708087682723999
+    },
+    {
+        "GPT_time": 1.037792444229126
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/api/BUILD.bazel\n<<<<<<< SEARCH\nload(\"/src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"/third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13823390007019043
+    },
+    {
+        "GPT_time": 1.6621296405792236
+    },
+    {
+        "command": "cat /repo/third_party/externals/dawn/src/tint/api/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6657843589782715
+    },
+    {
+        "GPT_time": 1.2152986526489258
+    },
+    {
+        "command": "grep -n \"flags.bzl\" /repo/third_party/externals/dawn/src/tint/api/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6651930809020996
+    },
+    {
+        "GPT_time": 1.2512705326080322
+    },
+    {
+        "diff": "\n/repo/third_party/externals/dawn/src/tint/api/BUILD.bazel\n<<<<<<< SEARCH\nload(\"//src/tint:flags.bzl\", \"COPTS\")\n=======\nload(\"/third_party/externals/dawn/src/tint:flags.bzl\", \"COPTS\")\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13759660720825195
+    }
+]

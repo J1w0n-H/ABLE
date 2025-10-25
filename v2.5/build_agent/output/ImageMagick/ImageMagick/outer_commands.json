@@ -6,5 +6,50 @@
         "command": "ls /repo",
         "returncode": 0,
         "time": 0.6670527458190918
+    },
+    {
+        "GPT_time": 1.4089887142181396
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.667494535446167
+    },
+    {
+        "GPT_time": 1.0119376182556152
+    },
+    {
+        "command": "cat /repo/Install-unix.txt",
+        "returncode": 0,
+        "time": 0.6691751480102539
+    },
+    {
+        "GPT_time": 1.939551830291748
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6658182144165039
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 16.907551527023315
+    },
+    {
+        "GPT_time": 1.1825096607208252
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 31.10384702682495
+    },
+    {
+        "GPT_time": 0.7085282802581787
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 5.167834997177124
     }
 ]

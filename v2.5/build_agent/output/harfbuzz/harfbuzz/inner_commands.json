@@ -2,73 +2,205 @@
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6090250015258789,
+        "time": 0.6098537445068359,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 1.0472922325134277,
+        "time": 1.048583745956421,
         "dir": "/src"
     },
     {
-        "command": "cat /repo/CMakeLists.txt",
+        "command": "cat /repo/README.md",
         "returncode": 0,
-        "time": 0.6125462055206299,
+        "time": 0.6087596416473389,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6274776458740234,
+        "time": 0.6307005882263184,
         "dir": "/src"
     },
     {
-        "command": "mkdir -p /repo/build",
+        "command": "cat /repo/BUILD.md",
         "returncode": 0,
-        "time": 0.6082239151000977,
+        "time": 0.6087353229522705,
         "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6286914348602295,
+        "dir": "/src"
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 2.0008585453033447,
+        "dir": "/src"
+    },
+    {
+        "command": "apt-get install -y -qq meson ninja-build pkg-config libglib2.0-dev libcairo2-dev libfreetype6-dev libgraphite2-dev",
+        "returncode": 0,
+        "time": 10.896208047866821,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6273996829986572,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6073601245880127,
+        "dir": "/src"
+    },
+    {
+        "command": "meson setup build",
+        "returncode": 1,
+        "time": 0.22218108177185059,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6279852390289307,
+        "dir": "/repo"
+    },
+    {
+        "command": "pip3 install --upgrade meson",
+        "returncode": 0,
+        "time": 1.7557828426361084,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6278133392333984,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6076655387878418,
+        "dir": "/repo"
+    },
+    {
+        "command": "meson setup build",
+        "returncode": 1,
+        "time": 0.2031707763671875,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.628389835357666,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6077883243560791,
+        "dir": "/repo"
+    },
+    {
+        "command": "/usr/local/bin/meson setup build",
+        "returncode": 0,
+        "time": 2.328091859817505,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6293063163757324,
+        "dir": "/repo"
     },
     {
         "command": "cd /repo/build",
         "returncode": 0,
-        "time": 0.6073291301727295,
-        "dir": "/src"
+        "time": 0.6068181991577148,
+        "dir": "/repo"
     },
     {
-        "command": "cmake .. -DCMAKE_BUILD_TYPE=Release",
+        "command": "ninja",
         "returncode": 0,
-        "time": 1.739323616027832,
+        "time": 21.400386095046997,
         "dir": "/repo/build"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6285426616668701,
+        "time": 0.6285548210144043,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6076107025146484,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 1,
+        "time": 0.12249183654785156,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6294262409210205,
+        "dir": "/repo"
+    },
+    {
+        "command": "mkdir -p /repo/build",
+        "returncode": 0,
+        "time": 0.6087965965270996,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6076040267944336,
+        "dir": "/repo"
+    },
+    {
+        "command": "cmake ..",
+        "returncode": 0,
+        "time": 1.5557878017425537,
         "dir": "/repo/build"
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 42.15888977050781,
+        "time": 33.66702127456665,
         "dir": "/repo/build"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6302249431610107,
+        "time": 0.629019021987915,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6084675788879395,
         "dir": "/repo/build"
     },
     {
         "command": "python /home/tools/runtest.py",
         "returncode": 0,
-        "time": 0.6664035320281982,
-        "dir": "/repo/build"
+        "time": 0.6414940357208252,
+        "dir": "/repo"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6300475597381592,
-        "dir": "/repo/build"
+        "time": 0.6320755481719971,
+        "dir": "/repo"
     }
 ]

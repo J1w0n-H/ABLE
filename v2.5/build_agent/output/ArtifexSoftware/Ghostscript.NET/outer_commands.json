@@ -1,0 +1,574 @@
+[
+    {
+        "GPT_time": 0.7986099720001221
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6654784679412842
+    },
+    {
+        "GPT_time": 1.2893755435943604
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6644163131713867
+    },
+    {
+        "GPT_time": 2.096762180328369
+    },
+    {
+        "command": "find /repo -name \"Makefile\" -o -name \"CMakeLists.txt\" -o -name \"*.sh\"",
+        "returncode": 0,
+        "time": 0.6641886234283447
+    },
+    {
+        "GPT_time": 1.2705435752868652
+    },
+    {
+        "command": "dotnet --version",
+        "returncode": 0,
+        "time": 0.4246947765350342
+    },
+    {
+        "GPT_time": 0.9739353656768799
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 2.161184072494507
+    },
+    {
+        "command": "apt-get install -y -qq dotnet-sdk-6.0",
+        "returncode": 0,
+        "time": 1.383739948272705
+    },
+    {
+        "GPT_time": 0.865638256072998
+    },
+    {
+        "command": "wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb",
+        "returncode": 0,
+        "time": 1.0369627475738525
+    },
+    {
+        "command": "dpkg -i packages-microsoft-prod.deb",
+        "returncode": 0,
+        "time": 0.9910173416137695
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 2.0563549995422363
+    },
+    {
+        "command": "apt-get install -y -qq dotnet-sdk-6.0",
+        "returncode": 0,
+        "time": 22.10361337661743
+    },
+    {
+        "GPT_time": 1.9125661849975586
+    },
+    {
+        "command": "dotnet build /repo/Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 7.39429235458374
+    },
+    {
+        "GPT_time": 1.335400104522705
+    },
+    {
+        "command": "dotnet build /repo/Ghostscript.NET.VS2022.sln /p:EnableWindowsTargeting=true",
+        "returncode": 0,
+        "time": 18.70039987564087
+    },
+    {
+        "GPT_time": 0.8442435264587402
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6653332710266113
+    },
+    {
+        "GPT_time": 1.4490764141082764
+    },
+    {
+        "command": "dotnet build /repo/Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.17826247215271
+    },
+    {
+        "GPT_time": 1.4259660243988037
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n=======\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n>>>>>>> REPLACE\n\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n=======\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.14058303833007812
+    },
+    {
+        "GPT_time": 1.0144448280334473
+    },
+    {
+        "command": "dotnet build /repo/Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.154330253601074
+    },
+    {
+        "GPT_time": 1.6412808895111084
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n=======\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n  </PropertyGroup>\n>>>>>>> REPLACE\n\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n=======\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n  </PropertyGroup>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13821029663085938
+    },
+    {
+        "GPT_time": 0.6472203731536865
+    },
+    {
+        "command": "dotnet build /repo/Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.12803292274475
+    },
+    {
+        "GPT_time": 1.0555593967437744
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n</Project>\n=======\n</Project>\n</Project>\n>>>>>>> REPLACE\n\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n</Project>\n=======\n</Project>\n</Project>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13882660865783691
+    },
+    {
+        "GPT_time": 0.5817241668701172
+    },
+    {
+        "command": "dotnet build /repo/Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.32558798789978
+    },
+    {
+        "GPT_time": 1.0225467681884766
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj",
+        "returncode": 0,
+        "time": 0.6651649475097656
+    },
+    {
+        "GPT_time": 1.6045732498168945
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n  </PropertyGroup>\n\ufeff<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <TargetFramework>net6.0-windows</TargetFramework>\n    <Platform Condition=\" '$(Platform)' == '' \">x86</Platform>\n    <OutputType>WinExe</OutputType>\n=======\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n    <TargetFramework>net6.0-windows</TargetFramework>\n    <Platform Condition=\" '$(Platform)' == '' \">x86</Platform>\n    <OutputType>WinExe</OutputType>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13876962661743164
+    },
+    {
+        "GPT_time": 1.1704325675964355
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj",
+        "returncode": 0,
+        "time": 0.6655697822570801
+    },
+    {
+        "GPT_time": 1.4780316352844238
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n  </PropertyGroup>\n\ufeff<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <TargetFramework>net6.0-windows</TargetFramework>\n    <Platform Condition=\" '$(Platform)' == '' \">x86</Platform>\n    <OutputType>WinExe</OutputType>\n=======\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n    <TargetFramework>net6.0-windows</TargetFramework>\n    <Platform Condition=\" '$(Platform)' == '' \">x86</Platform>\n    <OutputType>WinExe</OutputType>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13809490203857422
+    },
+    {
+        "GPT_time": 1.00801682472229
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.PDFA3Converter.Samples/Ghostscript.NET.PDFA3Converter.Samples.csproj",
+        "returncode": 0,
+        "time": 0.6642560958862305
+    },
+    {
+        "GPT_time": 0.9576559066772461
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.Samples/Ghostscript.NET.Samples.csproj",
+        "returncode": 0,
+        "time": 0.6644127368927002
+    },
+    {
+        "GPT_time": 0.6736862659454346
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj",
+        "returncode": 0,
+        "time": 0.6642189025878906
+    },
+    {
+        "GPT_time": 0.8628880977630615
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n</Project>\n</Project>\n=======\n</Project>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13741278648376465
+    },
+    {
+        "GPT_time": 0.7703812122344971
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET/Ghostscript.NET.csproj",
+        "returncode": 0,
+        "time": 0.6648058891296387
+    },
+    {
+        "GPT_time": 0.6698591709136963
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj",
+        "returncode": 0,
+        "time": 0.666038990020752
+    },
+    {
+        "GPT_time": 0.7384657859802246
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n</Project>\n</Project>\n=======\n</Project>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1378169059753418
+    },
+    {
+        "GPT_time": 0.9412434101104736
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.PDFA3Converter.Samples/Ghostscript.NET.PDFA3Converter.Samples.csproj",
+        "returncode": 0,
+        "time": 0.6669514179229736
+    },
+    {
+        "GPT_time": 0.7596311569213867
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.Samples/Ghostscript.NET.Samples.csproj",
+        "returncode": 0,
+        "time": 0.6662766933441162
+    },
+    {
+        "GPT_time": 0.9028489589691162
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj",
+        "returncode": 0,
+        "time": 0.6653406620025635
+    },
+    {
+        "GPT_time": 1.2792344093322754
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET/Ghostscript.NET.csproj",
+        "returncode": 0,
+        "time": 0.6655170917510986
+    },
+    {
+        "GPT_time": 1.0774469375610352
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6637771129608154
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 16.724456787109375
+    },
+    {
+        "GPT_time": 1.4116933345794678
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 18.47777557373047
+    },
+    {
+        "GPT_time": 1.0276947021484375
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.Viewer/_res",
+        "returncode": 0,
+        "time": 0.6634149551391602
+    },
+    {
+        "GPT_time": 1.0065233707427979
+    },
+    {
+        "command": "mv /repo/Ghostscript.NET.Viewer/_res/Ghostscript.NET.Viewer.Icon.ico /repo/Ghostscript.NET.Viewer/_res/ghostscript.net.viewer.icon.ico",
+        "returncode": 0,
+        "time": 17.051993370056152
+    },
+    {
+        "GPT_time": 0.7734205722808838
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.732909440994263
+    },
+    {
+        "GPT_time": 1.293137550354004
+    },
+    {
+        "command": "mv /repo/Ghostscript.NET.Viewer/_res/ghostscript.net.viewer.icon.ico /repo/Ghostscript.NET.Viewer/_res/Ghostscript.NET.Viewer.Icon.ico",
+        "returncode": 0,
+        "time": 16.8361656665802
+    },
+    {
+        "GPT_time": 2.4232170581817627
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.61127805709839
+    },
+    {
+        "GPT_time": 1.1221051216125488
+    },
+    {
+        "command": "mv /repo/Ghostscript.NET.Viewer/_res/ghostscript.net.viewer.icon.ico /repo/Ghostscript.NET.Viewer/_res/Ghostscript.NET.Viewer.Icon.ico",
+        "returncode": 0,
+        "time": 16.845044374465942
+    },
+    {
+        "GPT_time": 1.1587975025177002
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.Viewer/_res",
+        "returncode": 0,
+        "time": 0.6649641990661621
+    },
+    {
+        "GPT_time": 1.291517972946167
+    },
+    {
+        "command": "mv /repo/Ghostscript.NET.Viewer/_res/Ghostscript.NET.Viewer.Icon.ico /repo/Ghostscript.NET.Viewer/_res/ghostscript.net.viewer.icon.ico",
+        "returncode": 0,
+        "time": 17.362315893173218
+    },
+    {
+        "GPT_time": 0.8321006298065186
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6633596420288086
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 16.70040512084961
+    },
+    {
+        "GPT_time": 0.8161168098449707
+    },
+    {
+        "command": "ls /repo/*.sln",
+        "returncode": 0,
+        "time": 0.6640827655792236
+    },
+    {
+        "GPT_time": 1.1471304893493652
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6644940376281738
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.32720112800598
+    },
+    {
+        "GPT_time": 1.2595188617706299
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.Viewer/_res",
+        "returncode": 0,
+        "time": 0.6650776863098145
+    },
+    {
+        "GPT_time": 1.033555507659912
+    },
+    {
+        "command": "mv /repo/Ghostscript.NET.Viewer/_res/ghostscript.net.viewer.icon.ico /repo/Ghostscript.NET.Viewer/_res/Ghostscript.NET.Viewer.Icon.ico",
+        "returncode": 0,
+        "time": 17.344176292419434
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.35492444038391
+    },
+    {
+        "GPT_time": 1.5936813354492188
+    },
+    {
+        "command": "dotnet clean Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.66124176979065
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.33040976524353
+    },
+    {
+        "GPT_time": 1.062779188156128
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6654949188232422
+    },
+    {
+        "GPT_time": 1.5818135738372803
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6644735336303711
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.406489610671997
+    },
+    {
+        "GPT_time": 1.272160530090332
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.Viewer/_res",
+        "returncode": 0,
+        "time": 0.6646814346313477
+    },
+    {
+        "GPT_time": 1.9420585632324219
+    },
+    {
+        "command": "mv /repo/Ghostscript.NET.Viewer/_res/Ghostscript.NET.Viewer.Icon.ico /repo/Ghostscript.NET.Viewer/_res/ghostscript.net.viewer.icon.ico",
+        "returncode": 0,
+        "time": 16.882025718688965
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.524222135543823
+    },
+    {
+        "GPT_time": 1.7469868659973145
+    },
+    {
+        "command": "grep -i \"Ghostscript.NET.Viewer.Icon.ico\" /repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj",
+        "returncode": 0,
+        "time": 0.6650838851928711
+    },
+    {
+        "GPT_time": 1.7630016803741455
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n=======\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1375126838684082
+    },
+    {
+        "GPT_time": 1.4376108646392822
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n  <PropertyGroup>\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n=======\n  <PropertyGroup>\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13939833641052246
+    },
+    {
+        "GPT_time": 1.1626417636871338
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n=======\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13729166984558105
+    },
+    {
+        "GPT_time": 1.0690062046051025
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n  <PropertyGroup>\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n=======\n  <PropertyGroup>\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.14317083358764648
+    },
+    {
+        "GPT_time": 1.1790831089019775
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n=======\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13901996612548828
+    },
+    {
+        "GPT_time": 1.536041498184204
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n    <Content Include=\"_res\\ghostscript-dotnet.png\" />\n=======\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n    <Content Include=\"_res\\ghostscript-dotnet.png\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13772892951965332
+    },
+    {
+        "GPT_time": 1.1724090576171875
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n    <Content Include=\"_res\\tb_first.png\" />\n=======\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n    <Content Include=\"_res\\tb_first.png\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13855457305908203
+    },
+    {
+        "GPT_time": 1.3685851097106934
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n    <Content Include=\"_res\\ghostscript-dotnet.png\" />\n    <Content Include=\"_res\\tb_first.png\" />\n=======\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n    <Content Include=\"_res\\ghostscript-dotnet.png\" />\n    <Content Include=\"_res\\tb_first.png\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13637375831604004
+    },
+    {
+        "GPT_time": 1.5997729301452637
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n    <Content Include=\"_res\\ghostscript-dotnet.png\" />\n    <Content Include=\"_res\\tb_first.png\" />\n    <Content Include=\"_res\\tb_last.png\" />\n    <Content Include=\"_res\\tb_next.png\" />\n    <Content Include=\"_res\\tb_previous.png\" />\n    <Content Include=\"_res\\tool-background.png\" />\n=======\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n    <Content Include=\"_res\\ghostscript-dotnet.png\" />\n    <Content Include=\"_res\\tb_first.png\" />\n    <Content Include=\"_res\\tb_last.png\" />\n    <Content Include=\"_res\\tb_next.png\" />\n    <Content Include=\"_res\\tb_previous.png\" />\n    <Content Include=\"_res\\tool-background.png\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13973331451416016
+    },
+    {
+        "GPT_time": 1.986839771270752
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj\n<<<<<<< SEARCH\n    <ApplicationIcon>_res\\Ghostscript.NET.Viewer.Icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript-dotnet.png\" />\n    <Content Include=\"_res\\Ghostscript.NET.Viewer.Icon.ico\" />\n    <Content Include=\"_res\\tb_first.png\" />\n    <Content Include=\"_res\\tb_last.png\" />\n    <Content Include=\"_res\\tb_next.png\" />\n    <Content Include=\"_res\\tb_previous.png\" />\n    <Content Include=\"_res\\tool-background.png\" />\n=======\n    <ApplicationIcon>_res\\ghostscript.net.viewer.icon.ico</ApplicationIcon>\n  </PropertyGroup>\n  <ItemGroup>\n    <Content Include=\"_res\\ghostscript-dotnet.png\" />\n    <Content Include=\"_res\\ghostscript.net.viewer.icon.ico\" />\n    <Content Include=\"_res\\tb_first.png\" />\n    <Content Include=\"_res\\tb_last.png\" />\n    <Content Include=\"_res\\tb_next.png\" />\n    <Content Include=\"_res\\tb_previous.png\" />\n    <Content Include=\"_res\\tool-background.png\" />\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13927149772644043
+    },
+    {
+        "GPT_time": 1.2356929779052734
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6641674041748047
+    },
+    {
+        "command": "dotnet build Ghostscript.NET.VS2022.sln",
+        "returncode": 0,
+        "time": 17.722059965133667
+    },
+    {
+        "GPT_time": 1.06093168258667
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 17.253810167312622
+    }
+]

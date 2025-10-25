@@ -1,0 +1,22 @@
+diff --git a/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj b/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj
+index c005817..4c05887 100644
+--- a/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj
++++ b/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj
+@@ -1,3 +1,6 @@
++<PropertyGroup>
++  <EnableWindowsTargeting>true</EnableWindowsTargeting>
++</PropertyGroup>
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+     <TargetFramework>net6.0-windows</TargetFramework>
+diff --git a/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj b/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj
+index fd43b33..f524317 100644
+--- a/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj
++++ b/Ghostscript.NET.Viewer/Ghostscript.NET.Viewer.csproj
+@@ -1,3 +1,6 @@
++<PropertyGroup>
++  <EnableWindowsTargeting>true</EnableWindowsTargeting>
++</PropertyGroup>
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+     <TargetFramework>net6.0-windows</TargetFramework>

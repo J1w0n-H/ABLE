@@ -1,141 +1,1052 @@
 [
     {
-        "GPT_time": 0.6953206062316895
+        "GPT_time": 0.6526565551757812
     },
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6656227111816406
+        "time": 0.6689615249633789
     },
     {
-        "GPT_time": 1.1612884998321533
+        "GPT_time": 1.3930606842041016
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6654133796691895
+    },
+    {
+        "GPT_time": 1.0197558403015137
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6680240631103516
+        "time": 0.6644365787506104
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 44.405200242996216
+        "time": 36.02997088432312
     },
     {
-        "GPT_time": 1.0367584228515625
+        "GPT_time": 1.27606201171875
     },
     {
         "command": "apt-get update -qq",
         "returncode": 0,
-        "time": 37.232831954956055
+        "time": 37.06277775764465
     },
     {
         "command": "apt-get install -y -qq libgmp-dev libmpfr-dev",
         "returncode": 0,
-        "time": 36.98998045921326
+        "time": 37.336265325546265
     },
     {
-        "GPT_time": 0.8858168125152588
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.663764476776123
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 37.91125798225403
-    },
-    {
-        "GPT_time": 0.9432287216186523
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 54.25577473640442
-    },
-    {
-        "GPT_time": 1.145200252532959
+        "GPT_time": 0.6863589286804199
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6642684936523438
+        "time": 0.6631264686584473
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 38.30143928527832
+        "time": 37.582000970840454
     },
     {
-        "GPT_time": 1.0097870826721191
+        "GPT_time": 0.7465760707855225
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 47.2044095993042
+        "time": 53.56469774246216
     },
     {
-        "GPT_time": 1.0221338272094727
+        "GPT_time": 1.8545253276824951
+    },
+    {
+        "command": "apt-get install -y texinfo",
+        "returncode": 0,
+        "time": 42.61519169807434
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 66.41306209564209
+    },
+    {
+        "GPT_time": 1.2009303569793701
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.664503812789917
+    },
+    {
+        "GPT_time": 0.8054282665252686
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.663898229598999
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 38.32950019836426
-    },
-    {
-        "GPT_time": 0.9189693927764893
+        "time": 0.6643984317779541
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 43.482386350631714
+        "time": 40.268818378448486
     },
     {
-        "GPT_time": 1.085477352142334
+        "GPT_time": 1.8379838466644287
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6660211086273193
+    },
+    {
+        "GPT_time": 1.0138747692108154
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6651341915130615
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 40.612598180770874
-    },
-    {
-        "GPT_time": 0.7014892101287842
+        "time": 0.6630983352661133
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 43.725367307662964
+        "time": 38.614705324172974
     },
     {
-        "GPT_time": 1.3694813251495361
+        "GPT_time": 1.4026594161987305
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6648163795471191
+    },
+    {
+        "GPT_time": 1.3366034030914307
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6630344390869141
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 39.845386028289795
-    },
-    {
-        "GPT_time": 0.7127141952514648
+        "time": 0.6642129421234131
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 43.557756423950195
+        "time": 39.08801054954529
+    },
+    {
+        "GPT_time": 1.328524112701416
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6647400856018066
+    },
+    {
+        "GPT_time": 0.8395569324493408
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6636388301849365
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.95044994354248
+    },
+    {
+        "GPT_time": 1.3525512218475342
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6633687019348145
+    },
+    {
+        "GPT_time": 1.1492726802825928
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6641073226928711
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.68962264060974
+    },
+    {
+        "GPT_time": 1.1916389465332031
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.666858434677124
+    },
+    {
+        "GPT_time": 1.0123686790466309
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6639883518218994
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 40.70676612854004
+    },
+    {
+        "GPT_time": 0.7227804660797119
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 53.8414146900177
+    },
+    {
+        "GPT_time": 1.035529375076294
+    },
+    {
+        "command": "apt-get install -y file",
+        "returncode": 0,
+        "time": 40.498167753219604
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 46.882503032684326
+    },
+    {
+        "GPT_time": 1.0764610767364502
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6654305458068848
+    },
+    {
+        "GPT_time": 0.876481294631958
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6629059314727783
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.57197570800781
+    },
+    {
+        "GPT_time": 1.0214388370513916
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6659319400787354
+    },
+    {
+        "GPT_time": 0.8756592273712158
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6641554832458496
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.224297523498535
+    },
+    {
+        "GPT_time": 1.3199071884155273
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6648943424224854
+    },
+    {
+        "GPT_time": 1.1567020416259766
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6637444496154785
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.95825409889221
+    },
+    {
+        "GPT_time": 1.1486434936523438
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6640796661376953
+    },
+    {
+        "GPT_time": 0.8398635387420654
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6640329360961914
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.595659017562866
+    },
+    {
+        "GPT_time": 1.3912460803985596
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6664748191833496
+    },
+    {
+        "GPT_time": 0.8678338527679443
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6649034023284912
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.82602858543396
+    },
+    {
+        "GPT_time": 1.1642320156097412
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6656692028045654
+    },
+    {
+        "GPT_time": 1.1680810451507568
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6652061939239502
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.82855844497681
+    },
+    {
+        "GPT_time": 1.4174704551696777
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6646890640258789
+    },
+    {
+        "GPT_time": 0.7869524955749512
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638245582580566
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.320098876953125
+    },
+    {
+        "GPT_time": 1.237640380859375
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6651003360748291
+    },
+    {
+        "GPT_time": 0.871873140335083
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6623573303222656
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.59574317932129
+    },
+    {
+        "GPT_time": 1.2938413619995117
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6644375324249268
+    },
+    {
+        "GPT_time": 0.9170815944671631
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6634335517883301
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.40307068824768
+    },
+    {
+        "GPT_time": 1.493448257446289
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6645908355712891
+    },
+    {
+        "GPT_time": 1.0370311737060547
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6637067794799805
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.24637413024902
+    },
+    {
+        "GPT_time": 1.8460736274719238
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6653914451599121
+    },
+    {
+        "GPT_time": 1.0047883987426758
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6646251678466797
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.04817986488342
+    },
+    {
+        "GPT_time": 1.0366981029510498
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6645004749298096
+    },
+    {
+        "GPT_time": 1.1376628875732422
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6639039516448975
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.35529136657715
+    },
+    {
+        "GPT_time": 1.144568681716919
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6650147438049316
+    },
+    {
+        "GPT_time": 0.9832417964935303
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6637930870056152
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.0235013961792
+    },
+    {
+        "GPT_time": 1.2393035888671875
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6669433116912842
+    },
+    {
+        "GPT_time": 1.0169520378112793
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6643548011779785
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.448103189468384
+    },
+    {
+        "GPT_time": 1.1110353469848633
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6647562980651855
+    },
+    {
+        "GPT_time": 1.0100178718566895
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638312339782715
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.420905351638794
+    },
+    {
+        "GPT_time": 1.17979097366333
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.665424108505249
+    },
+    {
+        "GPT_time": 0.9972629547119141
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6623303890228271
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.631112813949585
+    },
+    {
+        "GPT_time": 1.1103529930114746
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6663165092468262
+    },
+    {
+        "GPT_time": 0.9263644218444824
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638345718383789
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.898025035858154
+    },
+    {
+        "GPT_time": 1.3248467445373535
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6642701625823975
+    },
+    {
+        "GPT_time": 0.8070344924926758
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6649007797241211
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.25998139381409
+    },
+    {
+        "GPT_time": 1.1757926940917969
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6656436920166016
+    },
+    {
+        "GPT_time": 0.9572134017944336
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6654472351074219
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.63595652580261
+    },
+    {
+        "GPT_time": 1.148552417755127
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6650269031524658
+    },
+    {
+        "GPT_time": 1.1758079528808594
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6639158725738525
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.078272581100464
+    },
+    {
+        "GPT_time": 1.3397574424743652
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6655571460723877
+    },
+    {
+        "GPT_time": 1.0326957702636719
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6639294624328613
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.50801110267639
+    },
+    {
+        "GPT_time": 1.0606791973114014
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.666039228439331
+    },
+    {
+        "GPT_time": 0.8841242790222168
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645498275756836
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.95557928085327
+    },
+    {
+        "GPT_time": 1.0808892250061035
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6646838188171387
+    },
+    {
+        "GPT_time": 1.0288245677947998
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6636824607849121
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.427135944366455
+    },
+    {
+        "GPT_time": 1.271357536315918
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6644692420959473
+    },
+    {
+        "GPT_time": 0.9541645050048828
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6630909442901611
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.186147928237915
+    },
+    {
+        "GPT_time": 1.0643160343170166
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6652007102966309
+    },
+    {
+        "GPT_time": 1.0049104690551758
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6640856266021729
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.800100564956665
+    },
+    {
+        "GPT_time": 1.2539124488830566
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6634764671325684
+    },
+    {
+        "GPT_time": 2.037393093109131
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645081043243408
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.905354261398315
+    },
+    {
+        "GPT_time": 1.465496301651001
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6644103527069092
+    },
+    {
+        "GPT_time": 1.3245882987976074
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.663517951965332
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.782957553863525
+    },
+    {
+        "GPT_time": 1.0817794799804688
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6647129058837891
+    },
+    {
+        "GPT_time": 1.0283453464508057
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6644999980926514
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 37.83776092529297
+    },
+    {
+        "GPT_time": 1.0863969326019287
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6653487682342529
+    },
+    {
+        "GPT_time": 1.1139051914215088
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6633679866790771
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.02299499511719
+    },
+    {
+        "GPT_time": 1.9493932723999023
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.665837287902832
+    },
+    {
+        "GPT_time": 1.185438871383667
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6646921634674072
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 40.867536544799805
+    },
+    {
+        "GPT_time": 2.412327289581299
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6652936935424805
+    },
+    {
+        "GPT_time": 1.6552097797393799
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6628293991088867
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.514615058898926
+    },
+    {
+        "GPT_time": 1.2203583717346191
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6641333103179932
+    },
+    {
+        "GPT_time": 1.414473533630371
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635227203369141
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.0043728351593
+    },
+    {
+        "GPT_time": 1.2172801494598389
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6648738384246826
+    },
+    {
+        "GPT_time": 6.245327949523926
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638936996459961
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.03433847427368
+    },
+    {
+        "GPT_time": 1.6621649265289307
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.664240837097168
+    },
+    {
+        "GPT_time": 0.9415249824523926
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664008617401123
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.771458864212036
+    },
+    {
+        "GPT_time": 1.3801403045654297
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6636035442352295
+    },
+    {
+        "GPT_time": 0.9120693206787109
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6633470058441162
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.85420322418213
+    },
+    {
+        "GPT_time": 1.0996041297912598
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6647982597351074
+    },
+    {
+        "GPT_time": 1.3211658000946045
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6640448570251465
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.7762496471405
+    },
+    {
+        "GPT_time": 1.1201691627502441
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.66465163230896
+    },
+    {
+        "GPT_time": 1.0313026905059814
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6636290550231934
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 38.971994400024414
+    },
+    {
+        "GPT_time": 1.4342927932739258
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6653075218200684
+    },
+    {
+        "GPT_time": 1.2134206295013428
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6633439064025879
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.57378387451172
+    },
+    {
+        "GPT_time": 1.2072219848632812
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6646134853363037
+    },
+    {
+        "GPT_time": 0.9442408084869385
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6623523235321045
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 39.4527325630188
+    },
+    {
+        "GPT_time": 1.5927436351776123
+    },
+    {
+        "command": "cat /repo/README",
+        "returncode": 0,
+        "time": 0.6642425060272217
     }
 ]

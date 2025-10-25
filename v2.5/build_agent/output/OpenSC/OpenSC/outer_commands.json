@@ -1,0 +1,1302 @@
+[
+    {
+        "GPT_time": 0.5768613815307617
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6660206317901611
+    },
+    {
+        "GPT_time": 2.174619436264038
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6636672019958496
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 0.9284420013427734
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 0.9620757102966309
+    },
+    {
+        "GPT_time": 0.9179110527038574
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 2.7073824405670166
+    },
+    {
+        "command": "apt-get install -y -qq autoconf",
+        "returncode": 0,
+        "time": 2.841759443283081
+    },
+    {
+        "GPT_time": 0.6178760528564453
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6649787425994873
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 2.860057830810547
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 1.204803228378296
+    },
+    {
+        "GPT_time": 0.8915958404541016
+    },
+    {
+        "command": "apt-get install -y -qq libtool pkg-config",
+        "returncode": 0,
+        "time": 5.994501352310181
+    },
+    {
+        "GPT_time": 0.6394667625427246
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6625008583068848
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.822298049926758
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.181793451309204
+    },
+    {
+        "GPT_time": 1.5474472045898438
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645412445068359
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.650159120559692
+    },
+    {
+        "GPT_time": 0.7263023853302002
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6633853912353516
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.269800186157227
+    },
+    {
+        "GPT_time": 1.275876522064209
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6668496131896973
+    },
+    {
+        "GPT_time": 1.1695778369903564
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.665442705154419
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.6310412883758545
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.182474136352539
+    },
+    {
+        "GPT_time": 1.4363977909088135
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.663841724395752
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.683351516723633
+    },
+    {
+        "GPT_time": 0.8386502265930176
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.248270750045776
+    },
+    {
+        "GPT_time": 1.4262421131134033
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6630346775054932
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.705773115158081
+    },
+    {
+        "GPT_time": 0.78139328956604
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6639180183410645
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.193020820617676
+    },
+    {
+        "GPT_time": 1.422208547592163
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6643831729888916
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.810840845108032
+    },
+    {
+        "GPT_time": 0.5923106670379639
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6648719310760498
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.273068428039551
+    },
+    {
+        "GPT_time": 1.170778751373291
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6643636226654053
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.685056447982788
+    },
+    {
+        "GPT_time": 1.1825509071350098
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6633024215698242
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.374949216842651
+    },
+    {
+        "GPT_time": 1.3311090469360352
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6644086837768555
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.672553777694702
+    },
+    {
+        "GPT_time": 0.8140389919281006
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.312728404998779
+    },
+    {
+        "GPT_time": 0.8522765636444092
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645870208740234
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.729584693908691
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.306264162063599
+    },
+    {
+        "GPT_time": 1.1702592372894287
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6643917560577393
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.6755149364471436
+    },
+    {
+        "GPT_time": 0.6275672912597656
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.129834890365601
+    },
+    {
+        "GPT_time": 0.8804748058319092
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635899543762207
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.718806266784668
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.278856992721558
+    },
+    {
+        "GPT_time": 0.9718773365020752
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6641206741333008
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.817323207855225
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.289010047912598
+    },
+    {
+        "GPT_time": 1.2201111316680908
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6652100086212158
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.635212421417236
+    },
+    {
+        "GPT_time": 0.7777020931243896
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.336286306381226
+    },
+    {
+        "GPT_time": 1.2629551887512207
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635479927062988
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.667179822921753
+    },
+    {
+        "GPT_time": 0.6947793960571289
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.142775058746338
+    },
+    {
+        "GPT_time": 0.8548810482025146
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635198593139648
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.660390615463257
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.208478212356567
+    },
+    {
+        "GPT_time": 3.255042552947998
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6676466464996338
+    },
+    {
+        "GPT_time": 1.2666678428649902
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638610363006592
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.750426769256592
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.161226987838745
+    },
+    {
+        "GPT_time": 3.7194037437438965
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6623716354370117
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.675202369689941
+    },
+    {
+        "GPT_time": 0.7933557033538818
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.169216871261597
+    },
+    {
+        "GPT_time": 1.3865363597869873
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664320707321167
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.75485634803772
+    },
+    {
+        "GPT_time": 1.0246717929840088
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6652548313140869
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.264998912811279
+    },
+    {
+        "GPT_time": 1.2383818626403809
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.667186975479126
+    },
+    {
+        "GPT_time": 0.8022580146789551
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6650311946868896
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.694963693618774
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.3105573654174805
+    },
+    {
+        "GPT_time": 1.283625602722168
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6636867523193359
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.68123197555542
+    },
+    {
+        "GPT_time": 0.5966475009918213
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.255153179168701
+    },
+    {
+        "GPT_time": 1.2134568691253662
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6637814044952393
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.7727086544036865
+    },
+    {
+        "GPT_time": 0.6386890411376953
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664315938949585
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.37386417388916
+    },
+    {
+        "GPT_time": 1.072516679763794
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6648664474487305
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.6048829555511475
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.173757791519165
+    },
+    {
+        "GPT_time": 1.6224026679992676
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638047695159912
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.6395063400268555
+    },
+    {
+        "GPT_time": 0.7589213848114014
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638569831848145
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.308073997497559
+    },
+    {
+        "GPT_time": 0.8106772899627686
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664522647857666
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.701989650726318
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.265329837799072
+    },
+    {
+        "GPT_time": 1.3620123863220215
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6646614074707031
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.687013149261475
+    },
+    {
+        "GPT_time": 1.5350828170776367
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6647477149963379
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.367299318313599
+    },
+    {
+        "GPT_time": 1.329331874847412
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.665717363357544
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.7895591259002686
+    },
+    {
+        "GPT_time": 0.777550458908081
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635222434997559
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.328318357467651
+    },
+    {
+        "GPT_time": 1.3213434219360352
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6642332077026367
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.722866058349609
+    },
+    {
+        "GPT_time": 0.5853962898254395
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635687351226807
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.294193744659424
+    },
+    {
+        "GPT_time": 1.1429178714752197
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.667381763458252
+    },
+    {
+        "GPT_time": 1.0090153217315674
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6648590564727783
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.760148525238037
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.167858839035034
+    },
+    {
+        "GPT_time": 1.5402145385742188
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6631085872650146
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.751528978347778
+    },
+    {
+        "GPT_time": 0.6115357875823975
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645951271057129
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.22777247428894
+    },
+    {
+        "GPT_time": 1.2008492946624756
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6632883548736572
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.662585258483887
+    },
+    {
+        "GPT_time": 0.9769394397735596
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6642370223999023
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.313669681549072
+    },
+    {
+        "GPT_time": 2.5044894218444824
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645193099975586
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.755616664886475
+    },
+    {
+        "GPT_time": 0.5787363052368164
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.26646614074707
+    },
+    {
+        "GPT_time": 1.468752384185791
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.66322922706604
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.72878623008728
+    },
+    {
+        "GPT_time": 0.6964895725250244
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6644747257232666
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.247900009155273
+    },
+    {
+        "GPT_time": 1.252713680267334
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6637547016143799
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.648035764694214
+    },
+    {
+        "GPT_time": 0.6243042945861816
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6642947196960449
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.275542497634888
+    },
+    {
+        "GPT_time": 1.1641745567321777
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638531684875488
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.801910161972046
+    },
+    {
+        "GPT_time": 0.5542032718658447
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6651864051818848
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.190724849700928
+    },
+    {
+        "GPT_time": 1.1749670505523682
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6646363735198975
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.727224588394165
+    },
+    {
+        "GPT_time": 0.6094067096710205
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6653761863708496
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.2161219120025635
+    },
+    {
+        "GPT_time": 1.2324719429016113
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6675186157226562
+    },
+    {
+        "GPT_time": 1.1822586059570312
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6646325588226318
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.666522979736328
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.167794942855835
+    },
+    {
+        "GPT_time": 1.3420302867889404
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6668238639831543
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.70194935798645
+    },
+    {
+        "GPT_time": 0.7274966239929199
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6648519039154053
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.303420066833496
+    },
+    {
+        "GPT_time": 1.2103734016418457
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6630265712738037
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.7519636154174805
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.216028213500977
+    },
+    {
+        "GPT_time": 1.0399017333984375
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6640481948852539
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.665007591247559
+    },
+    {
+        "GPT_time": 0.651395320892334
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6645643711090088
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.247792720794678
+    },
+    {
+        "GPT_time": 1.2528131008148193
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635088920593262
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.620878458023071
+    },
+    {
+        "GPT_time": 0.7733118534088135
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6630203723907471
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.245326519012451
+    },
+    {
+        "GPT_time": 1.436082363128662
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6634421348571777
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.718905925750732
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.128556489944458
+    },
+    {
+        "GPT_time": 1.5729477405548096
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6679449081420898
+    },
+    {
+        "GPT_time": 1.2333924770355225
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638202667236328
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.720473051071167
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.172540664672852
+    },
+    {
+        "GPT_time": 1.4943265914916992
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638543605804443
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.6817786693573
+    },
+    {
+        "GPT_time": 0.747373104095459
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.663644552230835
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.259573459625244
+    },
+    {
+        "GPT_time": 1.5796501636505127
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6636884212493896
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.740112781524658
+    },
+    {
+        "GPT_time": 0.961061954498291
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.278097867965698
+    },
+    {
+        "GPT_time": 1.4849863052368164
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6641738414764404
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.734925270080566
+    },
+    {
+        "GPT_time": 0.83231520652771
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6639423370361328
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.175323724746704
+    },
+    {
+        "GPT_time": 0.9205319881439209
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664607048034668
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.698041677474976
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.2944347858428955
+    },
+    {
+        "GPT_time": 0.8695669174194336
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664008378982544
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.640732288360596
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.238429546356201
+    },
+    {
+        "GPT_time": 1.206460952758789
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6643052101135254
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.734324932098389
+    },
+    {
+        "GPT_time": 0.773629903793335
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.225613594055176
+    },
+    {
+        "GPT_time": 1.256115436553955
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664680004119873
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.77846360206604
+    },
+    {
+        "GPT_time": 0.9882638454437256
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664984941482544
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.215744495391846
+    },
+    {
+        "GPT_time": 1.3333263397216797
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6631577014923096
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.696727991104126
+    },
+    {
+        "GPT_time": 0.6567647457122803
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6633641719818115
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.327031373977661
+    },
+    {
+        "GPT_time": 1.2335755825042725
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6664128303527832
+    },
+    {
+        "GPT_time": 1.014348030090332
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638941764831543
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.671221494674683
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.286694288253784
+    },
+    {
+        "GPT_time": 0.897641658782959
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638278961181641
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.7560951709747314
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.168907165527344
+    },
+    {
+        "GPT_time": 1.4512174129486084
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6647348403930664
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.586660385131836
+    },
+    {
+        "GPT_time": 0.6867039203643799
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.161041021347046
+    },
+    {
+        "GPT_time": 1.1695160865783691
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6688077449798584
+    }
+]
