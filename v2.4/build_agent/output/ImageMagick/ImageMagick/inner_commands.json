@@ -1,0 +1,80 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6095900535583496,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.8922638893127441,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6088240146636963,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.62603759765625,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/Install-unix.txt",
+        "returncode": 0,
+        "time": 0.6106805801391602,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6268734931945801,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6084151268005371,
+        "dir": "/src"
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 12.385085344314575,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6331231594085693,
+        "dir": "/repo"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 27.028974533081055,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6295897960662842,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.7115836143493652,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6284425258636475,
+        "dir": "/repo"
+    }
+]

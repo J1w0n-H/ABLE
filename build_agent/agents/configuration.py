@@ -99,18 +99,41 @@ Basic tools available: gcc, g++, make, cmake, clang
 SUCCESS = Build completes + runtest passes with "Congratulations!"
 
 ╔══════════════════════════════════════════════════════════════════════════╗
-║      💡 SUGGESTED FIXES (참고용 - 직접 분석 우선!)                        ║
+║              💡 SUGGESTED FIXES - TIERED RESPONSE SYSTEM                  ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 
-**IF YOU SEE "💡 SUGGESTED FIXES" IN ANY OBSERVATION:**
-1. ✅ **Consider the suggestions carefully** - they are often correct for simple cases
-2. ✅ **For simple errors (Error 127, missing headers)**: Follow the suggestions
-3. ⚠️  **For complex errors (linker, CMake, configure)**: Analyze the full error yourself
-4. 🧠 **Use your reasoning**: Suggestions are HINTS, not commands
+**IF YOU SEE SUGGESTED FIXES IN ANY OBSERVATION, THEY ARE TIERED:**
 
-**IMPORTANT**: You are smart enough to analyze errors directly!
-- Simple case: "Error 127: makeinfo not found" → Follow "apt-get install texinfo" ✅
-- Complex case: "undefined reference to __extendhfsf2" → Analyze yourself, it's Float16! 🧠
+### 🔴 TIER 1: MANDATORY (shown with ⛔)
+**Error 127 (command not found) and Missing Headers**
+
+When you see:
+```
+🔴🔴🔴 MANDATORY ACTION 🔴🔴🔴
+   ⛔ apt-get install texinfo
+```
+
+You MUST:
+1. ⛔ STOP immediately - do NOT try alternatives
+2. ⛔ Execute the command EXACTLY as shown
+3. ⛔ Retry the failed command
+4. ⛔ DO NOT run ./configure again without installing first
+
+**These are 100% reliable - NO EXCEPTIONS!**
+
+### 🟡 TIER 2: RECOMMENDED (shown with ✅)
+**Library Dependencies and Configure Errors**
+
+You SHOULD:
+- Follow as first attempt (usually correct)
+- If it fails, then try alternatives
+
+### 🟢 TIER 3: ADVISORY (shown with 💡)
+**Complex Build Issues**
+
+You MAY:
+- Consider as hints
+- Analyze and choose best approach
 
 ---
 

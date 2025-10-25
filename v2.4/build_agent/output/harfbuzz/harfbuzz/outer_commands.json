@@ -1,0 +1,52 @@
+[
+    {
+        "GPT_time": 2.073699951171875
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6667342185974121
+    },
+    {
+        "GPT_time": 1.8776369094848633
+    },
+    {
+        "command": "cat /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.667046070098877
+    },
+    {
+        "GPT_time": 1.1215267181396484
+    },
+    {
+        "command": "mkdir -p /repo/build",
+        "returncode": 0,
+        "time": 4.462379693984985
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6645357608795166
+    },
+    {
+        "command": "cmake .. -DCMAKE_BUILD_TYPE=Release",
+        "returncode": 0,
+        "time": 5.197761058807373
+    },
+    {
+        "GPT_time": 1.2520759105682373
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 45.5275194644928
+    },
+    {
+        "GPT_time": 0.7395799160003662
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 4.980400323867798
+    }
+]
