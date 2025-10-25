@@ -1,0 +1,8 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6100120544433594,
+        "dir": "/src"
+    }
+]

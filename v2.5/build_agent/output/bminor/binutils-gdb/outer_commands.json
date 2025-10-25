@@ -1,0 +1,141 @@
+[
+    {
+        "GPT_time": 0.6953206062316895
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6656227111816406
+    },
+    {
+        "GPT_time": 1.1612884998321533
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6680240631103516
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 44.405200242996216
+    },
+    {
+        "GPT_time": 1.0367584228515625
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 37.232831954956055
+    },
+    {
+        "command": "apt-get install -y -qq libgmp-dev libmpfr-dev",
+        "returncode": 0,
+        "time": 36.98998045921326
+    },
+    {
+        "GPT_time": 0.8858168125152588
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.663764476776123
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 37.91125798225403
+    },
+    {
+        "GPT_time": 0.9432287216186523
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 54.25577473640442
+    },
+    {
+        "GPT_time": 1.145200252532959
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6642684936523438
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 38.30143928527832
+    },
+    {
+        "GPT_time": 1.0097870826721191
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 47.2044095993042
+    },
+    {
+        "GPT_time": 1.0221338272094727
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.663898229598999
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 38.32950019836426
+    },
+    {
+        "GPT_time": 0.9189693927764893
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 43.482386350631714
+    },
+    {
+        "GPT_time": 1.085477352142334
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6651341915130615
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 40.612598180770874
+    },
+    {
+        "GPT_time": 0.7014892101287842
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 43.725367307662964
+    },
+    {
+        "GPT_time": 1.3694813251495361
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6630344390869141
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 39.845386028289795
+    },
+    {
+        "GPT_time": 0.7127141952514648
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 43.557756423950195
+    }
+]

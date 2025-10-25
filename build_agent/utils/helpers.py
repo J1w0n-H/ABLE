@@ -19,25 +19,50 @@ SAFE_COMMANDS = [
 def truncate_msg(result_message, command, truncate=1000, bar_truncate=20, returncode=0):
     """
     Truncate command output intelligently:
-    - <= 20 lines: Show full output (regardless of returncode)
-    - > 20 lines && returncode=0: Show first 10 + last 10 lines
-    - > 20 lines && returncode!=0: Show full output (errors need full context)
+    - <= 20 lines: Show full output
+    - > 20 lines && returncode=0: Show first 10 + last 10
+    - > 20 lines && returncode!=0 && <= 500: Show full output
+    - > 500 lines: Save to file, show summary + instructions
+    
+    v2.4.2: Save long output to file instead of truncating critical info
     """
     lines = result_message.splitlines()
     lines = [x for x in lines if len(x.strip()) > 0]
     line_count = len(lines)
     
-    # 1. 20줄 이하 -> 전체 출력 (리턴코드 무관)
+    # 1. Short output (≤20 lines) - show full
     if line_count <= 20:
         return result_message
     
-    # 2. 20줄 이상
-    if returncode == 0:
-        # 성공이면 앞뒤 10줄씩만 (토큰 절약)
+    # 2. Medium success output (20-500 lines, returncode=0) - truncate
+    if returncode == 0 and line_count <= 500:
         truncated_output = '\n'.join(lines[:10] + [f'... ({line_count - 20} lines omitted) ...'] + lines[-10:])
         return truncated_output
+    
+    # 3. Long output (>500 lines) - save to file
+    if line_count > 500:
+        # Save full output to file
+        output_file = '/tmp/last_command_output.txt'
+        with open(output_file, 'w') as f:
+            f.write(result_message)
+        
+        # Create summary for LLM
+        summary = f"⚠️  Output too long ({line_count} lines) - saved to {output_file}\n\n"
+        summary += "📁 Full output available at: /tmp/last_command_output.txt\n"
+        summary += "💡 Use these commands to inspect:\n"
+        summary += "   - tail -100 /tmp/last_command_output.txt (last 100 lines)\n"
+        summary += "   - grep 'error' /tmp/last_command_output.txt (find errors)\n"
+        summary += "   - grep -i 'Error 127' /tmp/last_command_output.txt (find specific error)\n\n"
+        summary += "━━━ First 50 lines ━━━\n"
+        summary += '\n'.join(lines[:50]) + "\n"
+        summary += f"\n... ({line_count - 100} lines omitted - see {output_file}) ...\n\n"
+        summary += "━━━ Last 50 lines ━━━\n"
+        summary += '\n'.join(lines[-50:])
+        
+        return summary
+    
+    # 4. Medium error output (20-500 lines, returncode!=0) - show full
     else:
-        # 실패면 전체 출력 (디버깅 필요)
         return result_message
 
 def get_waitinglist_error_msg():

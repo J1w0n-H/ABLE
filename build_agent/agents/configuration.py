@@ -165,6 +165,23 @@ WORK PROCESS:
     - ✅ **Use sed for specific ranges** when you know line numbers: `sed -n '100,200p' file` (lines 100-200)
     - ✅ **Use cat for complete file** if small (<200 lines) or you need everything: `cat Makefile`, `cat config.txt`
     - ⚠️ **AVOID incremental reading**: Do NOT do head -50, then head -100, then head -150... This wastes turns!
+    
+    **🆕 LONG OUTPUT HANDLING**:
+    If command output exceeds 500 lines, it will be saved to `/tmp/last_command_output.txt`
+    You'll see:
+    ```
+    ⚠️  Output too long (2847 lines) - saved to /tmp/last_command_output.txt
+    
+    💡 Use these commands to inspect:
+       - tail -100 /tmp/last_command_output.txt
+       - grep 'Error 127' /tmp/last_command_output.txt
+       - grep -i 'fatal error' /tmp/last_command_output.txt
+    ```
+    
+    **HOW TO USE:**
+    - Don't panic! The full output is saved
+    - Use grep/tail to find what you need
+    - Focus on error messages (usually in last 100 lines)
 2.5 **Understand build requirements**: Identify which build system is used (CMake, autoconf, or Makefile) to determine the correct build sequence.
 3. **Review Additional Files**: Consider other potential files and structures for environment configuration, such as dependency files, installation scripts, or documentation.
 4. **Analyze build dependencies**: Based on the observed structure in the root directory, determine the necessary system packages and libraries:

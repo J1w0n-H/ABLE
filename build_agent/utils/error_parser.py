@@ -73,8 +73,41 @@ def extract_critical_errors(output, returncode):
     if not error_lines:
         return ""
     
-    # Build error summary
-    summary = "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+    # Analyze and classify suggestions FIRST
+    suggestions = analyze_errors(error_lines)
+    error_text = '\n'.join(error_lines)
+    
+    mandatory = []
+    recommended = []
+    advisory = []
+    
+    if suggestions:
+        for suggestion in suggestions:
+            tier = classify_suggestion(suggestion, error_text)
+            if tier == 1:
+                mandatory.append(suggestion)
+            elif tier == 2:
+                recommended.append(suggestion)
+            else:
+                advisory.append(suggestion)
+    
+    # Build error summary - MANDATORY FIRST!
+    summary = ""
+    
+    # 🆕 CRITICAL: Show MANDATORY at the VERY TOP!
+    if mandatory:
+        summary += "\n" + "="*70 + "\n"
+        summary += "🔴🔴🔴 STOP! MANDATORY ACTION REQUIRED 🔴🔴🔴\n"
+        summary += "="*70 + "\n"
+        summary += "READ THIS FIRST - DO NOT SKIP!\n\n"
+        for s in mandatory:
+            summary += f"   ⛔ {s}\n"
+        summary += "\nYou MUST execute these commands immediately!\n"
+        summary += "Then retry your LAST command (the one that just failed).\n"
+        summary += "="*70 + "\n\n"
+    
+    # Then show error details
+    summary += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
     summary += "🚨 CRITICAL ERRORS DETECTED:\n"
     summary += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
     
@@ -89,43 +122,18 @@ def extract_critical_errors(output, returncode):
     for i, error in enumerate(reversed(unique_errors), 1):
         summary += f"{i}. {error}\n"
     
-    # Analyze and classify suggestions
-    suggestions = analyze_errors(error_lines)
-    error_text = '\n'.join(error_lines)
+    # Show other tier suggestions
+    if recommended:
+        summary += "\n🟡 RECOMMENDED ACTIONS:\n"
+        summary += "You should follow these (usually correct):\n"
+        for s in recommended:
+            summary += f"   ✅ {s}\n"
     
-    if suggestions:
-        mandatory = []
-        recommended = []
-        advisory = []
-        
-        for suggestion in suggestions:
-            tier = classify_suggestion(suggestion, error_text)
-            if tier == 1:
-                mandatory.append(suggestion)
-            elif tier == 2:
-                recommended.append(suggestion)
-            else:
-                advisory.append(suggestion)
-        
-        # Output tiered suggestions
-        if mandatory:
-            summary += "\n🔴🔴🔴 MANDATORY ACTION 🔴🔴🔴\n"
-            summary += "Execute these commands NOW (non-negotiable):\n"
-            for s in mandatory:
-                summary += f"   ⛔ {s}\n"
-            summary += "\nDO NOT proceed without executing these!\n"
-        
-        if recommended:
-            summary += "\n🟡 RECOMMENDED ACTIONS:\n"
-            summary += "You should follow these (usually correct):\n"
-            for s in recommended:
-                summary += f"   ✅ {s}\n"
-        
-        if advisory:
-            summary += "\n🟢 ADVISORY (Optional):\n"
-            summary += "Consider these as hints:\n"
-            for s in advisory:
-                summary += f"   💡 {s}\n"
+    if advisory:
+        summary += "\n🟢 ADVISORY (Optional):\n"
+        summary += "Consider these as hints:\n"
+        for s in advisory:
+            summary += f"   💡 {s}\n"
     
     summary += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
     

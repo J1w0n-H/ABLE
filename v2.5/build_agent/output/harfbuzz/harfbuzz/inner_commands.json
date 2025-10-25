@@ -1,0 +1,74 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6090250015258789,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 1.0472922325134277,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/CMakeLists.txt",
+        "returncode": 0,
+        "time": 0.6125462055206299,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6274776458740234,
+        "dir": "/src"
+    },
+    {
+        "command": "mkdir -p /repo/build",
+        "returncode": 0,
+        "time": 0.6082239151000977,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6073291301727295,
+        "dir": "/src"
+    },
+    {
+        "command": "cmake .. -DCMAKE_BUILD_TYPE=Release",
+        "returncode": 0,
+        "time": 1.739323616027832,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6285426616668701,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 42.15888977050781,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6302249431610107,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.6664035320281982,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6300475597381592,
+        "dir": "/repo/build"
+    }
+]
