@@ -17,7 +17,7 @@ PROJECTS=(
     "OSGeo/gdal HEAD"
 )
 
-ROOT_PATH="/root/Git/ARVO2.0/v2.4/"
+ROOT_PATH="/root/Git/ARVO2.0/v2.5/"
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "🚀 ARVO2.0 v2.3 Batch Test"

@@ -113,20 +113,33 @@ When you see:
    ⛔ apt-get install texinfo
 ```
 
+**SIMPLE RULE: Install → Retry LAST command → Done! ✅**
+
 You MUST:
-1. ⛔ STOP immediately - do NOT try alternatives
-2. ⛔ Execute the apt-get command EXACTLY as shown
-3. ⛔ Retry the ORIGINAL failed command that caused Error 127
-   - If "make -j4" caused Error 127 → retry "make -j4"
-   - If "./configure" caused Error → retry "./configure"
-   - DO NOT switch to a different command!
-4. ⛔ DO NOT run ./configure repeatedly without making progress
+1. ⛔ Execute the apt-get command EXACTLY
+2. ⛔ Look at your LAST ACTION (the command you just ran)
+3. ⛔ Run that SAME command again
 
-**ANTI-PATTERN (DON'T DO THIS):**
-❌ make fails → install package → run configure again
-✅ make fails → install package → run make again
+**CONCRETE EXAMPLE:**
+```
+Your last action: cd /repo && make -j4
+Observation shows: Running `make -j4`...
+                   Error 127: makeinfo not found
+Suggestion: ⛔ apt-get install texinfo
 
-**These are 100% reliable - NO EXCEPTIONS!**
+✅ CORRECT RESPONSE:
+   Step 1: apt-get install texinfo
+   Step 2: cd /repo && make -j4  ← Retry THIS exact command!
+
+❌ WRONG RESPONSE:
+   Step 1: apt-get install texinfo
+   Step 2: ./configure  ← NO! Why configure? make failed, not configure!
+```
+
+**DON'T OVERTHINK:**
+- Last command = whatever you just ran before seeing the error
+- Just repeat it after installing the package
+- Do NOT go back to configure unless configure itself failed!
 
 ### 🟡 TIER 2: RECOMMENDED (shown with ✅)
 **Library Dependencies and Configure Errors**
@@ -178,10 +191,8 @@ WORK PROCESS:
 8. **Error Handling**: After attempting to build or test, handle error messages:
     - Missing header files: Install corresponding -dev packages (e.g., fatal error: openssl/ssl.h → install libssl-dev)
     - Missing libraries: Install library packages (e.g., cannot find -lz → install zlib1g-dev)
-    - Missing tools: Install build tools (e.g., aclocal not found → install automake)
-    - **⚠️ CRITICAL: Error 127 = command not found** → Install missing tool IMMEDIATELY (see ERROR RESPONSE at top!)
-    - **⚠️ If you see "💡 SUGGESTED FIXES"** → Follow ERROR RESPONSE protocol (see top of this prompt!)
-    - **⚠️ DO NOT re-run ./configure repeatedly** → If make fails, install missing build tools (texinfo, file), NOT re-configure
+    - **⚠️ Error 127 or Missing Headers**: Follow TIER 1 instructions at top of prompt (MANDATORY!)
+    - **⚠️ Other errors**: Follow TIER 2/3 suggestions or analyze yourself
     You can make use of the following tools:
     a. `apt-cache search <keyword>`: Search for available packages
     b. `apt-cache show <package>`: Show package information
@@ -261,13 +272,13 @@ In addition to typical bash commands, we also provide the following commands tha
 
 4. **ONE-LINE COMMANDS** (CRITICAL!)
    ❌ WRONG: Multi-line if/then/fi (causes syntax errors!)
-   ```bash
+```bash
    if [ -f file ]; then
      cmd
    fi
-   ```
+```
    ✅ RIGHT: Single line with &&
-   ```bash
+```bash
    test -f file && cmd || true
    ```
    ❌ WRONG: Backslash continuation
