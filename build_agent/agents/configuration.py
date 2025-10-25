@@ -115,9 +115,16 @@ When you see:
 
 You MUST:
 1. ⛔ STOP immediately - do NOT try alternatives
-2. ⛔ Execute the command EXACTLY as shown
-3. ⛔ Retry the failed command
-4. ⛔ DO NOT run ./configure again without installing first
+2. ⛔ Execute the apt-get command EXACTLY as shown
+3. ⛔ Retry the ORIGINAL failed command that caused Error 127
+   - If "make -j4" caused Error 127 → retry "make -j4"
+   - If "./configure" caused Error → retry "./configure"
+   - DO NOT switch to a different command!
+4. ⛔ DO NOT run ./configure repeatedly without making progress
+
+**ANTI-PATTERN (DON'T DO THIS):**
+❌ make fails → install package → run configure again
+✅ make fails → install package → run make again
 
 **These are 100% reliable - NO EXCEPTIONS!**
 

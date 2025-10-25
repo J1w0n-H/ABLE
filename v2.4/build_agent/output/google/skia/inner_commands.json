@@ -1,0 +1,206 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6100137233734131,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 1.3942975997924805,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 1,
+        "time": 0.10639214515686035,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6332306861877441,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/CONTRIBUTING",
+        "returncode": 0,
+        "time": 0.6089048385620117,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6347012519836426,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6107738018035889,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6337292194366455,
+        "dir": "/src"
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 2,
+        "time": 15.699411630630493,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.636777400970459,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6083889007568359,
+        "dir": "/src"
+    },
+    {
+        "command": "bazel build //...",
+        "returncode": 1,
+        "time": 19.59391689300537,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6384711265563965,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat /repo/bazel/external/dawn/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6128051280975342,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6365945339202881,
+        "dir": "/repo"
+    },
+    {
+        "command": "sed -n '700,720p' /repo/bazel/external/dawn/BUILD.bazel",
+        "returncode": 0,
+        "time": 0.6092188358306885,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6363465785980225,
+        "dir": "/repo"
+    },
+    {
+        "command": "ls /repo/bazel/external/dawn/include",
+        "returncode": 2,
+        "time": 0.10817766189575195,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6348912715911865,
+        "dir": "/repo"
+    },
+    {
+        "command": "find /repo/bazel/external/dawn -name \"*.h\"",
+        "returncode": 123,
+        "time": 0.10637116432189941,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6367437839508057,
+        "dir": "/repo"
+    },
+    {
+        "command": "ls -R /repo/bazel/external/dawn",
+        "returncode": 0,
+        "time": 0.6132304668426514,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6332359313964844,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat /repo/WORKSPACE.bazel",
+        "returncode": 0,
+        "time": 0.609642744064331,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6325249671936035,
+        "dir": "/repo"
+    },
+    {
+        "command": "ls /repo/tools",
+        "returncode": 0,
+        "time": 0.6092700958251953,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6312530040740967,
+        "dir": "/repo"
+    },
+    {
+        "command": "ls /repo/tools/git-sync-deps",
+        "returncode": 0,
+        "time": 0.609738826751709,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6332228183746338,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat /repo/tools/git-sync-deps",
+        "returncode": 0,
+        "time": 0.6085720062255859,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6315906047821045,
+        "dir": "/repo"
+    },
+    {
+        "command": "ls /repo/DEPS",
+        "returncode": 0,
+        "time": 0.6096415519714355,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6316070556640625,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat /repo/DEPS",
+        "returncode": 0,
+        "time": 0.6089804172515869,
+        "dir": "/repo"
+    }
+]
