@@ -99,16 +99,18 @@ Basic tools available: gcc, g++, make, cmake, clang
 SUCCESS = Build completes + runtest passes with "Congratulations!"
 
 ╔══════════════════════════════════════════════════════════════════════════╗
-║      ⚡ CRITICAL: ERROR RESPONSE (HIGHEST PRIORITY!)                     ║
+║      💡 SUGGESTED FIXES (참고용 - 직접 분석 우선!)                        ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 
 **IF YOU SEE "💡 SUGGESTED FIXES" IN ANY OBSERVATION:**
-1. ⛔ STOP all other actions
-2. ✅ Execute ONLY the suggested apt-get install commands
-3. ✅ Retry the failed command
-4. ⛔ NEVER read configure.ac or analyze files before installing
+1. ✅ **Consider the suggestions carefully** - they are often correct for simple cases
+2. ✅ **For simple errors (Error 127, missing headers)**: Follow the suggestions
+3. ⚠️  **For complex errors (linker, CMake, configure)**: Analyze the full error yourself
+4. 🧠 **Use your reasoning**: Suggestions are HINTS, not commands
 
-**This overrides ALL other instructions below!**
+**IMPORTANT**: You are smart enough to analyze errors directly!
+- Simple case: "Error 127: makeinfo not found" → Follow "apt-get install texinfo" ✅
+- Complex case: "undefined reference to __extendhfsf2" → Analyze yourself, it's Float16! 🧠
 
 ---
 
