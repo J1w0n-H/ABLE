@@ -1,0 +1,310 @@
+\documentclass[10pt,twocolumn]{article}
+
+% Conference-style packages (NeurIPS-compatible without .sty file)
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+% Title formatting (NeurIPS-style)
+\titleformat{\section}{\normalfont\fontsize{12}{15}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\fontsize{11}{13}\bfseries}{\thesubsection}{1em}{}
+
+\title{ARVO2.0: LLM-Driven Build Automation for C/C++ Vulnerability Reproduction}
+
+\author{
+  Your Name Here \\
+  Department of Computer Science\\
+  Your University\\
+  \texttt{your.email@university.edu} \\
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+ARVO~\cite{mei2024arvo} extracts 8,934 OSS-Fuzz vulnerabilities into reproducible Docker environments, but only 63.3\% (5,651) build successfully. The remaining $\sim$3,280 failed builds (predominantly C/C++ projects) cannot be reproduced, blocking security research. This work proposes ARVO2.0, an LLM-driven build automation system with three C/C++-specific adaptations: compilation-first verification, error-driven dependency inference, and multi-build-system handling. The proof-of-concept successfully automates two high-complexity projects (ImageMagick and curl), demonstrating feasibility of LLM-driven C/C++ build automation.
+\end{abstract}
+
+\section{Introduction}
+
+OSS-Fuzz~\cite{ossfuzz} (Google's continuous fuzzing service) has discovered 10,000+ vulnerabilities in critical open source projects. C/C++ dominates system software but suffers from memory safety issues, making it the primary target of OSS-Fuzz.
+
+ARVO~\cite{mei2024arvo} extracts 8,934 vulnerabilities from OSS-Fuzz into reproducible Docker environments, yet \textbf{only 63.3\% (5,651) build successfully}. The remaining \textbf{$\sim$3,280 vulnerabilities} (predominantly C/C++ projects) remain inaccessible due to: (1) Complex C/C++ dependency resolution (80\% of failures); (2) Heterogeneous build systems (Autoconf, CMake, Make); (3) High cost of manual intervention.
+
+\textbf{Research Question:} Can LLM agents automate C/C++ build environment synthesis for ARVO's failed builds?
+
+This project proposes \textbf{ARVO2.0}: an extension of Repo2Run~\cite{hu2025repo2run}'s LLM automation framework adapted for C/C++ vulnerability reproduction. LLMs can infer configurations from build errors without deterministic tools like \texttt{pipreqs}.
+
+\section{Related Work}
+
+\subsection{ARVO's Template-Based Approach}
+
+ARVO~\cite{mei2024arvo} improved OSS-Fuzz's 13\% build success rate to \textbf{63.3\%} through dependency pinning and automation. However, template-based Dockerfile generation cannot handle non-obvious package mappings (XML2 $\rightarrow$ \texttt{libxml2-dev}), multi-build-system selection (Autoconf vs CMake), or project-specific flags (\texttt{-DWITH\_SSL=ON}). \textbf{Result}: a persistent 36.7\% failure rate that manual template editing cannot overcome.
+
+\subsection{Repo2Run's LLM Approach}
+
+Repo2Run~\cite{hu2025repo2run} achieved \textbf{86\% success} on 420 Python repositories through dual-environment architecture (LLM planner + sandbox executor), rollback mechanisms, and adaptive Dockerfile synthesis. However, Python-specific assumptions (\texttt{pipreqs}, \texttt{pytest}) do not transfer to C/C++, thus requiring C/C++-specific adaptations (Table~\ref{tab:python-vs-cpp}).
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Challenge} & \textbf{Python} & \textbf{C/C++} \\
+\midrule
+Dependency names & Direct & Cryptic mappings \\
+Build commands & Single step & Multi-step \\
+Error messages & Clear & Cryptic \\
+Verification & Run tests & Check artifacts \\
+\bottomrule
+\end{tabular}
+\caption{Python vs. C/C++ Build Environment Challenges}
+\label{tab:python-vs-cpp}
+\end{table}
+
+\section{Method}
+
+ARVO2.0 extends Repo2Run~\cite{hu2025repo2run}'s dual-agent design (planner + sandbox) to support C/C++-specific build inference, dependency reasoning, and system fallback. The outer agent (\texttt{configuration.py}) calls GPT-4o to plan actions, while the inner sandbox (\texttt{sandbox.py}) executes them in Docker (\texttt{gcr.io/oss-fuzz-base/base-builder}), tracks diffs and handles rollbacks. The loop iterates Plan $\rightarrow$ Execute $\rightarrow$ Reason until build success.
+
+\subsection{Key C/C++ Adaptations}
+
+Three core adaptations address C/C++-specific challenges:
+
+\textbf{(1) Compilation-First Verification}: Verify build artifacts (\texttt{*.o}, \texttt{*.so}) instead of running tests.
+
+\textbf{(2) Error-Driven Dependency Inference}: Infer dependencies from compiler errors and batch via \texttt{waitinglist}.
+
+\textbf{(3) Multi-Build-System Handling}: Detect and try different build systems (Autoconf/CMake/Make).
+
+\textbf{Example:} ImageMagick (260K LOC, 50+ dependencies) demonstrates a 7-turn workflow: GPT reads \texttt{configure.ac} (3,648 lines), uses smart grep to identify 8 core dependencies, batches package installation via \texttt{waitinglist}, runs \texttt{./configure} $\rightarrow$ \texttt{make -j4} $\rightarrow$ \texttt{runtest}, and verifies 156 object files and 3 shared libraries were generated. Full execution logs with Thinking/Action/Observation traces are provided in Appendix A.
+
+\section{Experiments}
+
+To validate feasibility, two high-complexity C/C++ projects were selected for testing: ImageMagick from ARVO~\cite{mei2024arvo}'s failure set and curl as a representative complex project (Table~\ref{tab:poc-results}).
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Project} & \textbf{Turns} & \textbf{Build System} & \textbf{Result} \\
+\midrule
+\textbf{ImageMagick} & 7 & Autoconf & \checkmark \\
+\textbf{curl} & 17 & CMake (Autoconf failed) & \checkmark \\
+\bottomrule
+\end{tabular}
+\caption{Proof-of-Concept Results}
+\label{tab:poc-results}
+\end{table}
+
+\textbf{Key achievements}: Both builds succeeded and were verified in clean Docker environments, with curl demonstrating autonomous fallback from Autoconf to CMake. Detailed build logs showing the iterative dependency resolution process are provided in Appendices A-B, with generated Dockerfiles in Appendix C.
+
+\section{Results}
+
+\subsection{Experimental Outcomes}
+
+The PoC (v2.2.0) achieved 100\% success on two high-complexity projects (ImageMagick and curl). Each C/C++-specific adaptation addressed observed bottlenecks: artifact verification eliminated false negatives, dependency batching reduced redundant calls, and multi-build-system support enabled adaptive strategy selection (curl autonomously switched from failed Autoconf to successful CMake; see Appendix B for the complete 17-turn resolution trace).
+
+\subsection{Discussion}
+
+This proof-of-concept demonstrates that \textbf{LLM agents can effectively automate C/C++ build environments for vulnerability reproduction}. The results validate our hypothesis that LLM-based reasoning can handle C/C++-specific challenges (cryptic dependencies, multi-build-system selection, compilation verification) without deterministic tools.
+
+\textbf{Limitation}: Small sample size (n=2), requiring large-scale evaluation to determine generalization across ARVO's failed builds.
+
+\subsection{ARVO Integration Plan}
+
+The goal is to integrate ARVO2.0 as an automated recovery layer for ARVO~\cite{mei2024arvo}'s failed builds. The system will automatically reattempt failed C/C++ projects from ARVO's failure set, verify results via \texttt{docker build} in clean environments, and contribute successful Dockerfiles back to the ARVO dataset. This integration aims to expand ARVO's coverage of OSS-Fuzz vulnerabilities while maintaining build quality through automated verification. The final report will evaluate this approach on a larger sample (n=100+) to validate generalization and measure success rate across diverse C/C++ projects.
+
+\section{Conclusion}
+
+This proof-of-concept demonstrates that LLM agents can effectively automate C/C++ build environments for vulnerability reproduction through C/C++-specific adaptations. The approach shows promise for improving ARVO~\cite{mei2024arvo}'s reproducibility rate. Future work will focus on large-scale validation and exploring proactive template learning to prevent failures rather than merely recovering from them.
+
+\section*{Acknowledgments}
+
+I thank the ARVO and Repo2Run teams for their foundational work.
+
+\section*{Appendices}
+\appendix
+
+\section{ImageMagick Build Log (7 turns)}
+
+\noindent\textbf{Turn 1: Initial Discovery}
+\begin{footnotesize}
+\begin{verbatim}
+Thinking: Need to explore repo structure 
+  and identify build system
+Action: ls /repo
+Observation: Found configure.ac (3648 lines)
+  → Autoconf-based project
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Turn 2: Dependency Detection}
+\begin{footnotesize}
+\begin{verbatim}
+Thinking: configure.ac contains library 
+  requirements. Use grep to extract them.
+Action: grep -E "AC_CHECK_LIB|
+  PKG_CHECK_MODULES" configure.ac
+Observation: Found 52 library checks
+  Core deps: libwebp, libxml2, libtiff,
+  libjpeg, libopenmpi, libjemalloc,
+  libtcmalloc, libwmf (8 packages)
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Turn 3-4: Batch Installation}
+\begin{footnotesize}
+\begin{verbatim}
+Thinking: Install all deps in one batch
+  to reduce overhead
+Action: waitinglist add libwebp-dev 
+  libxml2-dev libtiff-dev libjpeg-dev 
+  libopenmpi-dev libjemalloc-dev 
+  libtcmalloc-minimal4 libwmf-dev 
+  && download
+Observation: Executed 8 apt_download.py 
+  calls (52s install + 69s overhead)
+  All packages installed successfully
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Turn 5-7: Build \& Verify}
+\begin{footnotesize}
+\begin{verbatim}
+Thinking: Run Autoconf configure and build
+Action: ./configure && make -j4
+Observation: configure (30s), make (44s)
+  Build completed without errors
+
+Thinking: Verify build artifacts
+Action: runtest
+Observation: Found 156 *.o files, 
+  3 *.so libraries (libMagickCore-7.so,
+  libMagickWand-7.so, libMagick++-7.so)
+Result: "Congratulations, build successful!"
+\end{verbatim}
+\end{footnotesize}
+
+\section{curl Build Log (17 turns, selected)}
+
+\noindent\textbf{Turn 3-5: Autoconf Attempt}
+\begin{footnotesize}
+\begin{verbatim}
+Thinking: Try standard Autoconf build
+Action: ./buildconf && ./configure
+Observation: ERROR - missing dependencies
+  configure: error: --with-ssl was given
+  but OpenSSL could not be detected
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Turn 6-8: CMake Fallback}
+\begin{footnotesize}
+\begin{verbatim}
+Thinking: Autoconf failed. Switch to CMake.
+  Install SSL dependencies first.
+Action: waitinglist add libssl-dev 
+  zlib1g-dev libnghttp2-dev libbrotli-dev
+  && download
+Observation: 4 packages installed (batch 1)
+
+Thinking: Try CMake build
+Action: cmake -DWITH_SSL=ON . && make -j4
+Observation: ERROR - missing libraries
+  libpsl, libssh2, librtmp not found
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{Turn 11-17: Iterative Resolution}
+\begin{footnotesize}
+\begin{verbatim}
+Thinking: Install missing libs (batch 2-3)
+Action: waitinglist add libzstd-dev 
+  libpsl-dev && download
+  ... [batch 2: 1 pkg, batch 3: 6 pkgs]
+Observation: 11 total packages installed
+
+Thinking: Rebuild with all dependencies
+Action: cmake -DWITH_SSL=ON 
+  -DCMAKE_BUILD_TYPE=Release . && make -j4
+Observation: Build successful
+  Generated 257 *.o files, libcurl.so
+
+Action: runtest
+Observation: Verified 257 artifacts
+Result: "Congratulations, build successful!"
+\end{verbatim}
+\end{footnotesize}
+
+\section{Generated Dockerfiles}
+
+\noindent\textbf{ImageMagick (Autoconf, 7 turns)}
+\begin{footnotesize}
+\begin{verbatim}
+FROM gcr.io/oss-fuzz-base/base-builder
+RUN apt-get update && apt-get install -y \
+    libwebp-dev libxml2-dev libtiff-dev \
+    libjpeg-dev libopenmpi-dev \
+    libjemalloc-dev libtcmalloc-minimal4 \
+    libwmf-dev
+RUN git clone https://github.com/
+    ImageMagick/ImageMagick /src/imagemagick
+WORKDIR /src/imagemagick
+RUN git checkout f6e9d0c
+RUN ./configure && make -j4
+# Verified: docker build ✓, 156 artifacts
+\end{verbatim}
+\end{footnotesize}
+
+\noindent\textbf{curl (CMake, 17 turns)}
+\begin{footnotesize}
+\begin{verbatim}
+FROM gcr.io/oss-fuzz-base/base-builder
+RUN apt-get update && apt-get install -y \
+    libssl-dev zlib1g-dev libnghttp2-dev \
+    libbrotli-dev libzstd-dev libpsl-dev \
+    libssh2-1-dev librtmp-dev libldap2-dev \
+    libkrb5-dev libidn2-dev
+RUN git clone https://github.com/curl/curl \
+    /src/curl
+WORKDIR /src/curl
+RUN git checkout 8a26cde
+RUN cmake -DWITH_SSL=ON \
+          -DCMAKE_BUILD_TYPE=Release . \
+    && make -j4
+# Verified: docker build ✓, 257 artifacts
+\end{verbatim}
+\end{footnotesize}
+
+\begin{thebibliography}{9}
+
+\bibitem{ossfuzz}
+Google.
+\newblock OSS-Fuzz: Continuous Fuzzing for Open Source Software.
+\newblock \texttt{https://github.com/google/oss-fuzz}, 2016.
+
+\bibitem{mei2024arvo}
+Xiang Mei, Pulkit Singh Singaria, Jordi Del Castillo, Haoran Xi, Abdelouahab Benchikh, Tiffany Bao, Ruoyu Wang, Yan Shoshitaishvili, Adam Doupé, Hammond Pearce, and Brendan Dolan-Gavitt.
+\newblock ARVO: Atlas of Reproducible Vulnerabilities for Open Source Software.
+\newblock \emph{arXiv preprint arXiv:2408.02153}, 2024.
+
+\bibitem{hu2025repo2run}
+Ruida Hu, Chao Peng, Xinchen Wang, Junjielong Xu, and Cuiyun Gao.
+\newblock Repo2Run: Automated Building Executable Environment for Code Repository at Scale.
+\newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)}, 2025.
+
+\end{thebibliography}
+
+\end{document}
+

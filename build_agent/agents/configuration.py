@@ -98,6 +98,20 @@ Configure and build a C/C++ project in Docker ({self.image_name}).
 Basic tools available: gcc, g++, make, cmake, clang
 SUCCESS = Build completes + runtest passes with "Congratulations!"
 
+╔══════════════════════════════════════════════════════════════════════════╗
+║      ⚡ CRITICAL: ERROR RESPONSE (HIGHEST PRIORITY!)                     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+**IF YOU SEE "💡 SUGGESTED FIXES" IN ANY OBSERVATION:**
+1. ⛔ STOP all other actions
+2. ✅ Execute ONLY the suggested apt-get install commands
+3. ✅ Retry the failed command
+4. ⛔ NEVER read configure.ac or analyze files before installing
+
+**This overrides ALL other instructions below!**
+
+---
+
 WORK PROCESS:
 1. **Read Directory Structure**: Check the folder structure in the root directory, focusing on build configuration files (Makefile, CMakeLists.txt, configure, etc.).
 2. **Check the configuration files in the root directory**: Read build configuration files such as: `Makefile`, `CMakeLists.txt`, `configure.ac`, `configure.sh`, `.github` folder for CI configurations, `README.md` for build instructions, etc.
@@ -133,6 +147,9 @@ WORK PROCESS:
     - Missing header files: Install corresponding -dev packages (e.g., fatal error: openssl/ssl.h → install libssl-dev)
     - Missing libraries: Install library packages (e.g., cannot find -lz → install zlib1g-dev)
     - Missing tools: Install build tools (e.g., aclocal not found → install automake)
+    - **⚠️ CRITICAL: Error 127 = command not found** → Install missing tool IMMEDIATELY (see ERROR RESPONSE at top!)
+    - **⚠️ If you see "💡 SUGGESTED FIXES"** → Follow ERROR RESPONSE protocol (see top of this prompt!)
+    - **⚠️ DO NOT re-run ./configure repeatedly** → If make fails, install missing build tools (texinfo, file), NOT re-configure
     You can make use of the following tools:
     a. `apt-cache search <keyword>`: Search for available packages
     b. `apt-cache show <package>`: Show package information
@@ -157,35 +174,14 @@ WORK PROCESS:
         • If download says "WAITING LIST IS EMPTY", do NOT call it again
         • Only call download again if you add NEW packages to waiting list
         • Typical workflow: (1) waitinglist add -p pkg1 -t apt, (2) waitinglist add -p pkg2 -t apt, (3) download ONCE
-**Most Important!** You MUST complete the build before running `runtest`. Follow steps 1-7 in order:
-    1-4: Analyze and install dependencies
-    5-6: BUILD the project (./configure && make, or cmake .. && make)
-    7: ONLY THEN run `runtest` to verify and test
-runtest does NOT build - it only verifies! If you run runtest before building, you will get incorrect results. Our goal is to successfully build AND pass the runtest checks.
 If you encounter compilation errors or missing dependencies, you can consider two solutions. One solution is to use apt-get to install system packages and development libraries. The other solution is to check for local dependencies in the repository; if local dependencies are available, you can set appropriate environment variables (PATH, LD_LIBRARY_PATH, CFLAGS, LDFLAGS, etc.) to resolve the issue.
-Please note that when using apt-get or other tools to install packages, try to use the `-qq` (quiet) mode if available to reduce intermediate progress outputs. Additionally, we will help remove more obvious progress bar information to minimize interference with the analysis.
-If you need to install system packages using apt-get, please consider adding them to the waiting list first, and then use the `download` command to proceed with the installation.
+**IMPORTANT**: For most cases, use **direct apt-get install** instead of waiting list:
+```bash
+apt-get install <package>  # RECOMMENDED (fast, reliable)
+```
+Only use waiting list if you need to batch-install many packages at once.
 In each round of the conversation, we will inform you of the commands that have been correctly executed and have changed the state of the current Docker container. Please reflect on each round's Observation in relation to the current state of the Docker container and decide the subsequent Action.
-If you need to run two or more commands, please strictly follow the order by enclosing each command in ONE {BASH_FENCE[0]} and {BASH_FENCE[1]} blocks connected by "&&" with ONE line! It is not recommended to use backslashes (\\) for line continuation. If you need to execute commands that span multiple lines, it is advisable to write them into a .sh file and then run the executable file. For example, if you want to enter the /repo directory and execute `make`, you should input:
-{BASH_FENCE[0]}
-cd /repo && make
-{BASH_FENCE[1]}
-
-It is not recommended to directly input:
-{BASH_FENCE[0]}
-cd /repo
-{BASH_FENCE[1]}
-{BASH_FENCE[0]}
-make
-{BASH_FENCE[1]}
-
-Nor is it recommended to input:
-{BASH_FENCE[0]}
-cd /repo \\
-make
-{BASH_FENCE[1]}
-
-We also strongly request that you try to write the instructions on the same line as much as possible, and do not break them into multiple lines, as this may cause parsing errors. Even if the line of instructions contains a lot of && connections, do not arbitrarily break it into multiple lines.
+**CRITICAL**: All commands must be single-line using && (no if/then/fi, no backslash \\, no multi-line). See CRITICAL RULES below for details.
 
 We will automatically maintain two lists in the background to facilitate the installation and download of system packages and libraries. These are:
 1. waiting list: Used to store system packages waiting to be installed via apt-get. You can use `waitinglist show` to show all items in it.
@@ -231,10 +227,19 @@ In addition to typical bash commands, we also provide the following commands tha
    ❌ WRONG: Edit test_*.c to make tests pass
    ✅ RIGHT: Fix actual code or install missing dependencies
 
-4. **ONE-LINE COMMANDS**
-   ❌ WRONG: Use backslash \\ for line continuation
-   ✅ RIGHT: Use && to chain commands on one line
-   Example: `cd /repo && ./configure && make -j4`
+4. **ONE-LINE COMMANDS** (CRITICAL!)
+   ❌ WRONG: Multi-line if/then/fi (causes syntax errors!)
+   ```bash
+   if [ -f file ]; then
+     cmd
+   fi
+   ```
+   ✅ RIGHT: Single line with &&
+   ```bash
+   test -f file && cmd || true
+   ```
+   ❌ WRONG: Backslash continuation
+   ✅ RIGHT: Use && to chain: `cd /repo && ./configure && make -j4`
 
 5. **PRESERVE SOURCE FILES**
    → Only modify when absolutely necessary

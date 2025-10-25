@@ -1,0 +1,138 @@
+[
+    {
+        "GPT_time": 1.0677680969238281
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6659672260284424
+    },
+    {
+        "GPT_time": 1.0818359851837158
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6716330051422119
+    },
+    {
+        "GPT_time": 2.2307801246643066
+    },
+    {
+        "command": "grep -E \"AC_CHECK_LIB|PKG_CHECK_MODULES\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.667367696762085
+    },
+    {
+        "GPT_time": 1.7725157737731934
+    },
+    {
+        "command": "waitinglist add -p libbz2-dev -t apt",
+        "returncode": 0,
+        "time": 0.003446817398071289
+    },
+    {
+        "command": "waitinglist add -p libpng-dev -t apt",
+        "returncode": 0,
+        "time": 0.0027112960815429688
+    },
+    {
+        "command": "waitinglist add -p libjpeg-dev -t apt",
+        "returncode": 0,
+        "time": 0.0028924942016601562
+    },
+    {
+        "command": "waitinglist add -p libtiff-dev -t apt",
+        "returncode": 0,
+        "time": 0.0026772022247314453
+    },
+    {
+        "command": "waitinglist add -p libxml2-dev -t apt",
+        "returncode": 0,
+        "time": 0.002571582794189453
+    },
+    {
+        "command": "waitinglist add -p libwebp-dev -t apt",
+        "returncode": 0,
+        "time": 0.0028505325317382812
+    },
+    {
+        "command": "waitinglist add -p librsvg2-dev -t apt",
+        "returncode": 0,
+        "time": 0.00283050537109375
+    },
+    {
+        "command": "waitinglist add -p libcairo2-dev -t apt",
+        "returncode": 0,
+        "time": 0.0027196407318115234
+    },
+    {
+        "command": "waitinglist add -p libjemalloc-dev -t apt",
+        "returncode": 0,
+        "time": 0.0026204586029052734
+    },
+    {
+        "command": "waitinglist add -p libtcmalloc-minimal4 -t apt",
+        "returncode": 0,
+        "time": 0.0032749176025390625
+    },
+    {
+        "command": "waitinglist add -p libumem-dev -t apt",
+        "returncode": 0,
+        "time": 0.0030105113983154297
+    },
+    {
+        "command": "waitinglist add -p libwmf-dev -t apt",
+        "returncode": 0,
+        "time": 0.0027387142181396484
+    },
+    {
+        "command": "waitinglist add -p libgcov-dev -t apt",
+        "returncode": 0,
+        "time": 0.0027632713317871094
+    },
+    {
+        "command": "download",
+        "returncode": 0,
+        "time": 118.75588393211365
+    },
+    {
+        "GPT_time": 1.264436960220337
+    },
+    {
+        "command": "waitinglist add -p gcc -t apt",
+        "returncode": 0,
+        "time": 0.0036394596099853516
+    },
+    {
+        "command": "download",
+        "returncode": 0,
+        "time": 2.721313238143921
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6644177436828613
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 13.524821043014526
+    },
+    {
+        "GPT_time": 0.6459364891052246
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 31.646829843521118
+    },
+    {
+        "GPT_time": 0.7542157173156738
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 2.2251532077789307
+    }
+]

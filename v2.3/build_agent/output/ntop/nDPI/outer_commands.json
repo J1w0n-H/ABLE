@@ -1,0 +1,195 @@
+[
+    {
+        "GPT_time": 0.7316734790802002
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6683423519134521
+    },
+    {
+        "GPT_time": 0.8719174861907959
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6660740375518799
+    },
+    {
+        "GPT_time": 1.6008281707763672
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6631028652191162
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 5.130931854248047
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 4.713350296020508
+    },
+    {
+        "GPT_time": 1.9018325805664062
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 6.742290496826172
+    },
+    {
+        "command": "apt-get install -y -qq autoconf",
+        "returncode": 0,
+        "time": 7.161184549331665
+    },
+    {
+        "GPT_time": 1.3555467128753662
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.664818286895752
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 5.1001691818237305
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 4.839776039123535
+    },
+    {
+        "GPT_time": 0.9608757495880127
+    },
+    {
+        "command": "apt-get install -y -qq libtool",
+        "returncode": 0,
+        "time": 7.2708353996276855
+    },
+    {
+        "GPT_time": 1.189490556716919
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6643185615539551
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 5.27520751953125
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 4.759289503097534
+    },
+    {
+        "GPT_time": 1.4539909362792969
+    },
+    {
+        "command": "apt-get install -y -qq pkg-config",
+        "returncode": 0,
+        "time": 11.762646913528442
+    },
+    {
+        "GPT_time": 0.7030115127563477
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6644997596740723
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 10.93868088722229
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 7.791423320770264
+    },
+    {
+        "GPT_time": 0.8559014797210693
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.665027379989624
+    },
+    {
+        "GPT_time": 1.1511361598968506
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6649000644683838
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 10.890331506729126
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 7.772636413574219
+    },
+    {
+        "GPT_time": 0.7861542701721191
+    },
+    {
+        "command": "grep -n \"AC_CHECK_LIB\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6664581298828125
+    },
+    {
+        "GPT_time": 1.9168412685394287
+    },
+    {
+        "command": "apt-get install -y -qq libjson-c-dev librrd-dev libnuma-dev libpcap-dev libnl-3-dev libgpg-error-dev libgcrypt20-dev libpcre2-dev libmaxminddb-dev libcurl4-openssl-dev",
+        "returncode": 0,
+        "time": 12.893244743347168
+    },
+    {
+        "GPT_time": 0.7509691715240479
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6648128032684326
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 13.314659833908081
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 9.622918844223022
+    },
+    {
+        "GPT_time": 1.0577130317687988
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 14.404376745223999
+    },
+    {
+        "GPT_time": 0.9717073440551758
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 7.626829147338867
+    }
+]

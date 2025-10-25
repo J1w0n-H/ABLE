@@ -27,6 +27,7 @@ from download import download
 from outputcollector import OutputCollector
 from show_msg import show_msg
 from helpers import truncate_msg, SAFE_COMMANDS
+from error_parser import extract_critical_errors
 
 # Feature flag for Command Pattern refactoring
 USE_COMMAND_PATTERN = os.getenv('ARVO_USE_COMMAND_PATTERN', 'false').lower() == 'true'
@@ -214,15 +215,14 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
 
             print(f"Container {self.container.name} {self.container.short_id} started with image {image}")
             
-            current_file_path = os.path.abspath(__file__)
-            current_directory = os.path.dirname(current_file_path)
-            project_directory = os.path.dirname(current_directory)
+            # tools는 소스 디렉토리에서, repo는 사용자 지정 경로에서 복사
+            source_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             
-            cmd = f"chmod -R 777 {project_directory}/tools && docker cp {project_directory}/tools {self.container.name}:/home"
+            cmd = f"chmod -R 777 {source_directory}/tools && docker cp {source_directory}/tools {self.container.name}:/home"
             subprocess.run(cmd, check=True, shell=True)
 
-            # 把utils/repo中的内容复制到根目录/中
-            cmd = f"docker cp {project_directory}/utils/repo/{self.full_name}/repo {self.container.name}:/"
+            # 把utils/repo中的内容复制到根目录/中 - use self.root_path for user-specified location
+            cmd = f"docker cp {self.root_path}/utils/repo/{self.full_name}/repo {self.container.name}:/"
             subprocess.run(cmd, check=True, shell=True)
             return 1
         except Exception as e:
@@ -235,7 +235,7 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
             if self.shell and self.shell.isalive():
                 self.shell.close(force=True)  # 确保关闭之前的shell
             command = f'docker exec -it {self.container.id} /bin/bash'
-            self.shell = pexpect.spawn(command)
+            self.shell = pexpect.spawn(command, maxread=1000000)  # 1MB buffer for large build outputs
             self.shell.expect([r'\$ ', r'# '], timeout=600)  # 等待bash提示符
         else:
             raise Exception("Container not started. Call start_container() first.")
@@ -413,9 +413,8 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                         return truncate_msg(result_message, command), 'unknown'
                     elif match_waitinglist_addfile(command) != -1:
                         file_path = match_waitinglist_addfile(command)['file_path']
-                        current_file_path = os.path.abspath(__file__)
-                        current_directory = os.path.dirname(current_file_path)
-                        project_directory = os.path.dirname(current_directory)
+                        # Use self.sandbox.root_path instead of calculating from __file__
+                        project_directory = self.sandbox.root_path
                         result = subprocess.run(f'docker cp {self.sandbox.container.name}:{file_path} {project_directory}/utils/repo/{self.sandbox.full_name}/repo', shell=True, capture_output=True)
                         if result.returncode != 0:
                             msg = f'\nRunning `{command}`...\n'
@@ -463,29 +462,22 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                                 self.sandbox.commit_container()
                             start_time = time.time()
                             dir, return_code = self.execute('$pwd$', waiting_list, conflict_list)
-                            # Only record non-safe commands
-                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
-                                self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
+                            self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
                             self.sandbox.shell.sendline(command + " && sleep 0.5")
-                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
-                                self.sandbox.commands[-1]["returncode"] = -1
+                            self.sandbox.commands[-1]["returncode"] = -1
                         else:
                             if not (command.split()[0].strip() in safe_cmd and '>' not in command):
                                 self.sandbox.commit_container()
                             start_time = time.time()
                             dir, return_code = self.execute('$pwd$', waiting_list, conflict_list)
-                            # Only record non-safe commands
-                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
-                                self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
+                            self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
                             self.sandbox.shell.sendline(command)
-                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
-                                self.sandbox.commands[-1]["returncode"] = -1
+                            self.sandbox.commands[-1]["returncode"] = -1
 
                         self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600*2)  # 等待bash提示符，带超时
                         end_time = time.time()
                         elasped_time = end_time - start_time
-                        if not (command.split()[0].strip() in safe_cmd and '>' not in command):
-                            self.sandbox.commands[-1]["time"] = elasped_time
+                        self.sandbox.commands[-1]["time"] = elasped_time
 
                         # 获取 shell.before 中匹配到的模式之前的输出
                         output = self.sandbox.shell.before.decode('utf-8').strip()
@@ -504,12 +496,11 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                             return_code = self.get_returncode()
                         except:
                             return_code = 123
-                        if not (command.split()[0].strip() in safe_cmd and '>' not in command):
-                            try:
-                                self.sandbox.commands[-1]["returncode"] = return_code
-                            except:
-                                self.sandbox.commands[-1]["returncode"] = 111
-                                self.sandbox.commands[-1]["error_msg"] = return_code
+                        try:
+                            self.sandbox.commands[-1]["returncode"] = return_code
+                        except:
+                            self.sandbox.commands[-1]["returncode"] = 111
+                            self.sandbox.commands[-1]["error_msg"] = return_code
 
                         if return_code != 0 and not (command == 'python /home/tools/runtest.py' and return_code == 5):
                             if command.strip().lower().startswith('conflict'):
@@ -538,13 +529,24 @@ Explanation: Clear all the items in the waiting list.'''
                                 result_message = f'Running `{command}`...\n' + msg + '\n'
     
                                 return result_message, return_code
-                            # Rollback to last checkpoint on failure - LLM can retry with different approach
-                            if not (command.split()[0].strip() in safe_cmd and '>' not in command):
-                                self.sandbox.switch_to_pre_image()
-                                output_lines.append('The command execution failed, so I have reverted it back to the previous state.')
-                            else:
-                                output_lines.append('The command execution failed, please carefully check the output!')
+                            # Keep environment on failure - retry until success
+                            # DO NOT rollback immediately - let LLM try different approaches
+                            output_lines.append('The command execution failed. Environment maintained for retry with a different approach.')
+                        
                         result_message = '\n'.join(output_lines)
+                        
+                        # 에러 추출 및 분석 (실패 시에만)
+                        if return_code != 0:
+                            error_summary = extract_critical_errors(result_message, return_code)
+                            if error_summary:
+                                # 에러 요약을 맨 앞에 추가
+                                result_message = error_summary + "\n" + result_message
+                            
+                            # 병렬 빌드 실패 시 단일 스레드 제안
+                            if 'make' in command and '-j' in command:
+                                tip = "\n⚠️  Parallel build failed with complex output.\n"
+                                tip += "💡 TIP: Try 'make' (single-thread) for clearer error messages.\n"
+                                result_message = tip + result_message
                         if 'Congratulations, you have successfully configured the environment!' in result_message or command == 'python /home/tools/generate_diff.py'\
                             or command == 'pipdeptree --json-tree' or command == 'pipdeptree':
                             return result_message, return_code

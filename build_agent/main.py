@@ -78,113 +78,111 @@ def download_repo(root_path, full_name, sha):
     repo_name = full_name.split('/')[1]
     repo_path = f'{root_path}/utils/repo/{author_name}/{repo_name}/repo'
     
-    # Only create author directory, not repo_name directory (git clone will create it)
-    if not os.path.exists(f'{root_path}/utils/repo/{author_name}'):
-        os.system(f'mkdir -p {root_path}/utils/repo/{author_name}')
-    
     # Increase git buffer for large repos (500MB buffer, no speed limits)
     git_config_cmd = "git config --global http.postBuffer 524288000 && git config --global http.lowSpeedLimit 0 && git config --global http.lowSpeedTime 999999"
     subprocess.run(git_config_cmd, shell=True)
     
-    # Check if repo already exists
+    # ═══════════════════════════════════════════════════════════════
+    # Repository Reuse Logic (v2.3)
+    # ═══════════════════════════════════════════════════════════════
+    
     if os.path.exists(f'{repo_path}/.git'):
+        # Repository already exists! Try to reuse it
         print(f"🔄 Repository {full_name} already exists, checking current commit...")
         
-        # Check current commit
-        current_commit_result = subprocess.run(
-            'git rev-parse HEAD', 
-            cwd=repo_path, 
-            shell=True, 
-            capture_output=True, 
-            text=True
-        )
-        
-        current_commit = current_commit_result.stdout.strip() if current_commit_result.returncode == 0 else None
-        
-        if current_commit and current_commit.startswith(sha):
-            print(f"✅ Already at commit {sha[:8]}, skipping fetch and checkout")
-            # Already at the correct commit, skip everything
-        else:
-            if current_commit:
-                print(f"📍 Current commit: {current_commit[:8]}, target: {sha[:8]}")
+        try:
+            # Get current commit
+            current_commit_result = subprocess.run(
+                'git rev-parse HEAD',
+                cwd=repo_path,
+                capture_output=True,
+                text=True,
+                shell=True
+            )
+            current_commit = current_commit_result.stdout.strip()
             
-            try:
-                # Clean any local changes
-                subprocess.run('git reset --hard HEAD', cwd=repo_path, shell=True, capture_output=True)
-                subprocess.run('git clean -fdx', cwd=repo_path, shell=True, capture_output=True)
-                
-                # Fetch latest changes
-                print(f"📥 Fetching latest changes...")
-                fetch_result = subprocess.run(
-                    'git fetch origin', 
-                    cwd=repo_path, 
-                    shell=True, 
-                    capture_output=True, 
-                    text=True,
-                    timeout=300
-                )
-                
-                if fetch_result.returncode == 0:
-                    print(f"✅ Successfully updated {full_name}")
-                else:
-                    print(f"⚠️  Fetch failed, but will try to use existing repo")
-            except Exception as e:
-                print(f"⚠️  Failed to update repo, using existing version: {e}")
+            if current_commit.startswith(sha) or sha.startswith(current_commit[:8]):
+                # Already at target commit!
+                print(f"✅ Already at commit {sha[:8]}, skipping fetch and checkout")
+                return  # Early exit - fastest path!
             
-            # Need to checkout
-            print(f"🔖 Checking out commit {sha[:8]}...")
-            checkout_cmd = f"git checkout {sha}"
-            checkout_result = subprocess.run(checkout_cmd, cwd=repo_path, capture_output=True, shell=True, text=True)
+            # Different commit, need to switch
+            print(f"📍 Current: {current_commit[:8]}, target: {sha[:8]}")
+            print(f"🧹 Cleaning local changes...")
             
-            if checkout_result.returncode != 0:
-                print(f"⚠️  Checkout failed: {checkout_result.stderr}")
-                # Try to fetch the specific commit if it doesn't exist locally
-                print(f"📥 Fetching specific commit...")
-                subprocess.run(f'git fetch origin {sha}', cwd=repo_path, shell=True, capture_output=True)
-                checkout_result = subprocess.run(checkout_cmd, cwd=repo_path, capture_output=True, shell=True, text=True)
-                
-                if checkout_result.returncode != 0:
-                    raise Exception(f"Failed to checkout {sha}: {checkout_result.stderr}")
-    else:
-        # Repository doesn't exist, clone it
-        download_cmd = f"git clone https://github.com/{full_name}.git"
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                print(f"📦 Cloning {full_name} (attempt {attempt + 1}/{max_retries})...")
-                subprocess.run(download_cmd, cwd=f'{root_path}/utils/repo/{author_name}', check=True, shell=True, timeout=600)
-                print(f"✅ Successfully cloned {full_name}")
-                break
-            except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
-                if attempt < max_retries - 1:
-                    print(f"⚠️  Clone attempt {attempt + 1} failed, retrying in 5 seconds...")
-                    time.sleep(5)
-                else:
-                    print(f"❌ Failed to clone repository from GitHub after {max_retries} attempts: {full_name}")
-                    print(f"Error: {e}")
-                    raise Exception(f"Cannot clone repository {full_name}. Please check network connection and repository accessibility.")
-        
-        move_files_to_repo(f'{root_path}/utils/repo/{author_name}/{repo_name}')
-        
-        # For newly cloned repo, checkout the specific commit
-        print(f"🔖 Checking out commit {sha[:8]}...")
-        checkout_cmd = f"git checkout {sha}"
-        checkout_result = subprocess.run(checkout_cmd, cwd=repo_path, capture_output=True, shell=True, text=True)
-        
-        if checkout_result.returncode != 0:
-            print(f"⚠️  Checkout failed: {checkout_result.stderr}")
-            # Try to fetch the specific commit if it doesn't exist locally
-            print(f"📥 Fetching specific commit...")
-            subprocess.run(f'git fetch origin {sha}', cwd=repo_path, shell=True, capture_output=True)
-            checkout_result = subprocess.run(checkout_cmd, cwd=repo_path, capture_output=True, shell=True, text=True)
+            # Clean any local modifications
+            subprocess.run('git reset --hard HEAD', cwd=repo_path, shell=True, capture_output=True)
+            subprocess.run('git clean -fdx', cwd=repo_path, shell=True, capture_output=True)
             
-            if checkout_result.returncode != 0:
-                raise Exception(f"Failed to checkout {sha}: {checkout_result.stderr}")
+            # Try to checkout target commit (might already be fetched)
+            checkout_result = subprocess.run(
+                f'git checkout {sha}',
+                cwd=repo_path,
+                capture_output=True,
+                shell=True
+            )
+            
+            if checkout_result.returncode == 0:
+                print(f"✅ Successfully switched to commit {sha[:8]} (already fetched)")
+                return
+            
+            # Commit not found locally, need to fetch
+            print(f"📥 Fetching latest changes...")
+            fetch_result = subprocess.run(
+                'git fetch origin',
+                cwd=repo_path,
+                capture_output=True,
+                shell=True,
+                timeout=300
+            )
+            
+            if fetch_result.returncode != 0:
+                print(f"⚠️  Fetch failed, trying specific commit...")
+                subprocess.run(f'git fetch origin {sha}', cwd=repo_path, shell=True, timeout=300)
+            
+            # Now checkout
+            subprocess.run(f'git checkout {sha}', cwd=repo_path, shell=True, check=True)
+            print(f"✅ Successfully updated to commit {sha[:8]}")
+            return
+            
+        except Exception as e:
+            print(f"⚠️  Error reusing repository: {e}")
+            print(f"🔄 Will try to clone fresh...")
+            # Remove corrupted repo and continue to clone
+            subprocess.run(f'rm -rf {repo_path}', shell=True)
     
-    # Remove Dockerfile if exists
+    # ═══════════════════════════════════════════════════════════════
+    # Fresh Clone (first time or after error)
+    # ═══════════════════════════════════════════════════════════════
+    
+    if not os.path.exists(f'{root_path}/utils/repo/{author_name}/{repo_name}'):
+        os.system(f'mkdir -p {root_path}/utils/repo/{author_name}/{repo_name}')
+    
+    # Retry logic for unstable network connections
+    download_cmd = f"git clone https://github.com/{full_name}.git"
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            print(f"📦 Cloning {full_name} (attempt {attempt + 1}/{max_retries})...")
+            subprocess.run(download_cmd, cwd=f'{root_path}/utils/repo/{author_name}', check=True, shell=True, timeout=600)
+            print(f"✅ Successfully cloned {full_name}")
+            break
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+            if attempt < max_retries - 1:
+                print(f"⚠️  Clone attempt {attempt + 1} failed, retrying in 5 seconds...")
+                time.sleep(5)
+            else:
+                print(f"❌ Failed to clone repository from GitHub after {max_retries} attempts: {full_name}")
+                print(f"Error: {e}")
+                raise Exception(f"Cannot clone repository {full_name}. Please check network connection and repository accessibility.")
+    
+    move_files_to_repo(f'{root_path}/utils/repo/{author_name}/{repo_name}')
     if os.path.exists(f"{repo_path}/Dockerfile") and not os.path.isdir(f"{repo_path}/Dockerfile"):
         rm_dockerfile_cmd = f"rm -rf {repo_path}/Dockerfile"
         subprocess.run(rm_dockerfile_cmd, check=True, shell=True)
+
+    checkout_cmd = f"git checkout {sha}"
+    subprocess.run(checkout_cmd, cwd=repo_path, capture_output=True, shell=True)
 
     # x = subprocess.run('git log -1 --format="%H"', cwd=f'{root_path}/utils/repo/{author_name}/{repo_name}/repo', capture_output=True, shell=True)
     output_root = os.getenv('REPO2RUN_OUTPUT_ROOT', root_path)
@@ -242,11 +240,8 @@ def main():
     if not os.path.exists(f'{output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}'):
         subprocess.run(f'mkdir -p {output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}', shell=True)
     
-    # Don't delete existing repo - let download_repo handle reuse logic
-    # Only create author directory if needed (download_repo will handle the rest)
-    author_name = full_name.split('/')[0]
-    if not os.path.exists(f'{root_path}/utils/repo/{author_name}'):
-        subprocess.run(f'mkdir -p {root_path}/utils/repo/{author_name}', shell=True)
+    # 🆕 Repository Reuse: Don't delete existing repo!
+    # The download_repo() function will handle reusing or cloning as needed
     
     def timer():
         time.sleep(3600*2)  # Wait for 2 hours
@@ -297,10 +292,11 @@ def main():
         # Create a unique test image name (must be lowercase for Docker)
         test_image = f"arvo_test_{full_name.replace('/', '_').lower()}_{int(time.time())}"
         
-        # Use project root as build context to access utils/repo/
-        # Specify Dockerfile location with -f flag
-        project_root = output_root  # Assuming output_root is the project root
-        build_cmd = ["docker", "build", "-f", dockerfile_path, "-t", test_image, project_root]
+        # Build context must be root_path (build_agent dir) to access utils/repo/
+        # Dockerfile is in output_path, so use -f flag
+        build_context = output_path.rsplit('/output/', 1)[0]  # Get build_agent directory
+        dockerfile_rel_path = os.path.relpath(dockerfile_path, build_context)
+        build_cmd = ["docker", "build", "-f", dockerfile_rel_path, "-t", test_image, build_context]
         
         try:
             print(f"\n{'='*70}")

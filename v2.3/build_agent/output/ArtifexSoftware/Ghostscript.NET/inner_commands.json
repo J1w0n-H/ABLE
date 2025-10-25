@@ -1,0 +1,452 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6100380420684814,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6656363010406494,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6097850799560547,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6260435581207275,
+        "dir": "/src"
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET",
+        "returncode": 0,
+        "time": 0.6112439632415771,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6272990703582764,
+        "dir": "/src"
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 1.5766160488128662,
+        "dir": "/src"
+    },
+    {
+        "command": "apt-get install -y -qq dotnet-sdk-6.0",
+        "returncode": 100,
+        "time": 0.9418859481811523,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6251199245452881,
+        "dir": "/src"
+    },
+    {
+        "command": "wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb",
+        "returncode": 0,
+        "time": 0.6832706928253174,
+        "dir": "/src"
+    },
+    {
+        "command": "dpkg -i packages-microsoft-prod.deb",
+        "returncode": 0,
+        "time": 0.6608262062072754,
+        "dir": "/src"
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 1.7210431098937988,
+        "dir": "/src"
+    },
+    {
+        "command": "apt-get install -y -qq dotnet-sdk-6.0",
+        "returncode": 0,
+        "time": 27.08074116706848,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.626457929611206,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo/Ghostscript.NET",
+        "returncode": 0,
+        "time": 0.6080353260040283,
+        "dir": "/src"
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 3.5722248554229736,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6257612705230713,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.PDFA3Converter.Samples",
+        "returncode": 0,
+        "time": 0.6083517074584961,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6258041858673096,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.Samples",
+        "returncode": 0,
+        "time": 0.6077375411987305,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.625800371170044,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.Viewer",
+        "returncode": 0,
+        "time": 0.6096642017364502,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6270453929901123,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6089458465576172,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6251254081726074,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.DisplayTest",
+        "returncode": 0,
+        "time": 0.6091461181640625,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6261780261993408,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "cd /repo/Ghostscript.NET.DisplayTest",
+        "returncode": 0,
+        "time": 0.6071686744689941,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 1,
+        "time": 0.5576131343841553,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.626415491104126,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmp0vga90nm' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.050290584564208984,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6254093647003174,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6268432140350342,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 1,
+        "time": 0.28527379035949707,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6275339126586914,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmpdd6qjkxy' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05022883415222168,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6262500286102295,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6258511543273926,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmpmxvxsk8e' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05045509338378906,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6268630027770996,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6267778873443604,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmpsbx92od4' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05024528503417969,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6255967617034912,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.626666784286499,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 1,
+        "time": 0.3030533790588379,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6269843578338623,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmpksivkm60' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05026817321777344,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6256585121154785,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6266584396362305,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmpw69a84cz' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05059051513671875,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6255097389221191,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6280755996704102,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 1,
+        "time": 0.31095314025878906,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6272599697113037,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmp4i0osndh' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05068540573120117,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.626518964767456,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6279807090759277,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 1,
+        "time": 0.316986083984375,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.625917911529541,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmpsynwko1r' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05054187774658203,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6267595291137695,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6272284984588623,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmpsfd4nzat' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05030465126037598,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6264843940734863,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6272428035736084,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj",
+        "returncode": 0,
+        "time": 0.6100306510925293,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6269328594207764,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/code_edit.py -t '/tmp/patch/tmpdjfqjs95' -p '/tmp'",
+        "returncode": 0,
+        "time": 0.05075573921203613,
+        "dir": "/"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6260170936584473,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6262364387512207,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "cd /repo/Ghostscript.NET",
+        "returncode": 0,
+        "time": 0.6075758934020996,
+        "dir": "/repo/Ghostscript.NET.DisplayTest"
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 1.3753221035003662,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6270444393157959,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.6285054683685303,
+        "dir": "/repo/Ghostscript.NET"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6273362636566162,
+        "dir": "/repo/Ghostscript.NET"
+    }
+]

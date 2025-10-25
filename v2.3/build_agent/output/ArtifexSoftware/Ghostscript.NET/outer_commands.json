@@ -1,0 +1,269 @@
+[
+    {
+        "GPT_time": 0.6680605411529541
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6660292148590088
+    },
+    {
+        "GPT_time": 1.8438529968261719
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6662776470184326
+    },
+    {
+        "GPT_time": 1.8651325702667236
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET",
+        "returncode": 0,
+        "time": 0.6683311462402344
+    },
+    {
+        "GPT_time": 2.2629830837249756
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 1.913170337677002
+    },
+    {
+        "command": "apt-get install -y -qq dotnet-sdk-6.0",
+        "returncode": 0,
+        "time": 1.293647050857544
+    },
+    {
+        "GPT_time": 0.899486780166626
+    },
+    {
+        "command": "wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb",
+        "returncode": 0,
+        "time": 1.0435080528259277
+    },
+    {
+        "command": "dpkg -i packages-microsoft-prod.deb",
+        "returncode": 0,
+        "time": 1.018859624862671
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 2.084508180618286
+    },
+    {
+        "command": "apt-get install -y -qq dotnet-sdk-6.0",
+        "returncode": 0,
+        "time": 27.465421438217163
+    },
+    {
+        "GPT_time": 1.683547019958496
+    },
+    {
+        "command": "cd /repo/Ghostscript.NET",
+        "returncode": 0,
+        "time": 0.6639366149902344
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 10.12692141532898
+    },
+    {
+        "GPT_time": 1.7306838035583496
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.PDFA3Converter.Samples",
+        "returncode": 0,
+        "time": 0.6648509502410889
+    },
+    {
+        "GPT_time": 1.2149686813354492
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.Samples",
+        "returncode": 0,
+        "time": 0.664027214050293
+    },
+    {
+        "GPT_time": 7.5440895557403564
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.Viewer",
+        "returncode": 0,
+        "time": 0.6658906936645508
+    },
+    {
+        "GPT_time": 0.9729366302490234
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6654160022735596
+    },
+    {
+        "GPT_time": 3.2040529251098633
+    },
+    {
+        "command": "ls /repo/Ghostscript.NET.DisplayTest",
+        "returncode": 0,
+        "time": 0.6646718978881836
+    },
+    {
+        "GPT_time": 6.31663703918457
+    },
+    {
+        "command": "cd /repo/Ghostscript.NET.DisplayTest",
+        "returncode": 0,
+        "time": 0.6628117561340332
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 7.851860761642456
+    },
+    {
+        "GPT_time": 5.397486925125122
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n=======\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13713335990905762
+    },
+    {
+        "GPT_time": 4.433743953704834
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 7.7708868980407715
+    },
+    {
+        "GPT_time": 2.0368974208831787
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< <PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n=======\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n>>>>>>> REPLACE\n",
+        "returncode": 1,
+        "time": 0.1366112232208252
+    },
+    {
+        "GPT_time": 1.5007209777832031
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n=======\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1370530128479004
+    },
+    {
+        "GPT_time": 2.7591781616210938
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n\ufeff<Project Sdk=\"Microsoft.NET.Sdk\">\n=======\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n\ufeff<Project Sdk=\"Microsoft.NET.Sdk\">\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13812899589538574
+    },
+    {
+        "GPT_time": 2.3889334201812744
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 7.645807266235352
+    },
+    {
+        "GPT_time": 1.4211180210113525
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n=======\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.1373591423034668
+    },
+    {
+        "GPT_time": 1.6182305812835693
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n=======\n\ufeff<Project Sdk=\"Microsoft.NET.Sdk\">\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13939619064331055
+    },
+    {
+        "GPT_time": 1.0739624500274658
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 7.672221660614014
+    },
+    {
+        "GPT_time": 1.707045316696167
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n</PropertyGroup>\n=======\n</PropertyGroup>\n</Project>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13889336585998535
+    },
+    {
+        "GPT_time": 1.2191879749298096
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 7.745771884918213
+    },
+    {
+        "GPT_time": 1.3600244522094727
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n\ufeff<Project Sdk=\"Microsoft.NET.Sdk\">\n <PropertyGroup>\n   <EnableWindowsTargeting>true</EnableWindowsTargeting>\n </PropertyGroup>\n</Project>\n=======\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n    <TargetFramework>net6.0-windows</TargetFramework>\n  </PropertyGroup>\n</Project>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.14020013809204102
+    },
+    {
+        "GPT_time": 1.9245178699493408
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n\ufeff<Project Sdk=\"Microsoft.NET.Sdk\">\n <PropertyGroup>\n   <EnableWindowsTargeting>true</EnableWindowsTargeting>\n </PropertyGroup>\n</Project>\n=======\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n    <TargetFramework>net6.0-windows</TargetFramework>\n  </PropertyGroup>\n</Project>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.14081692695617676
+    },
+    {
+        "GPT_time": 3.0558114051818848
+    },
+    {
+        "command": "cat /repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj",
+        "returncode": 0,
+        "time": 0.6695249080657959
+    },
+    {
+        "GPT_time": 1.6054935455322266
+    },
+    {
+        "diff": "\n/repo/Ghostscript.NET.DisplayTest/Ghostscript.NET.DisplayTest.csproj\n<<<<<<< SEARCH\n\ufeff<Project Sdk=\"Microsoft.NET.Sdk\">\n<PropertyGroup>\n  <EnableWindowsTargeting>true</EnableWindowsTargeting>\n</PropertyGroup>\n</Project>\n=======\n<Project Sdk=\"Microsoft.NET.Sdk\">\n  <PropertyGroup>\n    <EnableWindowsTargeting>true</EnableWindowsTargeting>\n    <TargetFramework>net6.0-windows</TargetFramework>\n  </PropertyGroup>\n>>>>>>> REPLACE\n",
+        "returncode": 0,
+        "time": 0.13795089721679688
+    },
+    {
+        "GPT_time": 1.6952316761016846
+    },
+    {
+        "command": "cd /repo/Ghostscript.NET",
+        "returncode": 0,
+        "time": 0.663811206817627
+    },
+    {
+        "command": "dotnet build",
+        "returncode": 0,
+        "time": 8.804845809936523
+    },
+    {
+        "GPT_time": 0.7581489086151123
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 7.897955417633057
+    }
+]

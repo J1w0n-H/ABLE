@@ -160,7 +160,7 @@ safe_cmd = [
     "xz", "unxz", "sort", "uniq", "wc", "tr", "cut", "paste", "tee", "awk", "sed", "env", "printenv",
     "hostname", "ping", "traceroute", "ssh", "journalctl","lsblk", "blkid", "uptime",
     "lscpu", "lsusb", "lspci", "lsmod", "dmidecode", "ip", "ifconfig", "netstat", "ss", "route", "nmap",
-    "strace", "ltrace", "time", "nice", "renice", "killall", "printf"
+    "strace", "ltrace", "time", "nice", "renice", "killall", "printf", "apt-cache"
     ]
 
 # 替换没有版本号的包名成带版本号的函数

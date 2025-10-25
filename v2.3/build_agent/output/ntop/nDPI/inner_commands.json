@@ -1,0 +1,272 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6099522113800049,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 1.137986183166504,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6095743179321289,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6286122798919678,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6071672439575195,
+        "dir": "/src"
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 0.6131463050842285,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 127,
+        "time": 0.1063232421875,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6280639171600342,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 2.3894855976104736,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq autoconf",
+        "returncode": 0,
+        "time": 2.625769853591919,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6281492710113525,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6088097095489502,
+        "dir": "/repo"
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 0.6120467185974121,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 127,
+        "time": 0.1049966812133789,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6276781558990479,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq libtool",
+        "returncode": 0,
+        "time": 2.7875611782073975,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.629357099533081,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6078238487243652,
+        "dir": "/repo"
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 0.6120378971099854,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 127,
+        "time": 0.10472941398620605,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6275789737701416,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq pkg-config",
+        "returncode": 0,
+        "time": 6.934282302856445,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.62799072265625,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6082642078399658,
+        "dir": "/repo"
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 1,
+        "time": 5.2594828605651855,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 1.9423766136169434,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6265988349914551,
+        "dir": "/repo"
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6084949970245361,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6283280849456787,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6089394092559814,
+        "dir": "/repo"
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 1,
+        "time": 5.114900350570679,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 1.9570319652557373,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6267447471618652,
+        "dir": "/repo"
+    },
+    {
+        "command": "grep -n \"AC_CHECK_LIB\" /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6093072891235352,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6289186477661133,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq libjson-c-dev librrd-dev libnuma-dev libpcap-dev libnl-3-dev libgpg-error-dev libgcrypt20-dev libpcre2-dev libmaxminddb-dev libcurl4-openssl-dev",
+        "returncode": 0,
+        "time": 7.0613157749176025,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6276402473449707,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6078410148620605,
+        "dir": "/repo"
+    },
+    {
+        "command": "./autogen.sh",
+        "returncode": 0,
+        "time": 6.931101322174072,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 3.2865731716156006,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6276013851165771,
+        "dir": "/repo"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 8.057127714157104,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6281182765960693,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.6612992286682129,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6271893978118896,
+        "dir": "/repo"
+    }
+]

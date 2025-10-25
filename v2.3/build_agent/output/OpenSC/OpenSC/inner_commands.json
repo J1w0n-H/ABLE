@@ -1,0 +1,254 @@
+[
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6084184646606445,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6873288154602051,
+        "dir": "/src"
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.60990309715271,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6272814273834229,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6074614524841309,
+        "dir": "/src"
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 127,
+        "time": 0.10610342025756836,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 127,
+        "time": 0.10609006881713867,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.625697135925293,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 2.0171663761138916,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq autoconf",
+        "returncode": 0,
+        "time": 1.9472737312316895,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6279952526092529,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.607994794845581,
+        "dir": "/repo"
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 1,
+        "time": 1.8450965881347656,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.20064115524291992,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6288299560546875,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq libtool",
+        "returncode": 0,
+        "time": 2.0076074600219727,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6275203227996826,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6085171699523926,
+        "dir": "/repo"
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 1,
+        "time": 3.156940221786499,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.20438170433044434,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6287226676940918,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq automake",
+        "returncode": 0,
+        "time": 1.4894185066223145,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6281003952026367,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6073474884033203,
+        "dir": "/repo"
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 1,
+        "time": 3.093087673187256,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 0.20353269577026367,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.627561092376709,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq pkg-config",
+        "returncode": 0,
+        "time": 5.233960390090942,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6262912750244141,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6073527336120605,
+        "dir": "/repo"
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 4.692774534225464,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 1,
+        "time": 3.1016159057617188,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.627030611038208,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y -qq libpcsclite-dev",
+        "returncode": 0,
+        "time": 3.497307777404785,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6265866756439209,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6075804233551025,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 6.32316255569458,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6279044151306152,
+        "dir": "/repo"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 15.050830364227295,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6278564929962158,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.6385505199432373,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6270849704742432,
+        "dir": "/repo"
+    }
+]

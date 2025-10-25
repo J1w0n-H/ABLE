@@ -1,0 +1,182 @@
+[
+    {
+        "GPT_time": 0.6881537437438965
+    },
+    {
+        "command": "ls /repo",
+        "returncode": 0,
+        "time": 0.6651210784912109
+    },
+    {
+        "GPT_time": 1.5764832496643066
+    },
+    {
+        "command": "cat /repo/configure.ac",
+        "returncode": 0,
+        "time": 0.6660013198852539
+    },
+    {
+        "GPT_time": 1.0068707466125488
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.663750410079956
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 1.0197041034698486
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 0.9678857326507568
+    },
+    {
+        "GPT_time": 1.5348494052886963
+    },
+    {
+        "command": "apt-get update -qq",
+        "returncode": 0,
+        "time": 2.909494161605835
+    },
+    {
+        "command": "apt-get install -y -qq autoconf",
+        "returncode": 0,
+        "time": 2.8407461643218994
+    },
+    {
+        "GPT_time": 0.7975442409515381
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638190746307373
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 2.948155641555786
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 1.2282683849334717
+    },
+    {
+        "GPT_time": 1.3623673915863037
+    },
+    {
+        "command": "apt-get install -y -qq libtool",
+        "returncode": 0,
+        "time": 3.105679512023926
+    },
+    {
+        "GPT_time": 0.754676103591919
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6644811630249023
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 4.346771717071533
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 1.439359426498413
+    },
+    {
+        "GPT_time": 0.9386942386627197
+    },
+    {
+        "command": "apt-get install -y -qq automake",
+        "returncode": 0,
+        "time": 2.7431366443634033
+    },
+    {
+        "GPT_time": 0.7630877494812012
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6629810333251953
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 4.333472490310669
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 1.3942875862121582
+    },
+    {
+        "GPT_time": 1.4452273845672607
+    },
+    {
+        "command": "apt-get install -y -qq pkg-config",
+        "returncode": 0,
+        "time": 6.439166307449341
+    },
+    {
+        "GPT_time": 0.6270136833190918
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6638286113739014
+    },
+    {
+        "command": "./bootstrap",
+        "returncode": 0,
+        "time": 6.8808372020721436
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 5.225973844528198
+    },
+    {
+        "GPT_time": 0.8337116241455078
+    },
+    {
+        "command": "apt-get install -y -qq libpcsclite-dev",
+        "returncode": 0,
+        "time": 5.649790048599243
+    },
+    {
+        "GPT_time": 1.289161205291748
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635408401489258
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 9.504124164581299
+    },
+    {
+        "GPT_time": 1.3282341957092285
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 18.525941848754883
+    },
+    {
+        "GPT_time": 1.1643128395080566
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 4.711963653564453
+    }
+]

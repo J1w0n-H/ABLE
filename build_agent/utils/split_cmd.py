@@ -16,6 +16,45 @@
 import re
 
 def split_cmd_statements(cmd):
+    # ═══════════════════════════════════════════════════════════════
+    # Validate: Detect forbidden multi-line control structures
+    # ═══════════════════════════════════════════════════════════════
+    original_cmd = cmd  # Keep original for error message
+    
+    # Detect if/then/fi, for/do/done, while/do/done, case/esac
+    forbidden_patterns = [
+        (r'\bif\s+\[.*?\]\s*;\s*then', 'if [ ... ]; then'),
+        (r'\bfor\s+\w+\s+in\s+', 'for var in'),
+        (r'\bwhile\s+\[', 'while ['),
+        (r'\bcase\s+\w+\s+in', 'case var in'),
+    ]
+    
+    for pattern, description in forbidden_patterns:
+        if re.search(pattern, cmd, re.MULTILINE):
+            error_msg = f"""
+ERROR: Multi-line control structure detected: {description}
+
+Your command:
+{original_cmd[:200]}...
+
+❌ FORBIDDEN: Multi-line if/then/fi, for/while loops
+✅ REQUIRED: Single-line commands with && only
+
+Examples:
+  Wrong: if [ -f file ]; then cmd; fi
+  Right: test -f file && cmd || true
+  
+  Wrong: for i in *; do cmd $i; done  
+  Right: Use find with -exec or xargs
+
+Please rewrite as a single line with && connections!
+"""
+            raise ValueError(error_msg)
+    
+    # ═══════════════════════════════════════════════════════════════
+    # Process backslash continuations and newlines
+    # ═══════════════════════════════════════════════════════════════
+    
     # 删除 \ 后跟换行符
     cmd = re.sub(r'\\\s*\n', '', cmd)
 

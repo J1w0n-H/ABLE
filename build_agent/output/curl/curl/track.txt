@@ -1,7 +1,0 @@
-Generate success!
-Generate success!
-Generate success!
-Generate success!
-Generate success!
-Generate success!
-Dockerfile verification: ✅ VERIFIED

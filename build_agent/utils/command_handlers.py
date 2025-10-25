@@ -143,9 +143,8 @@ class WaitingListAddFileHandler(CommandHandler):
         parsed = match_waitinglist_addfile(command)
         file_path = parsed['file_path']
         
-        current_file_path = os.path.abspath(__file__)
-        current_directory = os.path.dirname(current_file_path)
-        project_directory = os.path.dirname(current_directory)
+        # Use session.sandbox.root_path instead of calculating from __file__
+        project_directory = session.sandbox.root_path
         
         result = subprocess.run(
             f'docker cp {session.sandbox.container.name}:{file_path} {project_directory}/utils/repo/{session.sandbox.full_name}/repo',
