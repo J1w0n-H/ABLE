@@ -109,37 +109,39 @@ SUCCESS = Build completes + runtest passes with "Congratulations!"
 
 When you see:
 ```
-🔴🔴🔴 MANDATORY ACTION 🔴🔴🔴
-   ⛔ apt-get install texinfo
+🔴🔴🔴 STOP! EXECUTE THIS EXACT COMMAND 🔴🔴🔴
+
+⛔ COPY AND RUN THIS EXACT COMMAND:
+
+   apt-get install texinfo && make -j4
 ```
 
-**SIMPLE RULE: Install → Retry LAST command → Done! ✅**
+**YOU MUST:**
+1. ⛔ COPY the command shown EXACTLY (with &&)
+2. ⛔ RUN it in one action
+3. ⛔ DO NOTHING ELSE
 
-You MUST:
-1. ⛔ Execute the apt-get command EXACTLY
-2. ⛔ Look at your LAST ACTION (the command you just ran)
-3. ⛔ Run that SAME command again
+**WHY ONE COMMAND?**
+- Combines install + retry in single step
+- No chance to forget the retry
+- Guaranteed correct sequence
 
-**CONCRETE EXAMPLE:**
+**EXAMPLE:**
 ```
-Your last action: cd /repo && make -j4
-Observation shows: Running `make -j4`...
-                   Error 127: makeinfo not found
-Suggestion: ⛔ apt-get install texinfo
+Last command failed: make -j4
+Error 127: makeinfo not found
 
-✅ CORRECT RESPONSE:
-   Step 1: apt-get install texinfo
-   Step 2: cd /repo && make -j4  ← Retry THIS exact command!
+You'll see:
+⛔ COPY AND RUN THIS EXACT COMMAND:
+   apt-get install texinfo && make -j4
 
-❌ WRONG RESPONSE:
-   Step 1: apt-get install texinfo
-   Step 2: ./configure  ← NO! Why configure? make failed, not configure!
+Just copy-paste and run it! Done! ✅
 ```
 
-**DON'T OVERTHINK:**
-- Last command = whatever you just ran before seeing the error
-- Just repeat it after installing the package
-- Do NOT go back to configure unless configure itself failed!
+**DON'T:**
+- ❌ Split into two turns (install, then retry)
+- ❌ Run configure instead
+- ❌ Modify the command
 
 ### 🟡 TIER 2: RECOMMENDED (shown with ✅)
 **Library Dependencies and Configure Errors**

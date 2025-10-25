@@ -537,7 +537,8 @@ Explanation: Clear all the items in the waiting list.'''
                         
                         # 에러 추출 및 분석 (실패 시에만)
                         if return_code != 0:
-                            error_summary = extract_critical_errors(result_message, return_code)
+                            # v2.5: Pass last_command for one-step fix generation
+                            error_summary = extract_critical_errors(result_message, return_code, last_command=command)
                             if error_summary:
                                 # 에러 요약을 맨 앞에 추가
                                 result_message = error_summary + "\n" + result_message

@@ -24,7 +24,7 @@ CORE PRINCIPLES:
 
 import re
 
-def extract_critical_errors(output, returncode):
+def extract_critical_errors(output, returncode, last_command=""):
     """
     Extract critical error messages from command output.
     Returns a formatted error summary or empty string if no errors found.
@@ -33,6 +33,9 @@ def extract_critical_errors(output, returncode):
     - Tiered suggestion system (MANDATORY/RECOMMENDED/ADVISORY)
     - Better Error 127 detection (case-insensitive)
     - Expanded context (30 lines)
+    
+    v2.5 IMPROVEMENT:
+    - last_command parameter for generating one-step fix command
     """
     if returncode == 0:
         return ""
@@ -97,13 +100,28 @@ def extract_critical_errors(output, returncode):
     # 🆕 CRITICAL: Show MANDATORY at the VERY TOP!
     if mandatory:
         summary += "\n" + "="*70 + "\n"
-        summary += "🔴🔴🔴 STOP! MANDATORY ACTION REQUIRED 🔴🔴🔴\n"
+        summary += "🔴🔴🔴 STOP! EXECUTE THIS EXACT COMMAND 🔴🔴🔴\n"
         summary += "="*70 + "\n"
-        summary += "READ THIS FIRST - DO NOT SKIP!\n\n"
-        for s in mandatory:
-            summary += f"   ⛔ {s}\n"
-        summary += "\nYou MUST execute these commands immediately!\n"
-        summary += "Then retry your LAST command (the one that just failed).\n"
+        
+        # 🆕 v2.5: Generate ONE-STEP command (install && retry)
+        if last_command:
+            # Combine install + retry into single command
+            install_cmds = " && ".join(mandatory)
+            one_step_command = f"{install_cmds} && {last_command}"
+            summary += f"\n⛔ COPY AND RUN THIS EXACT COMMAND:\n\n"
+            summary += f"   {one_step_command}\n\n"
+            summary += f"This will:\n"
+            for s in mandatory:
+                summary += f"   1. {s}\n"
+            summary += f"   2. Then retry: {last_command}\n"
+        else:
+            # Fallback: show separate steps
+            summary += "READ THIS FIRST - DO NOT SKIP!\n\n"
+            for s in mandatory:
+                summary += f"   ⛔ {s}\n"
+            summary += "\nYou MUST execute these commands immediately!\n"
+            summary += "Then retry your LAST command (the one that just failed).\n"
+        
         summary += "="*70 + "\n\n"
     
     # Then show error details

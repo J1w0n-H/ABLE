@@ -442,5 +442,107 @@
         "returncode": 0,
         "time": 0.6098911762237549,
         "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6336474418640137,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "mkdir -p /repo/build",
+        "returncode": 0,
+        "time": 0.6084120273590088,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6073713302612305,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "cmake .. -DCMAKE_BUILD_TYPE=Release",
+        "returncode": 0,
+        "time": 1.919025182723999,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6340222358703613,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 2,
+        "time": 1.838545560836792,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6317031383514404,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6081535816192627,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6326615810394287,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6076476573944092,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "mkdir -p build",
+        "returncode": 0,
+        "time": 0.6090397834777832,
+        "dir": "/repo"
+    },
+    {
+        "command": "cd build",
+        "returncode": 0,
+        "time": 0.6063194274902344,
+        "dir": "/repo"
+    },
+    {
+        "command": "cmake .. -DCMAKE_BUILD_TYPE=Release",
+        "returncode": 0,
+        "time": 2.0124785900115967,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6388611793518066,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 2,
+        "time": 2.1019678115844727,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6356334686279297,
+        "dir": "/repo/build"
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6106441020965576,
+        "dir": "/repo/build"
     }
 ]

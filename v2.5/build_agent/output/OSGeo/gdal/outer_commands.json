@@ -322,5 +322,78 @@
         "command": "cat /repo/README.md",
         "returncode": 0,
         "time": 0.667414665222168
+    },
+    {
+        "GPT_time": 1.222052812576294
+    },
+    {
+        "command": "mkdir -p /repo/build",
+        "returncode": 0,
+        "time": 19.54120635986328
+    },
+    {
+        "command": "cd /repo/build",
+        "returncode": 0,
+        "time": 0.6636745929718018
+    },
+    {
+        "command": "cmake .. -DCMAKE_BUILD_TYPE=Release",
+        "returncode": 0,
+        "time": 21.19197916984558
+    },
+    {
+        "GPT_time": 1.1501493453979492
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 19.645835638046265
+    },
+    {
+        "GPT_time": 1.0742332935333252
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6643872261047363
+    },
+    {
+        "GPT_time": 1.7407152652740479
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6635863780975342
+    },
+    {
+        "command": "mkdir -p build",
+        "returncode": 0,
+        "time": 19.401861429214478
+    },
+    {
+        "command": "cd build",
+        "returncode": 0,
+        "time": 0.6623289585113525
+    },
+    {
+        "command": "cmake .. -DCMAKE_BUILD_TYPE=Release",
+        "returncode": 0,
+        "time": 21.248637199401855
+    },
+    {
+        "GPT_time": 1.1732854843139648
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 20.581894636154175
+    },
+    {
+        "GPT_time": 2.028867483139038
+    },
+    {
+        "command": "cat /repo/README.md",
+        "returncode": 0,
+        "time": 0.6676201820373535
     }
 ]
