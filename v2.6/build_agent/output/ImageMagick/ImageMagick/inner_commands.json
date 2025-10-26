@@ -2,49 +2,49 @@
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6101007461547852,
+        "time": 0.6098678112030029,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.9036061763763428,
+        "time": 0.9038779735565186,
         "dir": "/src"
     },
     {
         "command": "cd /repo && ./configure",
         "returncode": 0,
-        "time": 13.032740831375122,
+        "time": 12.838094234466553,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6333878040313721,
+        "time": 0.6349008083343506,
         "dir": "/repo"
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 29.668057203292847,
+        "time": 28.578043460845947,
         "dir": "/repo"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6308984756469727,
+        "time": 0.630730390548706,
         "dir": "/repo"
     },
     {
         "command": "python /home/tools/runtest.py",
         "returncode": 0,
-        "time": 0.7188835144042969,
+        "time": 0.717249870300293,
         "dir": "/repo"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6310396194458008,
+        "time": 0.6315934658050537,
         "dir": "/repo"
     }
 ]
