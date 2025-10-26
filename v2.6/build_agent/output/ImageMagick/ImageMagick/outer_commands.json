@@ -1,34 +1,42 @@
 [
     {
-        "GPT_time": 0.8722715377807617
+        "GPT_time": 0.7307212352752686
     },
     {
-        "command": "ls /repo",
+        "command": "ls -l /repo",
         "returncode": 0,
-        "time": 0.6666040420532227
+        "time": 0.6674942970275879
     },
     {
-        "GPT_time": 1.256117820739746
+        "GPT_time": 1.165635347366333
+    },
+    {
+        "command": "find /repo -maxdepth 1 -name \"configure\" -o -name \"CMakeLists.txt\" -o -name \"Makefile\"",
+        "returncode": 0,
+        "time": 0.6695666313171387
+    },
+    {
+        "GPT_time": 0.7616147994995117
     },
     {
         "command": "cd /repo && ./configure",
         "returncode": 0,
-        "time": 12.896449327468872
+        "time": 12.303608894348145
     },
     {
-        "GPT_time": 0.7186870574951172
+        "GPT_time": 1.681161880493164
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 32.07888889312744
+        "time": 31.32851767539978
     },
     {
-        "GPT_time": 1.0921416282653809
+        "GPT_time": 0.9296715259552002
     },
     {
         "command": "runtest",
         "returncode": 0,
-        "time": 5.492098808288574
+        "time": 5.212895631790161
     }
 ]

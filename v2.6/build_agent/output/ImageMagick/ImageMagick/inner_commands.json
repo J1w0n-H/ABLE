@@ -1,50 +1,62 @@
 [
     {
-        "command": "ls /repo",
+        "command": "ls -l /repo",
         "returncode": 0,
-        "time": 0.6098678112030029,
+        "time": 0.6099727153778076,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.9038779735565186,
+        "time": 0.8910074234008789,
+        "dir": "/src"
+    },
+    {
+        "command": "find /repo -maxdepth 1 -name \"configure\" -o -name \"CMakeLists.txt\" -o -name \"Makefile\"",
+        "returncode": 0,
+        "time": 0.6132428646087646,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6301209926605225,
         "dir": "/src"
     },
     {
         "command": "cd /repo && ./configure",
         "returncode": 0,
-        "time": 12.838094234466553,
+        "time": 12.245498418807983,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6349008083343506,
+        "time": 0.6317694187164307,
         "dir": "/repo"
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 28.578043460845947,
+        "time": 27.761189699172974,
         "dir": "/repo"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.630730390548706,
+        "time": 0.6303567886352539,
         "dir": "/repo"
     },
     {
         "command": "python /home/tools/runtest.py",
         "returncode": 0,
-        "time": 0.717249870300293,
+        "time": 0.7122302055358887,
         "dir": "/repo"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6315934658050537,
+        "time": 0.6298902034759521,
         "dir": "/repo"
     }
 ]
