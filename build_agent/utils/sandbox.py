@@ -457,6 +457,12 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                             command = 'python /home/tools/runtest.py'
                         if command == 'generate_diff':
                             command = 'python /home/tools/generate_diff.py'
+                        
+                        # v2.5: Dynamic timeout for apt-get commands
+                        command_timeout = 600 * 2  # Default 20 minutes
+                        if 'apt-get install' in command:
+                            command_timeout = 1800  # 30 minutes for package installation
+                        
                         if command[-1] != '&':
                             if not (command.split()[0].strip() in safe_cmd and '>' not in command):
                                 self.sandbox.commit_container()
@@ -474,7 +480,7 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                             self.sandbox.shell.sendline(command)
                             self.sandbox.commands[-1]["returncode"] = -1
 
-                        self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600*2)  # 等待bash提示符，带超时
+                        self.sandbox.shell.expect([r'root@.*:.*# '], timeout=command_timeout)  # 等待bash提示符，带超时
                         end_time = time.time()
                         elasped_time = end_time - start_time
                         self.sandbox.commands[-1]["time"] = elasped_time

@@ -51,6 +51,7 @@ def extract_critical_errors(output, returncode, last_command=""):
         r'undefined reference to',      # linker errors
         r'No such file or directory',  # missing files
         r'command not found',           # missing commands
+        r': not found',                 # missing commands (command: not found)
         r'configure: error:',           # configure errors
         r'Error \d+',                   # generic errors
     ]
@@ -230,7 +231,7 @@ def analyze_errors(error_lines):
         
         for cmd, pkg in command_packages.items():
             if cmd in error_text.lower():
-                suggestions.add(f"apt-get install {pkg}")
+                suggestions.add(f"apt-get install -y {pkg}")
                 break
     
     # ═══════════════════════════════════════════════════════════════
@@ -254,7 +255,7 @@ def analyze_errors(error_lines):
         
         for header, pkg in header_packages.items():
             if header in error_text:
-                suggestions.add(f"apt-get install {pkg}")
+                suggestions.add(f"apt-get install -y {pkg}")
                 break
     
     return list(suggestions)
