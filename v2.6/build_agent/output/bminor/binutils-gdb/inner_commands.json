@@ -34,5 +34,89 @@
         "returncode": 0,
         "time": 2.7354421615600586,
         "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6412875652313232,
+        "dir": "/repo"
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 2.3394012451171875,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6433789730072021,
+        "dir": "/repo"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 21.243529796600342,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6457185745239258,
+        "dir": "/repo"
+    },
+    {
+        "command": "tail -100 /tmp/last_command_output.txt",
+        "returncode": 0,
+        "time": 0.6091384887695312,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6425180435180664,
+        "dir": "/repo"
+    },
+    {
+        "command": "grep -i 'error' /tmp/last_command_output.txt",
+        "returncode": 0,
+        "time": 0.608515739440918,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6436281204223633,
+        "dir": "/repo"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 6.06845498085022,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6397013664245605,
+        "dir": "/repo"
+    },
+    {
+        "command": "tail -100 /tmp/last_command_output.txt",
+        "returncode": 0,
+        "time": 0.6084225177764893,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6417064666748047,
+        "dir": "/repo"
+    },
+    {
+        "command": "make -j4 2>&1 | tee /tmp/make_output.txt | grep -i 'error'",
+        "returncode": 0,
+        "time": 9.226964235305786,
+        "dir": "/repo"
     }
 ]
