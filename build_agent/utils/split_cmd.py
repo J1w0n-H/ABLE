@@ -61,10 +61,20 @@ Please rewrite as a single line with && connections!
     # 替换普通换行符为单个空格
     cmd = re.sub(r'\n', ' ', cmd)
 
-    # 使用正则表达式按 && 分割子语句，并移除前后的空格
-    statements = re.split(r'\s*&&\s*', cmd)
+    # ═══════════════════════════════════════════════════════════════
+    # v2.7: Return single command (Bash handles && logic)
+    # ═══════════════════════════════════════════════════════════════
+    # REMOVED: && splitting to preserve Bash semantics
+    # OLD: statements = re.split(r'\s*&&\s*', cmd)
+    # OLD: return [statement.strip() for statement in statements]
     
-    return [statement.strip() for statement in statements]
+    # NEW: Let Bash handle && connections
+    # Benefits:
+    #   1. Accurate returncode (last command's exit status)
+    #   2. Proper cd behavior (all commands in same session)
+    #   3. One-Step commands work as intended
+    #   4. Fail-fast behavior (A && B stops if A fails)
+    return [cmd.strip()]
 
 if __name__ == "__main__":
     # 示例输入
