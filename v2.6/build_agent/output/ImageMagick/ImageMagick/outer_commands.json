@@ -6,5 +6,29 @@
         "command": "ls /repo",
         "returncode": 0,
         "time": 0.66788649559021
+    },
+    {
+        "GPT_time": 1.7953739166259766
+    },
+    {
+        "command": "cd /repo && ./configure",
+        "returncode": 0,
+        "time": 13.090311288833618
+    },
+    {
+        "GPT_time": 1.1408371925354004
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 33.158867835998535
+    },
+    {
+        "GPT_time": 0.9103984832763672
+    },
+    {
+        "command": "runtest",
+        "returncode": 0,
+        "time": 5.440774202346802
     }
 ]

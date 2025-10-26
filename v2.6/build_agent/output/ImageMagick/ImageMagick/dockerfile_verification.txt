@@ -1,0 +1,8 @@
+Valid: False
+Message: Build failed: DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+unable to prepare context: unable to evaluate symlinks in Dockerfile path: lstat /root/Git/ARVO2.0/output: no such file or directory
+
+Timestamp: 2025-10-26T18:58:34.946513

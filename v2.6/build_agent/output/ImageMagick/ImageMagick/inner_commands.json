@@ -4,5 +4,47 @@
         "returncode": 0,
         "time": 0.6101007461547852,
         "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.9036061763763428,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo && ./configure",
+        "returncode": 0,
+        "time": 13.032740831375122,
+        "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6333878040313721,
+        "dir": "/repo"
+    },
+    {
+        "command": "make -j4",
+        "returncode": 0,
+        "time": 29.668057203292847,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6308984756469727,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/runtest.py",
+        "returncode": 0,
+        "time": 0.7188835144042969,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6310396194458008,
+        "dir": "/repo"
     }
 ]
