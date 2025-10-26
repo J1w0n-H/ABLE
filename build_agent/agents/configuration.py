@@ -95,185 +95,150 @@ class Configuration(Agent):
 
 ## 🎯 YOUR MISSION
 Configure and build a C/C++ project in Docker ({self.image_name}).
-Basic tools: gcc, g++, make, cmake, clang
-SUCCESS = Build completes + `runtest` passes with "Congratulations!"
+SUCCESS = Build completes + runtest passes with "Congratulations!"
 
 ╔══════════════════════════════════════════════════════════════════════════╗
-║                    🔴 RULE #1: READ ERROR MESSAGES                        ║
+║                    🔴 RULE #1: READ ERROR MESSAGES                       ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 
-**MOST IMPORTANT RULE - OVERRIDES EVERYTHING ELSE:**
+**WHEN ANY COMMAND FAILS (returncode != 0):**
 
-When ANY command fails:
-1. 📖 **READ the error message FIRST**
-2. ✅ **If it says "run X", then RUN X**
-3. ❌ **DON'T blindly run configure or make again**
-4. 💡 **The error message IS your instruction!**
+1. **READ the error message FIRST** - don't skip this!
+2. **IF it says "run X"** → Run exactly what it says
+3. **DON'T** blindly run configure or make again
 
 **EXAMPLES:**
 
+✅ **GOOD:**
 ```
-Error says: "run make distclean and start over"
-→ Run: make distclean && ./configure && make -j4 ✅
-→ NOT: ./configure ❌
-
-Error says: "install libgmp-dev"
-→ Run: apt-get install -y libgmp-dev && <retry-failed-command> ✅
-→ NOT: apt-get install libgmp-dev (then forget retry) ❌
+Error: "configure: error: run make distclean"
+→ Action: make distclean
 ```
 
-**ANTI-PATTERNS (DON'T DO THIS!):**
+❌ **BAD:**
 ```
-❌ make fails → ./configure (WRONG! Read the error!)
-❌ apt-get install → (next turn) make (WRONG! Use && to combine!)
-❌ Error says "run X" → Ignore and run Y (WRONG! Follow the error!)
+Error: "configure: error: run make distclean"
+→ Action: ./configure  ← WRONG! Ignores error message!
 ```
+
+✅ **GOOD:**
+```
+Error: "makeinfo: command not found"
+Suggested: ⛔ apt-get install -y texinfo && make -j4
+→ Action: apt-get install -y texinfo && make -j4
+```
+
+❌ **BAD:**
+```
+Error: "makeinfo: command not found"
+→ Action: apt-get install texinfo  ← Missing && make -j4!
+→ Next turn: ./configure  ← Wrong sequence!
+```
+
+**🚨 ERROR MESSAGES ARE INSTRUCTIONS!**
+- "run X" → Run X
+- "install Y" → Install Y  
+- Don't guess, don't assume, just follow!
 
 ╔══════════════════════════════════════════════════════════════════════════╗
-║              🆘 WHEN YOU SEE MANDATORY FIXES (⛔ symbol)                  ║
+║                    ⛔ SUGGESTED FIXES (WHEN PROVIDED)                    ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 
-If Observation shows:
+**IF YOU SEE ⛔ SUGGESTED COMMANDS IN OBSERVATION:**
+
 ```
-🔴🔴🔴 STOP! EXECUTE THIS EXACT COMMAND 🔴🔴🔴
 ⛔ COPY AND RUN THIS EXACT COMMAND:
    apt-get install -y texinfo && make -j4
 ```
 
-**YOU MUST:**
-1. ⛔ COPY the command EXACTLY as shown
-2. ⛔ RUN it (don't split, don't modify)
-3. ⛔ DO NOTHING ELSE
+→ **COPY IT EXACTLY** (with && and all parameters)
+→ **RUN IT IN ONE ACTION** (don't split!)
+→ **DO NOTHING ELSE** (don't configure!)
 
-**This happens for:**
-- Error 127 (command not found: makeinfo, bison, flex, etc.)
-- Missing headers (fatal error: zlib.h, ssl.h, etc.)
-
-**WHY?** System already analyzed the error and generated the fix!
-
-╔══════════════════════════════════════════════════════════════════════════╗
-║                        📋 TYPICAL BUILD WORKFLOW                          ║
-╚══════════════════════════════════════════════════════════════════════════╝
-
-**NORMAL FLOW (when NO errors):**
-
-1. **Explore**: `ls /repo` → check Makefile, CMakeLists.txt, configure
-2. **Dependencies**: Read README/configure.ac → install packages
-3. **Configure**: `./configure` (or `cmake ..`)
-4. **Build**: `make -j4`
-5. **Test**: `runtest`
-
-**ERROR FLOW (when command fails):**
-
-1. 🛑 **STOP** - Don't auto-retry!
-2. 📖 **READ** the error message
-3. ✅ **FOLLOW** what it says
-4. 🔄 **RETRY** the failed command (use &&)
-
-**KEY INSIGHT:**
-- configure/make are NOT magic recovery commands!
-- They're ONE-TIME steps in the normal flow
-- If make fails → fix the error → retry make
-- NOT: make fails → configure again → make again (infinite loop!)
+**WHY ONE COMMAND?**
+- Installs package + retries build in single step
+- No chance to forget the retry
+- No chance to run wrong command
 
 ---
 
-## 📚 DETAILED GUIDANCE
+## 📋 TYPICAL WORKFLOW (GENERAL GUIDANCE)
 
-### Smart File Reading
-- ✅ `grep -n "pattern" file` - Find specific patterns
-- ✅ `sed -n '100,200p' file` - Read specific line ranges
-- ✅ `cat file` - Read small files (<200 lines)
-- ❌ DON'T: head -50, then head -100, then head -150 (wastes turns!)
+**⚠️ IMPORTANT: If ANY command fails, stop and follow RULE #1 above!**
+**⚠️ Don't blindly follow this workflow if errors occur!**
 
-**Long Output Handling:**
-If output > 500 lines, it's saved to `/tmp/last_command_output.txt`
-Use: `tail -100 /tmp/last_command_output.txt` or `grep 'error' /tmp/last_command_output.txt`
+1. **Explore the project**: `ls /repo`, check for Makefile/CMakeLists.txt/configure
+2. **Read build files** (efficiently):
+   - `grep -n "pattern" file` (search patterns)
+   - `sed -n '100,200p' file` (specific lines)
+   - `cat file` (small files < 200 lines)
+3. **Identify build system**:
+   - `configure` exists → Autoconf (run `./configure`)
+   - `CMakeLists.txt` → CMake (run `cmake`)
+   - `Makefile` only → Direct make
+4. **Install dependencies**: `apt-get install -y <packages>`
+5. **Configure**: Run configuration step (if needed)
+6. **Build**: Run `make -j4`
+7. **Test**: Run `runtest`
 
-### Package Installation
-**IMPORTANT**: Use direct apt-get (NOT waiting list):
+**🆕 LONG OUTPUT HANDLING**:
+If output exceeds 500 lines → saved to `/tmp/last_command_output.txt`
 ```bash
-apt-get install -y <package>  # ✅ Direct (recommended)
+tail -100 /tmp/last_command_output.txt  # Last 100 lines
+grep -i 'error' /tmp/last_command_output.txt  # Find errors
 ```
-Only use `waitinglist add` for batch operations.
 
-### Build System Detection
-- **Autoconf**: Has `configure` or `configure.ac` → Run `./configure` then `make -j4`
-- **CMake**: Has `CMakeLists.txt` → Run `cmake ..` then `make -j4`
-- **Plain Makefile**: Just `make -j4`
+**ERROR HANDLING**:
+- Fatal error: xxx.h → `apt-get install -y libxxx-dev`
+- Command not found → `apt-get install -y <tool>`
+- ⚠️ **ERROR MESSAGE SAYS "RUN X"? → Follow RULE #1!**
 
-### Common Build Dependencies
-Install `-dev` packages for headers:
-- `libssl-dev` (ssl.h, openssl/ssl.h)
-- `zlib1g-dev` (zlib.h)
-- `libgmp-dev` (gmp.h)
-- `python3-dev` (Python.h)
-
-Install build tools:
-- `autoconf automake libtool pkg-config` (autotools)
-- `cmake` (CMake projects)
-- `texinfo` (makeinfo)
-- `bison flex` (parsers)
-
-### Useful Commands
+**USEFUL TOOLS**:
 - `apt-cache search <keyword>` - Search packages
-- `apt-get install -y <package>` - Install packages (use -y for non-interactive)
-- `pkg-config --cflags --libs <package>` - Get compile flags
-- `export VAR=value` - Set environment variables
-- `clear_configuration` - Reset Docker to initial state
+- `apt-get install -y <pkg>` - Install (use -y!)
+- `grep -i 'error' file` - Search errors
+- `tail -100 file` - Last 100 lines
 
-### Important Notes
-- ✅ Use `apt-get install` directly (NOT waiting list unless batch operation)
-- ✅ Check if headers/libs are part of project before installing external packages
-- ✅ `runtest` only verifies build (doesn't build itself) - run after `make`
-- ❌ DON'T download large files with git/wget in /repo
-- ❌ DON'T use if/then/fi (syntax errors) - use && instead
+---
+
+## 📝 COMMAND FORMAT
 
 {INIT_PROMPT}
-You are now in the Docker environment of {self.image_name}. Please perform all operations within this environment.
-CLI TOOLS: You can call CLI tools in  {BASH_FENCE[0]} ... {BASH_FENCE[1]} block as Action with a Thought. like:
-### Thought: I need to understand the structure of the root directory.
-### Action:
-{BASH_FENCE[0]}
-ls /repo
-{BASH_FENCE[1]}
 
-For another example:
-### Thought: I need to read the README.md file.
+**YOUR RESPONSE FORMAT:**
+```
+### Thought: Brief explanation
 ### Action:
 {BASH_FENCE[0]}
-cat README.md
+command here
 {BASH_FENCE[1]}
+```
 
 {EDIT_PROMPT}
-*Note*: Do not make extensive changes to the existing files in the /repo folder. You may only make appropriate and necessary changes to the original repository files (e.g., when there are actual errors or tests that cannot be run).
-*Very Important Note*: Passing tests by modifying testing functions is not allowed, and you should figure out how to make the current test functions run successfully!!!
-In addition to typical bash commands, we also provide the following commands that can be used, you can use them flexibly if needed:
+
+**AVAILABLE TOOLS:**
 {tools_list}
+
+**NOTES:**
+- Prefer `apt-get install -y` over waiting list
+- Don't modify test files
+- `runtest` runs AFTER build
+- Use single-line commands with &&
 
 ╔══════════════════════════════════════════════════════════════════════════╗
-║                        ⚠️ CRITICAL RULES ⚠️                              ║
+║                          ⚠️  CRITICAL RULES                              ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 
-1. **ONE-LINE COMMANDS ONLY**
-   ❌ WRONG: Multi-line if/then/fi, backslash continuation
-   ✅ RIGHT: Use && to chain: `cd /repo && ./configure && make -j4`
+1. **BUILD BEFORE RUNTEST**: dependencies → configure → make → **runtest**
+   (runtest only verifies, doesn't build!)
 
-2. **BUILD SEQUENCE**
-   ❌ WRONG: dependencies → runtest (skips build!)
-   ✅ RIGHT: dependencies → configure → make → runtest
+2. **ONE-LINE COMMANDS**: Use `&&` to chain, NO if/then/fi, NO backslash \\
+   ✅ `test -f file && cmd || true`
+   ❌ Multi-line if/then/fi
 
-3. **NEVER MODIFY TEST FILES**
-   Don't edit test_*.c / *_test.py to make tests pass!
+3. **DON'T MODIFY TEST FILES**: Fix actual code, not test_*.c
 
-4. **NO INTERACTIVE SHELLS**
-   ❌ FORBIDDEN: hatch shell, tmux, interactive prompts
-   ✅ ALLOWED: Direct bash commands only
-
----
-
-**Special Commands Available:**
-{tools_list}
+4. **NO INTERACTIVE SHELLS**: No hatch shell, tmux, etc.
 """
     def show_init_prompt(self):
         print(self.init_prompt)
