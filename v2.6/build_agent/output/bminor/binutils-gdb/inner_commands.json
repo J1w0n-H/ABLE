@@ -2,7 +2,37 @@
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.609821081161499,
+        "time": 0.6090826988220215,
         "dir": "/src"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 5.926287651062012,
+        "dir": "/src"
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6078710556030273,
+        "dir": "/src"
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 1.1484522819519043,
+        "dir": "/repo"
+    },
+    {
+        "command": "python /home/tools/generate_diff.py",
+        "returncode": 0,
+        "time": 0.6414353847503662,
+        "dir": "/repo"
+    },
+    {
+        "command": "apt-get install -y libgmp-dev libmpfr-dev",
+        "returncode": 0,
+        "time": 2.7354421615600586,
+        "dir": "/repo"
     }
 ]

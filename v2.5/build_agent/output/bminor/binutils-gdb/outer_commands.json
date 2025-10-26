@@ -1,487 +1,224 @@
 [
     {
-        "GPT_time": 2.1491599082946777
+        "GPT_time": 1.0491909980773926
     },
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.673454761505127
+        "time": 0.6684849262237549
     },
     {
-        "GPT_time": 1.2605032920837402
+        "GPT_time": 1.145066261291504
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6657958030700684
+        "time": 0.6658515930175781
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 38.15647006034851
+        "time": 36.58193111419678
     },
     {
-        "GPT_time": 0.8958241939544678
+        "GPT_time": 5.980602025985718
     },
     {
         "command": "apt-get install -y libgmp-dev libmpfr-dev",
         "returncode": 0,
-        "time": 39.75219678878784
+        "time": 38.99331188201904
     },
     {
-        "GPT_time": 1.023604393005371
+        "GPT_time": 1.4081146717071533
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 40.331432819366455
+        "time": 37.4067325592041
     },
     {
-        "GPT_time": 1.7706573009490967
+        "GPT_time": 0.8948147296905518
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 55.13403391838074
+        "time": 55.41130971908569
     },
     {
-        "GPT_time": 0.9262604713439941
+        "GPT_time": 0.7216179370880127
+    },
+    {
+        "command": "tail -100 /tmp/last_command_output.txt",
+        "returncode": 0,
+        "time": 0.6665654182434082
+    },
+    {
+        "GPT_time": 0.8763570785522461
+    },
+    {
+        "command": "grep -i 'error' /tmp/last_command_output.txt",
+        "returncode": 0,
+        "time": 0.6682941913604736
+    },
+    {
+        "GPT_time": 0.8425068855285645
+    },
+    {
+        "command": "make -j4 > /tmp/make_output.txt 2>&1",
+        "returncode": 0,
+        "time": 41.68518352508545
+    },
+    {
+        "command": "tail -100 /tmp/make_output.txt",
+        "returncode": 0,
+        "time": 0.6661856174468994
+    },
+    {
+        "GPT_time": 1.3058512210845947
+    },
+    {
+        "command": "grep -i 'error' /tmp/make_output.txt",
+        "returncode": 0,
+        "time": 0.6671831607818604
+    },
+    {
+        "GPT_time": 1.1049301624298096
     },
     {
         "command": "apt-get install -y texinfo",
         "returncode": 0,
-        "time": 44.68620848655701
+        "time": 43.42780089378357
+    },
+    {
+        "GPT_time": 1.2706475257873535
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 71.94358825683594
+        "time": 67.26004552841187
     },
     {
-        "GPT_time": 1.5551621913909912
+        "GPT_time": 1.2142775058746338
     },
     {
         "command": "apt-get install -y flex",
         "returncode": 0,
-        "time": 41.45351195335388
+        "time": 40.985663414001465
+    },
+    {
+        "GPT_time": 0.7357676029205322
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 42.43775725364685
+        "time": 41.62303352355957
     },
     {
-        "GPT_time": 0.9351680278778076
+        "GPT_time": 0.8327572345733643
     },
     {
         "command": "apt-get install -y bison",
         "returncode": 0,
-        "time": 41.92954730987549
+        "time": 39.96926021575928
+    },
+    {
+        "GPT_time": 1.0379970073699951
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 142.70347118377686
+        "time": 144.0340280532837
     },
     {
-        "GPT_time": 1.540808916091919
+        "GPT_time": 0.7313249111175537
     },
     {
-        "command": "grep -r \"syslex.c\" /repo",
+        "command": "tail -100 /tmp/last_command_output.txt",
         "returncode": 0,
-        "time": 1.3242716789245605
+        "time": 0.6672470569610596
     },
     {
-        "GPT_time": 2.933412551879883
+        "GPT_time": 1.3538105487823486
     },
     {
-        "command": "grep -r \"generate\" /repo",
+        "command": "grep -i 'error' /tmp/last_command_output.txt",
         "returncode": 0,
-        "time": 1.2359566688537598
+        "time": 0.6663405895233154
     },
     {
-        "GPT_time": 1.2932989597320557
+        "GPT_time": 1.0001306533813477
     },
     {
-        "command": "grep -r \"syslex.c\" /repo",
+        "command": "make -j4",
         "returncode": 0,
-        "time": 1.3064258098602295
+        "time": 46.899224519729614
     },
     {
-        "GPT_time": 1.530623197555542
-    },
-    {
-        "command": "grep -n \"syslex.c\" /repo/binutils/Makefile",
-        "returncode": 0,
-        "time": 0.6134951114654541
-    },
-    {
-        "GPT_time": 1.5076422691345215
-    },
-    {
-        "command": "head -n 100 /repo/binutils/Makefile",
-        "returncode": 0,
-        "time": 0.6695401668548584
-    },
-    {
-        "GPT_time": 1.3655853271484375
-    },
-    {
-        "command": "grep -n \"syslex.c\" /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6650195121765137
-    },
-    {
-        "GPT_time": 1.8437659740447998
-    },
-    {
-        "command": "sed -n '140,160p' /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6683790683746338
-    },
-    {
-        "GPT_time": 1.7336704730987549
-    },
-    {
-        "command": "grep -n \"GENERATED_CFILES\" /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6663053035736084
-    },
-    {
-        "GPT_time": 0.884274959564209
-    },
-    {
-        "command": "sed -n '160,200p' /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6676406860351562
-    },
-    {
-        "GPT_time": 1.104508638381958
-    },
-    {
-        "command": "grep -n \"flex\" /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6677095890045166
-    },
-    {
-        "GPT_time": 1.3102054595947266
-    },
-    {
-        "command": "sed -n '20,60p' /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6124880313873291
-    },
-    {
-        "GPT_time": 0.8672356605529785
-    },
-    {
-        "command": "head -n 60 /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6659047603607178
-    },
-    {
-        "GPT_time": 1.0261857509613037
-    },
-    {
-        "command": "sed -n '60,100p' /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6681585311889648
-    },
-    {
-        "GPT_time": 0.9232864379882812
-    },
-    {
-        "command": "sed -n '30,50p' /repo/binutils/Makefile.am",
-        "returncode": 0,
-        "time": 0.6166441440582275
-    },
-    {
-        "GPT_time": 1.200596570968628
-    },
-    {
-        "command": "head -n 60 /repo/binutils/Makefile.am | tail -n 30",
-        "returncode": 0,
-        "time": 0.6698555946350098
-    },
-    {
-        "GPT_time": 1.1600289344787598
-    },
-    {
-        "command": "apt-get install -y flex",
-        "returncode": 0,
-        "time": 43.52721118927002
-    },
-    {
-        "GPT_time": 0.7012228965759277
+        "GPT_time": 0.8936564922332764
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6644625663757324
+        "time": 0.6632018089294434
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 44.57873558998108
+        "time": 42.809327602386475
     },
     {
-        "GPT_time": 1.4411423206329346
+        "GPT_time": 1.355649471282959
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 42.9097466468811
+        "time": 42.696919679641724
     },
     {
-        "GPT_time": 1.234595775604248
+        "GPT_time": 1.3041648864746094
     },
     {
-        "command": "cd /repo",
+        "command": "make distclean",
         "returncode": 0,
-        "time": 0.6649630069732666
+        "time": 40.837995529174805
+    },
+    {
+        "GPT_time": 2.0639829635620117
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 44.27170968055725
-    },
-    {
-        "GPT_time": 1.1404716968536377
+        "time": 43.29872131347656
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 43.3931028842926
+        "time": 46.88444495201111
     },
     {
-        "GPT_time": 0.6904292106628418
+        "GPT_time": 0.9346919059753418
     },
     {
-        "command": "cd /repo",
+        "command": "find . -name config.cache -exec rm -f {} \\;",
         "returncode": 0,
-        "time": 0.6653952598571777
+        "time": 0.6500539779663086
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 44.16652154922485
-    },
-    {
-        "GPT_time": 0.8171200752258301
+        "time": 42.98591208457947
     },
     {
         "command": "make -j4",
         "returncode": 0,
-        "time": 42.58448934555054
+        "time": 191.74151420593262
     },
     {
-        "GPT_time": 1.2956931591033936
+        "GPT_time": 1.657470941543579
     },
     {
-        "command": "cd /repo",
+        "command": "runtest",
         "returncode": 0,
-        "time": 0.6639852523803711
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 43.44500231742859
-    },
-    {
-        "GPT_time": 1.0349843502044678
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 43.64343571662903
-    },
-    {
-        "GPT_time": 2.224926471710205
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6684665679931641
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 43.319061040878296
-    },
-    {
-        "GPT_time": 22.376399278640747
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 41.982274770736694
-    },
-    {
-        "GPT_time": 1.1314263343811035
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6625919342041016
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 43.593218088150024
-    },
-    {
-        "GPT_time": 0.5736696720123291
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 45.3623366355896
-    },
-    {
-        "GPT_time": 1.0287768840789795
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6650123596191406
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 44.48842406272888
-    },
-    {
-        "GPT_time": 0.6622447967529297
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 42.48633408546448
-    },
-    {
-        "GPT_time": 0.9105398654937744
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6637036800384521
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 42.06085443496704
-    },
-    {
-        "GPT_time": 0.6913459300994873
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 42.924391746520996
-    },
-    {
-        "GPT_time": 0.9451353549957275
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6634979248046875
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 42.35375618934631
-    },
-    {
-        "GPT_time": 0.7558846473693848
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 42.81872296333313
-    },
-    {
-        "GPT_time": 1.2523083686828613
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.662308931350708
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 42.18525552749634
-    },
-    {
-        "GPT_time": 1.1083109378814697
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 42.3714325428009
-    },
-    {
-        "GPT_time": 0.871812105178833
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6643731594085693
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 42.40298080444336
-    },
-    {
-        "GPT_time": 0.7160873413085938
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 42.12231373786926
-    },
-    {
-        "GPT_time": 1.1219687461853027
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6655983924865723
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 42.21254897117615
-    },
-    {
-        "GPT_time": 2.379028558731079
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 42.29239630699158
-    },
-    {
-        "GPT_time": 1.5655794143676758
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6648461818695068
-    },
-    {
-        "command": "./configure",
-        "returncode": 0,
-        "time": 43.19667434692383
-    },
-    {
-        "GPT_time": 0.9028232097625732
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 43.17159175872803
+        "time": 41.725022077560425
     }
 ]

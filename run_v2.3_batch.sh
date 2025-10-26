@@ -6,8 +6,8 @@
 # set -e
 
 PROJECTS=(
-    "ImageMagick/ImageMagick HEAD"
-    "harfbuzz/harfbuzz HEAD"
+#    "ImageMagick/ImageMagick HEAD"
+#    "harfbuzz/harfbuzz HEAD"
     "bminor/binutils-gdb HEAD"
     "ntop/nDPI HEAD"
     "google/skia HEAD"
@@ -15,9 +15,10 @@ PROJECTS=(
     "FFmpeg/FFmpeg HEAD"
     "OpenSC/OpenSC HEAD"
     "OSGeo/gdal HEAD"
+
 )
 
-ROOT_PATH="/root/Git/ARVO2.0/v2.5/"
+ROOT_PATH="/root/Git/ARVO2.0/v2.6/"
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "🚀 ARVO2.0 v2.3 Batch Test"

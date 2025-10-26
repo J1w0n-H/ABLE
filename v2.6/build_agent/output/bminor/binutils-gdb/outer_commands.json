@@ -1,10 +1,31 @@
 [
     {
-        "GPT_time": 0.8532447814941406
+        "GPT_time": 0.8364298343658447
     },
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6681554317474365
+        "time": 0.66652512550354
+    },
+    {
+        "GPT_time": 0.9545807838439941
+    },
+    {
+        "command": "cd /repo",
+        "returncode": 0,
+        "time": 0.6643764972686768
+    },
+    {
+        "command": "./configure",
+        "returncode": 0,
+        "time": 50.49844837188721
+    },
+    {
+        "GPT_time": 0.8529939651489258
+    },
+    {
+        "command": "apt-get install -y libgmp-dev libmpfr-dev",
+        "returncode": 0,
+        "time": 45.06398582458496
     }
 ]

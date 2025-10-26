@@ -1,0 +1,4 @@
+integrate_docker failed, reason:
+ [Errno 2] No such file or directory: '/root/Git/ARVO2.0/v2.6/build_agent/output/harfbuzz/harfbuzz/sha.txt'
+Dockerfile verification: ❌ FAILED
+Reason: Dockerfile not found
