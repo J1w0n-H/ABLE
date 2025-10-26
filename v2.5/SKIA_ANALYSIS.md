@@ -33,18 +33,43 @@ python /home/tools/code_edit.py (324번)
 bazel build //... (3번 시도)
 ```
 
-### 3. 핵심 문제: `flags.bzl` 경로 오류
+### 3. 핵심 문제: **Bazel Label 경로 규칙 위반** 🎯
+
+**에러 메시지**:
 ```
-ERROR: cannot load '//src:tint/flags.bzl': no such file
+Label '//src/tint:flags.bzl' is invalid because 'src/tint' is not a package;
+perhaps you meant to put the colon here: '//src:tint/flags.bzl'?
+```
 
-파일 위치:
-1. /repo/bazel/flags.bzl
-2. /repo/third_party/externals/dawn/src/tint/flags.bzl
+**Bazel 경로 규칙**:
+```
+올바른 형식: //path:file
+- //src:file  ✅ (package name = "src")
+- //third_party/externals/dawn:file  ✅
 
-문제:
-- dawn 서브모듈 내 BUILD.bazel 파일들이
-  상위 경로(`//src:tint/flags.bzl`) 참조
-- 서브모듈 컨텍스트에서는 존재하지 않음
+잘못된 형식: //path/sub:file
+- //src/tint:file  ❌ ("src/tint"는 package가 아님)
+```
+
+**실제 파일 구조**:
+```
+/repo/third_party/externals/dawn/
+  src/
+    tint/
+      flags.bzl
+```
+
+**원인**:
+```
+dawn의 BUILD.bazel이 독립 프로젝트 가정:
+load("//src/tint:flags.bzl", ...)  ❌
+
+하지만 skia 컨텍스트에서는:
+/repo = Bazel root
+//third_party/externals/dawn = package
+
+따라서 올바른 경로:
+//third_party/externals/dawn/src/tint:flags.bzl  ✅
 ```
 
 ---
@@ -61,15 +86,23 @@ ERROR: cannot load '//src:tint/flags.bzl': no such file
 ```
 ❌ code_edit.py 324번 실행
 - BUILD.bazel 파일들 경로 수정 시도
-- flags.bzl 경로 문제 해결 시도
+- 잘못된 수정:
+  Before: load("//src/tint:flags.bzl", "COPTS")
+  After:  load("/third_party/externals/dawn/src/tint:flags.bzl", "COPTS")  ❌
+  
+실제 필요한 수정:
+  Before: load("//src/tint:flags.bzl", "COPTS")
+  After:  load("//third_party/externals/dawn/src/tint:flags.bzl", "COPTS")  ✅
 ```
 
-**주요 수정 시도**:
-1. `/repo/third_party/externals/dawn/src/tint/api/BUILD.bazel`
-   - Before: `load("//src/tint:flags.bzl", "COPTS")`
-   - After: `load("/third_party/externals/dawn/src/tint:flags.bzl", "COPTS")`
-   
-2. **여러 BUILD.bazel 파일 수정**
+**실제로는** (Bazel 규칙):
+```
+// 로 시작해야 함 (absolute label)
+//third_party/externals/dawn/src/tint:flags.bzl
+
+/ 로 시작하면 안 됨 (relative path)
+/third_party/externals/dawn/...  ❌
+```
 
 ### Phase 3: 빌드 시도 (턴 17-24)
 ```
@@ -80,82 +113,100 @@ bazel build //... 실행 (3번)
 
 **마지막 에러** (턴 24):
 ```
-ERROR: error loading package 'third_party/externals/dawn/src/tint/utils/text_generator':
-cannot load '//src:tint/flags.bzl': no such file
+ERROR: Label '//src/tint:flags.bzl' is invalid
+because 'src/tint' is not a package
 ```
 
 ---
 
 ## ❌ 실패 원인 분석
 
-### 1. **근본 문제**: 서브모듈 경로 참조 문제
-```
-dawn 서브모듈 내부:
-BUILD.bazel → load("//src/tint:flags.bzl", ...)
+### 1. **근본 문제**: Bazel Label 규칙 모름
 
-문제:
-- dawn은 독립 프로젝트
-- 내부 경로: //src/tint:flags.bzl
-- skia에서 가져올 때: /third_party/externals/dawn/src/tint/flags.bzl
-- 경로 불일치!
+**Bazel의 ":" 의미**:
 ```
+//path:target
+  ↑     ↑
+  path  target name within the package
 
-### 2. **LLM 한계**
-```
-❌ 324번 수정 시도
-→ 같은 패턴 반복
-→ 추론 실패
+//src:tint/flags.bzl  ❌ 잘못된 형식
+//src/tint:flags.bzl  ❌ 잘못된 형식 (src/tint가 package가 아님)
+
+올바른 형식:
+//third_party/externals/dawn/src/tint:flags.bzl  ✅
 ```
 
-**LLM 행동**:
-- 한 파일 수정 성공 → 빌드
-- 같은 에러 → 다른 파일 찾아 수정
-- 또 같은 에러 → 반복...
-
-**문제점**:
-1. **부분적 수정**: 324개 BUILD.bazel 중 일부만 수정
-2. **파악 실패**: 문제의 근본 원인 이해 못함
-3. **전략 없음**: 체계적 접근 부족
-
-### 3. **타임아웃**
+**dawn 서브모듈 내부에서**:
+```python
+# dawn 내부 BUILD.bazel (원본)
+load("//src/tint:flags.bzl", "COPTS")
 ```
-Turn 24: bazel build //... (Timeout for 2 hour!)
-→ 2시간 타임아웃
-→ 프로세스 중단
+→ dawn 독립 프로젝트에서는 `//src`가 package
+→ skia에서 가져올 때는 `//third_party/externals/dawn/src`가 package
+
+### 2. **LLM의 잘못된 수정**
+
+```
+시도한 수정:
+load("/src/tint:flags.bzl", "COPTS")  ❌
+
+문제점:
+1. /로 시작 (absolute file path, Bazel label 아님)
+2. Bazel은 //로 시작하는 label만 인식
+3. absolute file path는 Bazel에서 사용 못함
+```
+
+**올바른 수정**:
+```
+load("//third_party/externals/dawn/src/tint:flags.bzl", "COPTS")  ✅
+```
+
+### 3. **LLM이 Bazel 규칙을 이해 못함**
+
+```
+LLM이 본 것:
+- 에러: "cannot load '//src/tint:flags.bzl'"
+- 파일 위치: /repo/third_party/externals/dawn/src/tint/flags.bzl
+- 시도: /third_party/externals/dawn/src/tint:flags.bzl
+
+LLM이 놓친 것:
+- Bazel label 규칙: //로 시작
+- //를 /로 바꾸면 안 됨
 ```
 
 ---
 
 ## 💡 왜 안 됐나?
 
-### 1. Bazel의 복잡성
+### 1. Bazel의 복잡한 Label 규칙
 ```
 Bazel 특징:
-- 복잡한 의존성 관리
-- 경로 규칙 엄격
-- 서브모듈 처리 어려움
+- Label은 반드시 //로 시작
+- //path:target 형식 준수
+- 절대 파일 경로(/로 시작) 사용 불가
 ```
 
-### 2. 서브모듈 문제
+### 2. LLM의 오해
 ```
-google/skia 구조:
-/repo (skia)
-  /third_party/externals/dawn (dawn 서브모듈)
-    /src/tint/BUILD.bazel (dawn 내부 파일)
+LLM 추론:
+에러 → 경로 문제 → 절대 경로 사용
+→ "/third_party/..."  ❌
 
+실제 해결:
+에러 → Bazel label 문제 → 올바른 label
+→ "//third_party/..."  ✅
+```
+
+### 3. 324번 수정해도 안 되는 이유
+```
 문제:
-- dawn의 BUILD.bazel은 dawn 기준 경로 사용
-- skia 컨텍스트에서 불일치
-```
+- Bazel 규칙 자체를 모름
+- //와 /의 차이를 인식 못함
+- 부분적 수정만 반복
 
-### 3. LLM의 한계
-```
-복잡한 프로젝트 구조 이해:
-- 서브모듈 관계
-- Bazel 경로 규칙
-- Build system 동작
-
-→ LLM에게 너무 복잡함
+해결책:
+- Bazel label 규칙 명시적 설명 필요
+- error_parser에 Bazel 감지 + label 규칙 안내
 ```
 
 ---
@@ -169,39 +220,39 @@ google/skia 구조:
 1. Bazel의 복잡성
 2. 서브모듈 경로 문제
 3. LLM 능력 초과
-
-**결론**:
-- 현재 시스템으로는 불가능
-- 구조적 문제 (LLM 한계)
-- v2.5 성공률 하락 원인
+4. **Bazel label 규칙 이해 부족** 🎯
 
 ---
 
 ## 🎯 결론
 
-### v2.5에서 skia의 역할
-```
-v2.5 성공률: 62.5% (5/8)
-- 제외: skia 타임아웃
-- 포함: skia 실패
+### 핵심 발견
 
-실제:
-skia는 시스템 능력 밖의 프로젝트
-→ 성공률 하락의 주요 원인
+**LLM이 놓친 것**:
+1. **Bazel label 규칙** (`//` vs `/`)
+2. **에러 메시지 힌트 무시** ("perhaps you meant...")
+3. **체계적 접근 부족** (324번 무작위 수정)
+
+**개선 가능성**:
+```
+현재: LLM이 Bazel 규칙 모름 ❌
+개선: error_parser에 Bazel 감지 + 규칙 설명 ✅
 ```
 
-### 핵심 교훈
-```
-"모든 프로젝트를 빌드할 수는 없다"
+### v2.6 개선안
 
-시스템 설계 시:
-- 목표 범위 명확히
-- 무리한 목표 설정 금지
-- 복잡한 프로젝트 제외 고려
+**error_parser.py**:
+```python
+# Bazel 경로 에러 감지
+if "Label '//" in error_text and "' is invalid" in error_text:
+    suggestions.add("🔴 Bazel Label 규칙 위반 감지!")
+    suggestions.add("Bazel label은 반드시 //로 시작해야 함")
+    suggestions.add("예: //third_party/externals/dawn/src/tint:flags.bzl")
+    suggestions.add("❌ /third_party/... 형태는 사용 불가")
 ```
 
 ---
 
 **작성**: 2025-10-25 10:00  
 **Status**: skia는 시스템 능력 밖  
-**Next**: v2.6에서 Bazel 프로젝트 제외 또는 특별 처리 고려 🎯
+**Next**: v2.6에서 Bazel label 규칙 안내 추가 🎯
