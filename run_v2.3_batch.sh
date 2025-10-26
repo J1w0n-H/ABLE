@@ -6,8 +6,8 @@
 # set -e
 
 PROJECTS=(
-#    "ImageMagick/ImageMagick HEAD"
-#    "harfbuzz/harfbuzz HEAD"
+    "ImageMagick/ImageMagick HEAD"
+    "harfbuzz/harfbuzz HEAD"
     "bminor/binutils-gdb HEAD"
     "ntop/nDPI HEAD"
     "google/skia HEAD"
