@@ -568,19 +568,18 @@ The edit format is as follows:
             system_res += f'You are currently in a [{self.image_name}] container.\n'
             reminder = f"\nENVIRONMENT REMINDER: You have {self.max_turn - turn} turns left to complete the task."
             system_res += reminder
-            success_cmds = extract_cmds(self.sandbox.commands)
-
-            if len(success_cmds) > 0:
-                appendix = '\nThe container has successfully executed the following commands in order. Please refer to the execution history, reflect, and decide the subsequent actions. Remember, your ultimate goal is to pass the tests by executing `runtest`.\n' + \
-                    '\n'.join(success_cmds)
-            else:
-                appendix = '\nThe container remains in its original state.'
-            pattern = r'python\s+/home/tools/apt_download.py\s+-p\s+(\S+)'
-
-            replacement = r'apt-get install \1'
-            appendix = re.sub(pattern, replacement, appendix)
             
-            system_res += appendix
+            # v2.5.2: Remove confusing history - LLM already has Observation with all command results
+            # success_cmds = extract_cmds(self.sandbox.commands)
+            # if len(success_cmds) > 0:
+            #     appendix = '\nThe container has successfully executed the following commands in order. Please refer to the execution history, reflect, and decide the subsequent actions. Remember, your ultimate goal is to pass the tests by executing `runtest`.\n' + \
+            #         '\n'.join(success_cmds)
+            # else:
+            #     appendix = '\nThe container remains in its original state.'
+            # pattern = r'python\s+/home/tools/apt_download.py\s+-p\s+(\S+)'
+            # replacement = r'apt-get install \1'
+            # appendix = re.sub(pattern, replacement, appendix)
+            # system_res += appendix
             if "gpt" in self.model:
                 system_message = {"role": "system", "content": system_res}
             else:
