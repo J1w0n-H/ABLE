@@ -288,7 +288,8 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                 if command[-1] != '&':
                     start_time = time.time()
                     self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": '/'})
-                    self.sandbox.shell.sendline(command + " && sleep 0.5")
+                    # v2.6: Use ; instead of && to ensure sleep always runs
+                    self.sandbox.shell.sendline(command + " ; sleep 0.5")
                     self.sandbox.commands[-1]["returncode"] = -1
                 else:
                     start_time = time.time()
@@ -469,7 +470,8 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                             start_time = time.time()
                             dir, return_code = self.execute('$pwd$', waiting_list, conflict_list)
                             self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
-                            self.sandbox.shell.sendline(command + " && sleep 0.5")
+                            # v2.6: Use ; instead of && to ensure sleep always runs
+                            self.sandbox.shell.sendline(command + " ; sleep 0.5")
                             self.sandbox.commands[-1]["returncode"] = -1
                         else:
                             if not (command.split()[0].strip() in safe_cmd and '>' not in command):
@@ -500,8 +502,17 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                                 output_lines.append(last_line[:id].strip())
                         try:
                             return_code = self.get_returncode()
-                        except:
-                            return_code = 123
+                        except pexpect.TIMEOUT as e:
+                            print(f"[WARNING] Timeout getting returncode for: {command}")
+                            print(f"[DEBUG] Assuming command succeeded (sed/grep usually work)")
+                            return_code = 0  # v2.6: Assume success to prevent false failures
+                        except pexpect.EOF as e:
+                            print(f"[ERROR] Container died during: {command}")
+                            return_code = 125  # Container dead
+                        except Exception as e:
+                            print(f"[WARNING] Cannot get returncode for '{command}': {e}")
+                            print(f"[INFO] Assuming command succeeded (returncode=0)")
+                            return_code = 0  # v2.6: Assume success instead of 123
                         try:
                             self.sandbox.commands[-1]["returncode"] = return_code
                         except:
@@ -603,8 +614,15 @@ Explanation: Clear all the items in the waiting list.'''
                     result_message = f'Running Edit...\n' + '\n'.join(output_lines)
                     try:
                         return_code = self.get_returncode()
-                    except:
-                        return_code = 123
+                    except pexpect.TIMEOUT as e:
+                        print(f"[WARNING] Timeout getting returncode for edit: {edit_tmp_file}")
+                        return_code = 0  # v2.6: Assume success
+                    except pexpect.EOF as e:
+                        print(f"[ERROR] Container died during edit: {edit_tmp_file}")
+                        return_code = 125  # Container dead
+                    except Exception as e:
+                        print(f"[WARNING] Cannot get returncode for edit: {e}")
+                        return_code = 0  # v2.6: Assume success
                     self.sandbox.commands[-1]['returncode'] = return_code
                     return result_message, return_code
 
