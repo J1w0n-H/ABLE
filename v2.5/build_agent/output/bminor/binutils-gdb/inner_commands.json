@@ -2,157 +2,67 @@
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6087031364440918,
+        "time": 0.6124355792999268,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 2.742304563522339,
+        "time": 3.5439839363098145,
         "dir": "/src"
     },
     {
         "command": "cat /repo/README",
         "returncode": 0,
-        "time": 0.6103396415710449,
+        "time": 0.6083459854125977,
         "dir": "/src"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6467854976654053,
-        "dir": "/src"
-    },
-    {
-        "command": "grep -n \"AC_CHECK_LIB\" /repo/configure.ac",
-        "returncode": 1,
-        "time": 0.10735058784484863,
-        "dir": "/src"
-    },
-    {
-        "command": "python /home/tools/generate_diff.py",
-        "returncode": 0,
-        "time": 0.6391329765319824,
-        "dir": "/src"
-    },
-    {
-        "command": "cat /repo/configure.ac",
-        "returncode": 0,
-        "time": 0.6132209300994873,
-        "dir": "/src"
-    },
-    {
-        "command": "python /home/tools/generate_diff.py",
-        "returncode": 0,
-        "time": 0.638493537902832,
+        "time": 0.6393909454345703,
         "dir": "/src"
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6080641746520996,
+        "time": 0.6078429222106934,
         "dir": "/src"
     },
     {
         "command": "./configure",
         "returncode": 1,
-        "time": 0.585334062576294,
+        "time": 0.5863940715789795,
         "dir": "/repo"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6393489837646484,
+        "time": 0.6421077251434326,
         "dir": "/repo"
     },
     {
         "command": "apt-get update -qq",
         "returncode": 0,
-        "time": 2.0538063049316406,
+        "time": 2.2044737339019775,
         "dir": "/repo"
     },
     {
         "command": "apt-get install -y -qq libgmp-dev libmpfr-dev",
         "returncode": 0,
-        "time": 1.8609778881072998,
+        "time": 2.0296406745910645,
         "dir": "/repo"
     },
     {
         "command": "python /home/tools/generate_diff.py",
         "returncode": 0,
-        "time": 0.6380445957183838,
-        "dir": "/repo"
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.607781171798706,
+        "time": 0.6446974277496338,
         "dir": "/repo"
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 2.232893705368042,
+        "time": 2.36672043800354,
         "dir": "/repo"
-    },
-    {
-        "command": "python /home/tools/generate_diff.py",
-        "returncode": 0,
-        "time": 0.639533519744873,
-        "dir": "/repo"
-    },
-    {
-        "command": "make -j4",
-        "returncode": 2,
-        "time": 18.75982928276062,
-        "dir": "/repo"
-    },
-    {
-        "command": "python /home/tools/generate_diff.py",
-        "returncode": 0,
-        "time": 0.6402840614318848,
-        "dir": "/repo"
-    },
-    {
-        "command": "apt-get install texinfo",
-        "returncode": -1,
-        "time": -1,
-        "dir": "/repo"
-    },
-    {
-        "command": "make -j4",
-        "returncode": 2,
-        "time": 0.10746002197265625,
-        "dir": "/src"
-    },
-    {
-        "command": "python /home/tools/generate_diff.py",
-        "returncode": 0,
-        "time": 0.6386246681213379,
-        "dir": "/src"
-    },
-    {
-        "command": "apt-get install texinfo file",
-        "returncode": 100,
-        "time": 0.12617707252502441,
-        "dir": "/src"
-    },
-    {
-        "command": "make -j4",
-        "returncode": 2,
-        "time": 0.10835838317871094,
-        "dir": "/src"
-    },
-    {
-        "command": "python /home/tools/generate_diff.py",
-        "returncode": 0,
-        "time": 0.6401927471160889,
-        "dir": "/src"
-    },
-    {
-        "command": "ps aux | grep apt-get",
-        "returncode": 0,
-        "time": 0.6112475395202637,
-        "dir": "/src"
     }
 ]

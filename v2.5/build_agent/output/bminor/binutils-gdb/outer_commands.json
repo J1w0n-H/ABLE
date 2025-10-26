@@ -1,115 +1,52 @@
 [
     {
-        "GPT_time": 0.8916561603546143
+        "GPT_time": 1.3144645690917969
     },
     {
         "command": "ls /repo",
         "returncode": 0,
-        "time": 0.6654677391052246
+        "time": 0.6692156791687012
     },
     {
-        "GPT_time": 1.5185937881469727
+        "GPT_time": 1.4385437965393066
     },
     {
         "command": "cat /repo/README",
         "returncode": 0,
-        "time": 0.6668174266815186
+        "time": 0.6655387878417969
     },
     {
-        "GPT_time": 1.578566312789917
-    },
-    {
-        "command": "grep -n \"AC_CHECK_LIB\" /repo/configure.ac",
-        "returncode": 0,
-        "time": 0.16594624519348145
-    },
-    {
-        "GPT_time": 1.4716315269470215
-    },
-    {
-        "command": "cat /repo/configure.ac",
-        "returncode": 0,
-        "time": 0.6711299419403076
-    },
-    {
-        "GPT_time": 1.118621826171875
+        "GPT_time": 1.100198745727539
     },
     {
         "command": "cd /repo",
         "returncode": 0,
-        "time": 0.6640958786010742
+        "time": 0.6642422676086426
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 35.94957971572876
+        "time": 36.012550830841064
     },
     {
-        "GPT_time": 1.1583304405212402
+        "GPT_time": 1.3179574012756348
     },
     {
         "command": "apt-get update -qq",
         "returncode": 0,
-        "time": 36.71552562713623
+        "time": 37.45995497703552
     },
     {
         "command": "apt-get install -y -qq libgmp-dev libmpfr-dev",
         "returncode": 0,
-        "time": 36.81423497200012
+        "time": 38.56920146942139
     },
     {
-        "GPT_time": 0.8413910865783691
-    },
-    {
-        "command": "cd /repo",
-        "returncode": 0,
-        "time": 0.6634249687194824
+        "GPT_time": 0.7301549911499023
     },
     {
         "command": "./configure",
         "returncode": 0,
-        "time": 37.2365665435791
-    },
-    {
-        "GPT_time": 0.9275436401367188
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 53.74257516860962
-    },
-    {
-        "GPT_time": 1.195577621459961
-    },
-    {
-        "command": "apt-get install texinfo",
-        "returncode": 1,
-        "time": 1236.1663553714752
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 36.01228427886963
-    },
-    {
-        "GPT_time": 1.497046947479248
-    },
-    {
-        "command": "apt-get install texinfo file",
-        "returncode": 0,
-        "time": 35.22259068489075
-    },
-    {
-        "command": "make -j4",
-        "returncode": 0,
-        "time": 35.71565628051758
-    },
-    {
-        "GPT_time": 1.190401554107666
-    },
-    {
-        "command": "ps aux | grep apt-get",
-        "returncode": 0,
-        "time": 0.6676766872406006
+        "time": 38.30992269515991
     }
 ]
