@@ -229,45 +229,7 @@ checking target system type... x86_64-pc-linux-gnu
 checking for a BSD-compatible install... /usr/bin/install -c
 checking whether sleep supports fractional seconds... yes
 checking filesystem timestamp resolution... 0.01
-checking whether build environment is sane... yes
-checking for a race-free mkdir -p... /usr/bin/mkdir -p
-checking for gawk... no
-checking for mawk... mawk
-checking whether make sets $(MAKE)... yes
-checking whether make supports nested variables... yes
-checking xargs -n works... yes
-checking whether UID '0' is supported by ustar format... yes
-checking whether GID '0' is supported by ustar format... yes
-checking how to create a ustar tar archive... gnutar
-Configuring ImageMagick 7.1.2-8
-checking whether build environment is sane... yes
-checking whether make supports the include directive... yes (GNU style)
-checking for gcc... clang
-checking whether the C compiler works... yes
-checking for C compiler default output file name... a.out
-checking for suffix of executables... 
-checking whether we are cross compiling... no
-
-... (926 lines omitted) ...
-
-  CC       MagickWand/libMagickWand_7_Q16HDRI_la-wand-view.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Blob.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-BlobRef.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-CoderInfo.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Color.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Drawable.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Exception.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Functions.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Geometry.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Image.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-ImageRef.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Montage.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Options.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Pixels.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-ResourceLimits.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-SecurityPolicy.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Statistic.lo
-  CXX      Magick++/lib/libMagick___7_Q16HDRI_la-STL.lo
+... (lines omitted) ...
   CXX      Magick++/lib/libMagick___7_Q16HDRI_la-Thread.lo
   CXX      Magick++/lib/libMagick___7_Q16HDRI_la-TypeMetric.lo
   CCLD     MagickCore/libMagickCore-7.Q16HDRI.la
