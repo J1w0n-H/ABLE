@@ -14,11 +14,23 @@
 
 import os, sys, json
 import subprocess
-from agents.agent import Agent
-from utils.llm import get_llm_response
-from utils.agent_util import safe_cmd, extract_commands, append_trajectory, TIME_OUT_LABEL, extract_diffs, save_diff_description, DIFF_FENCE, BASH_FENCE, INIT_PROMPT, EDIT_PROMPT, HEAD, DIVIDER, UPDATED
-from utils.tools_config import Tools
-from utils.split_cmd import split_cmd_statements
+
+# Support both direct execution and package import
+try:
+    from .agent import Agent
+    from ..config import Config
+    from ..utils.llm import get_llm_response
+    from ..utils.agent_util import safe_cmd, extract_commands, append_trajectory, TIME_OUT_LABEL, extract_diffs, save_diff_description, DIFF_FENCE, BASH_FENCE, INIT_PROMPT, EDIT_PROMPT, HEAD, DIVIDER, UPDATED
+    from ..utils.tools_config import Tools
+    from ..utils.split_cmd import split_cmd_statements
+except ImportError:
+    from agents.agent import Agent
+    from config import Config
+    from utils.llm import get_llm_response
+    from utils.agent_util import safe_cmd, extract_commands, append_trajectory, TIME_OUT_LABEL, extract_diffs, save_diff_description, DIFF_FENCE, BASH_FENCE, INIT_PROMPT, EDIT_PROMPT, HEAD, DIVIDER, UPDATED
+    from utils.tools_config import Tools
+    from utils.split_cmd import split_cmd_statements
+
 import re
 import time
 
@@ -63,11 +75,11 @@ Explanation: Clear all the items in the conflict list.''',
     return new_text
 
 class Configuration(Agent):
-    def __init__(self, sandbox, image_name, full_name, root_dir, max_turn=70):
-        self.model = "gpt-4o-2024-05-13"
-        # self.model = "aws_claude35_sonnet"
+    def __init__(self, sandbox, image_name, full_name, root_dir, max_turn=None, output_root=None):
+        self.model = Config.LLM_MODEL
         self.root_dir = root_dir
-        self.max_turn = max_turn
+        self.output_root = output_root if output_root else Config.OUTPUT_ROOT
+        self.max_turn = max_turn if max_turn else Config.MAX_TURN
         self.sandbox = sandbox
         self.sandbox_session = self.sandbox.get_session()
         self.full_name = full_name
@@ -89,156 +101,175 @@ class Configuration(Agent):
         for tool in self.tool_lib:
             tools_list += f"{tool.value['command']} # {tool.value['description']}\n"
         self.init_prompt = f"""\
-╔══════════════════════════════════════════════════════════════════════════╗
-║                C/C++ BUILD ENVIRONMENT CONFIGURATION                     ║
-╚══════════════════════════════════════════════════════════════════════════╝
 
-## 🎯 YOUR MISSION
-Configure and build a C/C++ project in Docker ({self.image_name}).
-SUCCESS = Build completes + runtest passes with "Congratulations!"
 
 ╔══════════════════════════════════════════════════════════════════════════╗
-║                    🔴 RULE #1: READ ERROR MESSAGES                       ║
+║                    📋 WORK PROCESS (4 STEPS)                             ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 
-**WHEN ANY COMMAND FAILS (returncode != 0):**
+**OVERALL FLOW:**
+STEP1. **Scan** → Check build system type + read documentation
+STEP2. **Build** → Pick ONE build command and run it 
+STEP3. **Fix errors** → Read error messages, install what's missing
+   - If same error 2-3 times → Check INSTALL/README from step 1
+STEP4. **Verify** → Run `python /home/tools/runtest.py` when build succeeds
 
-1. **READ the error message FIRST** - don't skip this!
-2. **IF it says "run X"** → Run exactly what it says
-3. **DON'T** blindly run configure or make again
-
-**EXAMPLES:**
-
-✅ **GOOD:**
-```
-Error: "configure: error: run make distclean"
-→ Action: make distclean
-```
-
-❌ **BAD:**
-```
-Error: "configure: error: run make distclean"
-→ Action: ./configure  ← WRONG! Ignores error message!
-```
-
-✅ **GOOD:**
-```
-Error: "makeinfo: command not found"
-Suggested: ⛔ apt-get install -y texinfo && make -j4
-→ Action: apt-get install -y texinfo && make -j4
-```
-
-❌ **BAD:**
-```
-Error: "makeinfo: command not found"
-→ Action: apt-get install texinfo  ← Missing && make -j4!
-→ Next turn: ./configure  ← Wrong sequence!
-```
-
-**🚨 ERROR MESSAGES ARE INSTRUCTIONS!**
-- "run X" → Run X
-- "install Y" → Install Y  
-- Don't guess, don't assume, just follow!
-
-╔══════════════════════════════════════════════════════════════════════════╗
-║                    ⛔ SUGGESTED FIXES (WHEN PROVIDED)                    ║
-╚══════════════════════════════════════════════════════════════════════════╝
-
-**IF YOU SEE ⛔ SUGGESTED COMMANDS IN OBSERVATION:**
-
-```
-⛔ COPY AND RUN THIS EXACT COMMAND:
-   apt-get install -y texinfo && make -j4
-```
-
-→ **COPY IT EXACTLY** (with && and all parameters)
-→ **RUN IT IN ONE ACTION** (don't split!)
-→ **DO NOTHING ELSE** (don't configure!)
-
-**WHY ONE COMMAND?**
-- Installs package + retries build in single step
-- No chance to forget the retry
-- No chance to run wrong command
+**🚨 COMMAND REPETITION RULES (CRITICAL!):**
+1. **NEVER** run the exact same command twice in a row
+2. If a command succeeds → Move on to the next step
+3. If a command fails → Analyze WHY, then try a DIFFERENT command
+4. If chained command partially succeeds (e.g., `pip3 install meson && meson setup build` → pip3 ✓, meson ✗) → DON'T re-run pip3!
 
 ---
 
-## 📋 TYPICAL WORKFLOW (GENERAL GUIDANCE)
-
-**⚠️ IMPORTANT: If ANY command fails, stop and follow RULE #1 above!**
-**⚠️ Don't blindly follow this workflow if errors occur!**
-
-1. **Explore the project**: `ls /repo`, check for Makefile/CMakeLists.txt/configure
-2. **Read build files** (efficiently):
-   - `grep -n "pattern" file` (search patterns)
-   - `sed -n '100,200p' file` (specific lines)
-   - `cat file` (small files < 200 lines)
-3. **Identify build system**:
-   - `configure` exists → Autoconf (run `./configure`)
-   - `CMakeLists.txt` → CMake (run `cmake`)
-   - `Makefile` only → Direct make
-4. **Install dependencies**: `apt-get install -y <packages>`
-5. **Configure**: Run configuration step (if needed)
-6. **Build**: Run `make -j4`
-7. **Test**: Run `runtest`
-
-**🆕 LONG OUTPUT HANDLING**:
-If output exceeds 500 lines → saved to `/tmp/last_command_output.txt`
+**STEP 1: Quick scan**
 ```bash
-tail -100 /tmp/last_command_output.txt  # Last 100 lines
-grep -i 'error' /tmp/last_command_output.txt  # Find errors
+ls -1 /repo | grep -iE "CMakeLists.txt|Makefile|configure|meson.build|WORKSPACE|build.sh" && (grep -iR --include="*README*" --include="*INSTALL*" --include="*BUILD*" -E "(cmake|make|bazel|configure|meson|gcc|clang)" /repo || echo "No build instructions found in README/INSTALL files")
 ```
+→ Read the installation documentation (CMakeLists.txt|Makefile|configure|meson.build|WORKSPACE|build.sh) briefly to understand the correct build process before proceeding.
 
-**ERROR HANDLING**:
-- Fatal error: xxx.h → `apt-get install -y libxxx-dev`
-- Command not found → `apt-get install -y <tool>`
-- ⚠️ **ERROR MESSAGE SAYS "RUN X"? → Follow RULE #1!**
+**STEP 2: Build** (choose by what files exist)
+- `configure` exists → `cd /repo && ./configure` (then `make -j$(nproc)` if successful)
+- `configure.ac` but NO `configure` → Need autoreconf first:
+  ```bash
+  apt-get install -y autoconf automake libtool && cd /repo && autoreconf -fi && ./configure && make -j$(nproc)
+  ```
+- `CMakeLists.txt` → `cmake -S /repo -B /repo/build -DCMAKE_BUILD_TYPE=Release && make -C /repo/build -j$(nproc)`
+- `meson.build` → `pip3 install meson && export PATH=$PATH:/usr/local/bin && cd /repo && meson setup build && ninja -C build`
+- `.bazelversion`/`WORKSPACE` → `cd /repo && bazel sync --configure && bazel build //... && bazel test //...`
+  - **CRITICAL**: `cd /repo` first! `bazel sync` fetches external deps!
+- `Makefile` only → `make -C /repo -j$(nproc)`
+**STEP 3: If build FAILS - Analyze and Fix**
 
-**USEFUL TOOLS**:
-- `apt-cache search <keyword>` - Search packages
-- `apt-get install -y <pkg>` - Install (use -y!)
-- `grep -i 'error' file` - Search errors
-- `tail -100 file` - Last 100 lines
+**Read the output CAREFULLY:**
+- 📋 **RECENT COMMAND HISTORY** = Recent commands that have been executed and their results(Don't repeat)
+- 💡 **DETECTED ISSUES** = Pattern-based hints (what's likely missing)
+- 🚨 **ERROR MESSAGES** = Actual error output (what failed)
+- ⚠️ **CRITICAL**: NEVER run the exact same command twice! If it succeeded once, move on. If it failed, try something DIFFERENT 
+**Common patterns:**
+- "Command 'X' not found" → `apt-cache search X`, then install package
+- "Missing header 'X.h'" → `apt-cache search X.h`, then install -dev package
+- "Undefined autoconf macros" → `apt-get install -y autoconf-archive`
+- "Config cache conflict" → `find /repo -name 'config.cache' -delete && ./configure`
+- "Ninja not found" → `apt-get install -y ninja-build`
+
+**Key principles:**
+- **Read BOTH sections** - hints guide you, errors confirm the issue
+- **Use apt-cache search** when you're unsure which package provides what
+- **Only retry the failed step** - don't restart from scratch!
+- **Use && chaining** - install → retry in one command
 
 ---
 
-## 📝 COMMAND FORMAT
+╔══════════════════════════════════════════════════════════════════════════╗
+║    🎯 MISSION: Configure C/C++ Build + Pass ABLE's Test Verification    ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+**SUCCESS CRITERIA:** 
+Execute `python /home/tools/runtest.py` after successful build.
+It will show "Congratulations, you have successfully configured the environment!" on success.
+---
+
+**KEY TOOLS:**
+- `apt-cache search <keyword>` - Find packages
+- `apt-get install -y <package>` - Install packages (RECOMMENDED)
+- `pkg-config --cflags --libs <pkg>` - Get compile/link flags
+- Use `--help` or `man` for other tools
+
+**PACKAGE INSTALLATION:**
+Use direct `apt-get install <package>` for best results. Waiting list is available but slower (see `{tools_list}` below for commands).
 
 {INIT_PROMPT}
+You are now in the Docker environment of {self.image_name}. Please perform all operations within this environment.
+CLI TOOLS: You can call CLI tools in  {BASH_FENCE[0]} ... {BASH_FENCE[1]} block as Action with a Thought.
 
-**YOUR RESPONSE FORMAT:**
-```
-### Thought: Brief explanation
+**Example 1 - First scan:**
+### Thought: Since the prompt says to scan first, I need to identify what build system files exist.
 ### Action:
 {BASH_FENCE[0]}
-command here
+ls -1 /repo | grep -iE "CMakeLists.txt|Makefile|configure|meson.build"
 {BASH_FENCE[1]}
-```
+
+**Example 2 - After seeing an error:**
+### Thought: Since the error message says "Could not detect Ninja", and the output shows "Successfully installed meson" and "Build targets in project: 46", I can see that meson setup succeeded. Only ninja is missing. So I'll install ninja-build and retry only the ninja step.
+### Action:
+{BASH_FENCE[0]}
+apt-get install -y ninja-build && cd /repo && ninja -C build
+{BASH_FENCE[1]}
+
+**Example 3 - WRONG! (Command repetition):**
+### Thought: Since the package installation succeeded, let me install it again to make sure.
+### Action:
+{BASH_FENCE[0]}
+apt-get install -y autoconf-archive  # ❌ WRONG! Already succeeded once!
+{BASH_FENCE[1]}
+
+**Example 3 - CORRECT! (No repetition):**
+### Thought: Since the output shows "autoconf-archive is already the newest version", the package is installed. Now I should move to the next step: configure.
+### Action:
+{BASH_FENCE[0]}
+cd /repo && ./configure
+{BASH_FENCE[1]}
 
 {EDIT_PROMPT}
-
-**AVAILABLE TOOLS:**
+*Note*: Do not make extensive changes to the existing files in the /repo folder. You may only make appropriate and necessary changes to the original repository files (e.g., when there are actual errors or tests that cannot be run).
+*Very Important Note*: Passing tests by modifying testing functions is not allowed, and you should figure out how to make the current test functions run successfully!!!
+In addition to typical bash commands, we also provide the following commands that can be used, you can use them flexibly if needed:
 {tools_list}
 
-**NOTES:**
-- Prefer `apt-get install -y` over waiting list
-- Don't modify test files
-- `runtest` runs AFTER build
-- Use single-line commands with &&
-
 ╔══════════════════════════════════════════════════════════════════════════╗
-║                          ⚠️  CRITICAL RULES                              ║
+║                          ⚠️  CRITICAL RULES ⚠️                           ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 
-1. **BUILD BEFORE RUNTEST**: dependencies → configure → make → **runtest**
-   (runtest only verifies, doesn't build!)
+1. **YOUR TASK**: Configure C/C++ build environment (NOT answer questions!)
+   
+   **🎯 SUCCESS = See this message from `runtest`:**
+   ```
+   "Congratulations, you have successfully configured the environment!"
+   ```
+   
+   **Workflow**: dependencies → build → **`runtest`** → "Congratulations!"
+   
+   ❌ **NOT complete**: `make` succeeds, `meson test` passes, `bazel test` OK
+   ✅ **IS complete**: `runtest` shows "Congratulations!"
 
-2. **ONE-LINE COMMANDS**: Use `&&` to chain, NO if/then/fi, NO backslash \\
-   ✅ `test -f file && cmd || true`
-   ❌ Multi-line if/then/fi
+2. **BUILD BEFORE RUNTEST** (Most Important!)
+   ❌ WRONG: dependencies → runtest (skips build!)
+   ✅ RIGHT: dependencies → configure → make → runtest
+   → runtest does NOT build - it only verifies!
 
-3. **DON'T MODIFY TEST FILES**: Fix actual code, not test_*.c
+3. **DO NOT MODIFY TEST FILES**
+   ❌ WRONG: Edit test_*.c to make tests pass
+   ✅ RIGHT: Fix actual code or install missing dependencies
 
-4. **NO INTERACTIVE SHELLS**: No hatch shell, tmux, etc.
+4. **ONE-LINE COMMANDS** (CRITICAL!)
+   ❌ WRONG: Multi-line if/then/fi (causes syntax errors!)
+```bash
+   if [ -f file ]; then
+     cmd
+   fi
+```
+   ✅ RIGHT: Single line with &&
+```bash
+   test -f file && cmd || true
+   ```
+   ❌ WRONG: Backslash continuation
+   ✅ RIGHT: Use && to chain: `cd /repo && ./configure && make -j4`
+
+5. **PRESERVE SOURCE FILES**
+   → Only modify when absolutely necessary
+   → Never delete test files or build scripts
+   → Prefer: install packages, set env vars
+
+6. **EVERY THOUGHT MUST START WITH "Since"** (CRITICAL!)
+   ❌ WRONG: "### Thought: The configure script failed..."
+   ✅ RIGHT: "### Thought: Since the error shows 'winscard.h is required', ..."
+   → ALWAYS quote what you observed from the output
+   → Then explain your reasoning based on that observation
+
+7. **NO INTERACTIVE SHELLS**
+   ❌ FORBIDDEN: hatch shell, tmux, interactive prompts
+   ✅ ALLOWED: Direct bash commands only
 """
     def show_init_prompt(self):
         print(self.init_prompt)
@@ -267,25 +298,35 @@ command here
         diff_no = 1
         def manage_token_usage(messages, max_tokens=30000):
             """
-            在消息列表超过Token限制时，从最老的消息开始删除，直到总Token数量低于max_tokens。
-            使用切片操作来管理Token使用。
+            When message list exceeds token limit, delete from the oldest messages
+            until total token count is below max_tokens.
+            Use slicing operations to manage token usage.
             Max tokens set to 30000 to match LLM context limit.
+            
+            FIX: Keep system prompt (index 0-3) + recent messages only
             """
             total_tokens = sum(len(str(message)) for message in messages)
             if total_tokens <= max_tokens:
                 return messages  # 如果总Token数不超过限制，返回原始消息列表
 
-            # 计算应保留的消息数量
+            # Keep first 4 messages (system prompt) + progressively remove old messages
             new_messages = messages[:]
-            while sum(len(str(message)) for message in new_messages) > max_tokens:
-                # new_messages = new_messages[4:]  # 切片删除最老的消息（不是第0个）
-                new_messages = new_messages[:4] + new_messages[6:]
+            while sum(len(str(message)) for message in new_messages) > max_tokens and len(new_messages) > 4:
+                # Remove 5th message (oldest conversation, not system prompt)
+                if len(new_messages) > 4:
+                    new_messages.pop(4)
+                else:
+                    break
 
             return new_messages
         
         # 传入内部指令，传出所有正确执行的历史指令
         def extract_cmds(inner_commands):
+            """
+            Extract SUCCESSFUL commands only - for Dockerfile generation
+            """
             res_cmd = list()
+            
             for inner_command in inner_commands:
                 command = inner_command['command']
                 dir = inner_command['dir'] if 'dir' in inner_command else '/'
@@ -294,10 +335,6 @@ command here
                 
                 # Skip failed commands
                 if str(returncode).strip() != '0':
-                    continue
-                
-                # Skip safe commands (double check for safety)
-                if action_name in safe_cmd and '>' not in command:
                     continue
                 
                 # Skip analysis tools
@@ -309,17 +346,94 @@ command here
                     res_cmd = list()
                     continue
                 
-                # Only include commands that actually modify system state
-                if dir != '/':
-                    res_cmd.append(f'cd {dir} && {command}')
-                else:
-                    res_cmd.append(command)
+                # Format command
+                formatted_cmd = f'cd {dir} && {command}' if dir != '/' else command
+                
+                # Skip safe commands from main history
+                if action_name in safe_cmd and '>' not in command:
+                    continue
+                
+                # Add to main history
+                res_cmd.append(formatted_cmd)
+            
             return res_cmd
+        
+        def get_recent_history(inner_commands, max_recent=15):
+            """
+            Get recent command history (both success and failure) for LLM context
+            Shows last N commands with their results
+            
+            v3.5: Commands are now split at execution time, so each command 
+                  in inner_commands is already individual (no need to split &&)
+            """
+            recent = []
+            all_cmds_for_loop_detection = []  # Track all for loop detection
+            
+            # Get last max_recent commands
+            commands_to_show = inner_commands[-max_recent:] if len(inner_commands) > max_recent else inner_commands
+            
+            for inner_command in commands_to_show:
+                command = inner_command['command']
+                dir = inner_command['dir'] if 'dir' in inner_command else '/'
+                returncode = inner_command['returncode']
+                action_name = command.split(' ')[0].strip()
+                
+                # Skip analysis tools
+                if command == 'python /home/tools/runtest.py' or command == 'python /home/tools/generate_diff.py' or command == '$pwd$':
+                    continue
+                
+                # Skip clear_configuration
+                if action_name == 'clear_configuration':
+                    recent = []  # Clear history on reset
+                    all_cmds_for_loop_detection = []
+                    recent.append("✨ Container reset to initial state")
+                    continue
+                
+                # Skip safe read-only commands (ls, cat, etc)
+                if action_name in safe_cmd and '>' not in command:
+                    continue
+                
+                # v3.5: Commands are already split - just show the command itself
+                # Don't reconstruct chains using 'dir', as commands are already individual
+                formatted_cmd = command
+                
+                # Track for loop detection
+                all_cmds_for_loop_detection.append(formatted_cmd)
+                
+                # Show with status (now each command is already individual)
+                # returncode can be: 0 (success), non-zero int (failure), or 'unknown' (special commands)
+                if returncode == 0 or str(returncode).strip() == '0' or returncode == 'unknown':
+                    recent.append(f"✅ {formatted_cmd}")
+                else:
+                    recent.append(f"❌ {formatted_cmd}")
+            
+            # Detect command repetition
+            if len(all_cmds_for_loop_detection) >= 2:
+                if all_cmds_for_loop_detection[-1] == all_cmds_for_loop_detection[-2]:
+                    recent.append("")
+                    recent.append("⚠️ WARNING: You just repeated the same command!")
+            
+            # Detect A-B-A loop
+            if len(all_cmds_for_loop_detection) >= 3:
+                if all_cmds_for_loop_detection[-1] == all_cmds_for_loop_detection[-3]:
+                    recent.append("")
+                    recent.append("="*60)
+                    recent.append("🚨 CRITICAL: INFINITE LOOP DETECTED!")
+                    recent.append("="*60)
+                    recent.append("You are alternating between two commands that both fail!")
+                    recent.append("🛑 This approach is NOT working!")
+                    recent.append("📖 REQUIRED: Check INSTALL/README documentation")
+                    recent.append("="*60)
+            
+            return recent
 
+        finish = False  # Track if runtest passed
         while(turn < self.max_turn):
             turn += 1
-            finish = False
             GPT_start_time = time.time()
+            
+            # v4.0: 10-turn reminder moved to system_res (line 704-721) for unified display
+            
             current_messages = manage_token_usage(self.messages)
 
             configuration_agent_list, usage = get_llm_response(self.model, current_messages)
@@ -352,7 +466,7 @@ command here
             #如果回答중同时有修改和命령，拒绝
             if len(diffs) != 0 and len(commands) != 0:
                 system_res = f"ERROR! Your reply contains both bash block and diff block, which is not accepted. Each round of your reply can only contain one {BASH_FENCE[0]} {BASH_FENCE[1]} block or one {DIFF_FENCE[0]} {DIFF_FENCE[1]} block. Each round of your answers contain only *ONE* action!"
-            elif len(commands) != 0: #按顺序执行工具
+            elif len(commands) != 0: #按顺序执행工具
                 for i in range(len(commands)):
                     self.outer_commands.append({"command": commands[i], "returncode": -2, "time": -1})
                     start_time = time.time()
@@ -390,12 +504,12 @@ command here
                     sandbox_res, return_code =  self.sandbox_session.execute(commands[i], waiting_list, conflict_list)
                     sandbox_res = res_truncate(sandbox_res)
                     system_res += sandbox_res
-                    if return_code != 'unknown':
-                        system_res += f'\n`{commands[i]}` executes with returncode: {return_code}\n'
+                    # Note: returncode intentionally not shown to AI to avoid over-focusing on it
+                    # AI should read error messages instead
                     end_time = time.time()
                     elasped_time = end_time - start_time
                     self.outer_commands[-1]["time"] = elasped_time
-                    self.outer_commands[-1]["returncode"] = 0
+                    self.outer_commands[-1]["returncode"] = return_code  # Store actual return code (not shown to LLM)
                     #重置session
                     if TIME_OUT_LABEL in sandbox_res:
                         self.sandbox_session = self.sandbox.get_session()
@@ -497,22 +611,55 @@ The edit format is as follows:
             reminder = f"\nENVIRONMENT REMINDER: You have {self.max_turn - turn} turns left to complete the task."
             system_res += reminder
             
-            # v2.5.2: Remove confusing history - LLM already has Observation with all command results
-            # success_cmds = extract_cmds(self.sandbox.commands)
-            # if len(success_cmds) > 0:
-            #     appendix = '\nThe container has successfully executed the following commands in order. Please refer to the execution history, reflect, and decide the subsequent actions. Remember, your ultimate goal is to pass the tests by executing `runtest`.\n' + \
-            #         '\n'.join(success_cmds)
-            # else:
-            #     appendix = '\nThe container remains in its original state.'
-            # pattern = r'python\s+/home/tools/apt_download.py\s+-p\s+(\S+)'
-            # replacement = r'apt-get install \1'
-            # appendix = re.sub(pattern, replacement, appendix)
-            # system_res += appendix
+            # Get recent command history (success + failure) for LLM
+            # max_recent=50 to ensure ~15 meaningful commands are shown after filtering
+            recent_history = get_recent_history(self.sandbox.commands, max_recent=50)
+            
+            if len(recent_history) > 0:
+                appendix = '\n' + '='*60 + '\n'
+                appendix += f'📋 RECENT COMMAND HISTORY ({len(recent_history)} commands)\n'
+                appendix += '   ✅ = success, ❌ = failed\n'
+                appendix += '='*60 + '\n'
+                appendix += '\n'.join(recent_history)
+                appendix += '\n' + '='*60
+                
+                # v4.0: Every 10 turns, add documentation check reminder
+                if turn % 10 == 0 and turn > 0:
+                    appendix += '\n\n' + '🔔'*30 + '\n'
+                    appendix += f'⚠️  CHECKPOINT (Turn {turn}) - Search docs for error keywords!\n'
+                    appendix += '🔔'*30 + '\n'
+                    appendix += '📖 Extract error keywords → grep them in docs (with context):\n'
+                    appendix += '\n'
+                    appendix += '  Example 1: Error mentions "bison" or "flex"\n'
+                    appendix += '  → grep -iC 20 "bison" /repo/INSTALL /repo/README* 2>/dev/null || echo "Not found in docs"\n'
+                    appendix += '\n'
+                    appendix += '  Example 2: Missing "winscard.h" or library\n'
+                    appendix += '  → grep -iC 20 "winscard" /repo/INSTALL /repo/README* 2>/dev/null || echo "Not found in docs"\n'
+                    appendix += '🔔'*30 + '\n'
+                
+                appendix += '\n\nPlease refer to the execution history above, reflect on what worked and what failed, and decide the subsequent actions. Remember, your ultimate goal is to pass the verification by executing `python /home/tools/runtest.py`.'
+            else:
+                appendix = '\nThe container remains in its original state.'
+            
+            pattern = r'python\s+/home/tools/apt_download.py\s+-p\s+(\S+)'
+            replacement = r'apt-get install \1'
+            appendix = re.sub(pattern, replacement, appendix)
+            
+            system_res += appendix
             if "gpt" in self.model:
                 system_message = {"role": "system", "content": system_res}
             else:
                 system_message = {"role": "user", "content": system_res}
             self.messages.append(system_message)
+            
+            # DEBUG: Save the exact message sent to LLM
+            with open(f'{self.root_dir}/output/{self.full_name}/llm_observation.txt', 'w') as debug_f:
+                debug_f.write("="*80 + "\n")
+                debug_f.write(f"TURN {turn}: MESSAGE TO LLM\n")
+                debug_f.write("="*80 + "\n")
+                debug_f.write(system_res)
+                debug_f.write("\n" + "="*80 + "\n")
+            
             with open(f'{self.root_dir}/output/{self.full_name}/outer_commands.json', 'w') as w1:
                 w1.write(json.dumps(self.outer_commands, indent=4))
             with open(f'{self.root_dir}/output/{self.full_name}/inner_commands.json', 'w') as w1:
@@ -529,6 +676,24 @@ The edit format is as follows:
                     os.system(f'mkdir {self.root_dir}/output/{self.full_name}/patch')
                 with open(f'{self.root_dir}/output/{self.full_name}/patch/final_patch.diff', 'w') as w0:
                     w0.write(generate_diff)
+        
+        # Configuration phase complete
+        print()
+        print("="*70)
+        if finish:
+            print("✅ CONFIGURATION COMPLETE: runtest passed!")
+            print(f"🎯 Project: {self.full_name}")
+            print(f"⏱️  Total time: {time.time() - start_time0:.1f}s")
+            print(f"📊 Total turns: {turn}")
+            print(f"💰 Total tokens: {cost_tokens}")
+        else:
+            print("❌ CONFIGURATION INCOMPLETE: Max turns reached")
+            print(f"🎯 Project: {self.full_name}")
+            print(f"⏱️  Total time: {time.time() - start_time0:.1f}s")
+            print(f"📊 Total turns: {turn}/{self.max_turn}")
+            print(f"💰 Total tokens: {cost_tokens}")
+        print("="*70)
+        print()
         
         append_trajectory(trajectory, self.messages, 'configuration')
         end_time0 = time.time()

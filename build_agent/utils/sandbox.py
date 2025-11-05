@@ -25,7 +25,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from parser.parse_command import match_download, match_runtest, match_conflict_solve, match_waitinglist_add, match_waitinglist_addfile, match_conflictlist_clear, match_waitinglist_clear, match_waitinglist_show, match_conflictlist_show, match_clear_configuration
 from download import download
 from outputcollector import OutputCollector
-from show_msg import show_msg
 from helpers import truncate_msg, SAFE_COMMANDS
 from error_parser import extract_critical_errors
 
@@ -36,34 +35,34 @@ USE_COMMAND_PATTERN = os.getenv('ARVO_USE_COMMAND_PATTERN', 'false').lower() == 
 safe_cmd = SAFE_COMMANDS
 
 def delete_dangling_image():
-    # 获取所有 dangling 镜像的 ID
+    # Get all dangling image IDs
     dangling_images = subprocess.check_output('docker images --filter "dangling=true" -q', shell=True).decode('utf-8').strip()
-    # 如果有 dangling 镜像，则删除它们
+    # Delete dangling images if any exist
     if dangling_images:
         subprocess.run(f'docker rmi {dangling_images} > /dev/null 2>&1', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def compare_versions(version1, version2):
-    # 分割版本号字符串
+    # Split version strings
     parts1 = version1.split('.')
     parts2 = version2.split('.')
 
-    # 将较短的版本号列表用零填充，使两者长度一致
+    # Pad shorter version list with zeros to match lengths
     max_len = max(len(parts1), len(parts2))
     parts1.extend(['0'] * (max_len - len(parts1)))
     parts2.extend(['0'] * (max_len - len(parts2)))
 
-    # 逐一比较版本号部分
+    # Compare version parts one by one
     for part1, part2 in zip(parts1, parts2):
         part1 = int(part1)
         part2 = int(part2)
 
-        # 比较两个部分
+        # Compare the two parts
         if part1 > part2:
             return 1
         elif part1 < part2:
             return -1
 
-    # 如果每个部分都相同，则版本号相等
+    # If all parts are equal, versions are equal
     return 0
 
 class Sandbox:
@@ -77,18 +76,15 @@ class Sandbox:
         self.root_path = root_path
     
     def generate_dockerfile(self):
-        # C 전용 Dockerfile 생성
+        """Generate Dockerfile for the build environment."""
         if self.namespace.startswith('gcr.io/oss-fuzz-base'):
-            # C 프로젝트용 Dockerfile
             dockerfile_content = f"""FROM {self.namespace}
 
-# C build tools are already included in base-builder
-# gcc, make, cmake, clang, etc. are pre-installed
+# C build tools (gcc, make, cmake, clang) are pre-installed in base-builder
 
 RUN mkdir -p /repo && git config --global --add safe.directory /repo
 """
         else:
-            # 기본 처리
             dockerfile_content = f"""FROM {self.namespace}
 RUN mkdir -p /repo && git config --global --add safe.directory /repo
 """
@@ -102,7 +98,6 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
         self.namespace = 'build_env_' + self.namespace
 
         try:
-            # subprocess.run(["docker", "build", ".", "--no-cache", "-t", self.namespace], cwd=dockerfile_path, check=True)
             subprocess.run(["docker", "build", ".", "-t", self.namespace], cwd=dockerfile_path, check=True)
             return True
         except subprocess.CalledProcessError as e:
@@ -126,22 +121,16 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
     def commit_container(self):
         try:
             delete_dangling_image()
-            # 将容器提交成固定名称的镜像
             image = self.container.commit(repository=f"{self.full_name.lower().replace('/', '_').replace('-', '_')}", tag='tmp')
-            # subprocess.run(f'docker commit {self.container.name} running_env:tmp', shell=True)
-            # print(f"Container {self.container.name} committed as image running_env:tmp.")
             return True
-        except docker.errors.ContainerError as e:
-            print(f"Error committing container: {e}")
+        except docker.errors.ContainerError:
             return None
 
     def switch_to_pre_image(self):
         try:
-            # tmp_image_name = "running_env:tmp"
             tmp_image_name = f"{self.full_name.lower().replace('/', '_').replace('-', '_')}:tmp"
-            # print(f"Switching to tmp image: {tmp_image_name}")
-
-            # 停止并移除现有的容器
+            
+            # Stop and remove existing container
             if self.container:
                 self.container.stop()
                 self.container.remove()
@@ -149,7 +138,6 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
             
             host_path = '/tmp/patch'
             container_path = '/tmp/patch'
-            # 创建并启动一个新的容器，使用 tmp 镜像
             self.container = self.client.containers.run(
                 tmp_image_name,
                 detach=True,
@@ -162,37 +150,29 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                 cpuset_cpus='0-15',
                 )
 
-            # 启动新的 shell 会话
             self.start_shell()
             return True
         
-        except docker.errors.ImageNotFound as e:
-            print(f"Image not found: {e}")
+        except docker.errors.ImageNotFound:
             return False
-        except docker.errors.ContainerError as e:
-            print(f"Error switching to tmp container: {e}")
+        except docker.errors.ContainerError:
             return False
-        except Exception as generic_error:
-            print(f"An unexpected error occurred: {generic_error}")
+        except Exception:
             return False
 
-    # 获取容器内的项目路径
     def get_project_path(self):
         project_path = self.container.exec_run("pwd").output.decode().strip()
         return project_path
     
-    # 开启一个新的Container，返回1表示创建成功，返回-1表示创建失败
     def start_container(self, base_image=False):
         if not base_image:
             success = self.build_image()
             if not success:
-                # sys.exit(1)
                 raise Exception('Build image error!')
         image = f"{self.namespace}"
         host_path = '/tmp/patch'
         container_path = '/tmp/patch'
         try:
-            # For oss-fuzz images, override the default command to keep container running
             if 'oss-fuzz' in image:
                 self.container = self.client.containers.run(
                     image, 
@@ -213,37 +193,28 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                     volumes={host_path: {'bind': container_path, 'mode': 'rw'}}
                     )
 
-            print(f"Container {self.container.name} {self.container.short_id} started with image {image}")
-            
-            # tools는 소스 디렉토리에서, repo는 사용자 지정 경로에서 복사
             source_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             
             cmd = f"chmod -R 777 {source_directory}/tools && docker cp {source_directory}/tools {self.container.name}:/home"
             subprocess.run(cmd, check=True, shell=True)
 
-            # 把utils/repo中的内容复制到根目录/中 - use self.root_path for user-specified location
             cmd = f"docker cp {self.root_path}/utils/repo/{self.full_name}/repo {self.container.name}:/"
             subprocess.run(cmd, check=True, shell=True)
             return 1
-        except Exception as e:
-            print(f"Container start faild: {e}")
+        except Exception:
             return -1
 
-    # 开启一个shell
     def start_shell(self):
         if self.container:
             if self.shell and self.shell.isalive():
-                self.shell.close(force=True)  # 确保关闭之前的shell
+                self.shell.close(force=True)
             command = f'docker exec -it {self.container.id} /bin/bash'
-            self.shell = pexpect.spawn(command, maxread=1000000)  # 1MB buffer for large build outputs
-            self.shell.expect([r'\$ ', r'# '], timeout=600)  # 等待bash提示符
+            self.shell = pexpect.spawn(command, maxread=1000000)
+            self.shell.expect([r'\$ ', r'# '], timeout=600)
         else:
             raise Exception("Container not started. Call start_container() first.")
 
-    # 开启一个新的session
     def get_session(self):
-
-        # 在获取session时启动新的shell
         self.start_shell()
 
         class Session:
@@ -256,39 +227,32 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                     try:
                         from command_handlers import CommandExecutor
                         self.command_executor = CommandExecutor()
-                        print('[INFO] Command Pattern enabled')
-                    except ImportError as e:
-                        print(f'[WARNING] Command Pattern not available: {e}')
+                    except ImportError:
                         self.command_executor = None
             
             def get_returncode(self):
                 echo_returncode = '''echo $?'''
                 self.sandbox.shell.sendline(echo_returncode)
                 self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600)
-                # 获取 shell.before 中匹配到的模式之前的输出
                 output = self.sandbox.shell.before.decode('utf-8').strip()
                 output = output.replace('\x1b[?2004l\r', '')
 
-                # 分析输出行，排除发送的命令行和最后的提示符行
                 output_lines1 = output.split('\r\n')
 
                 if len(output_lines1) > 1:
                     last_line = output_lines1[-1]
                     output_lines1 = output_lines1[1:-1]
-                    id = last_line.find('''\x1b[''')
-                    if id != -1 and len(last_line[:id].strip()) > 0:
-                        output_lines1.append(last_line[:id].strip())
+                    ansi_idx = last_line.find('''\x1b[''')
+                    if ansi_idx != -1 and len(last_line[:ansi_idx].strip()) > 0:
+                        output_lines1.append(last_line[:ansi_idx].strip())
                 return_code = '\n'.join(output_lines1).strip()
                 return int(return_code)
 
-
-            # 给download用的一个特殊函数
             def execute_simple(self, command, timeout=600):
                 self.sandbox.commit_container()
                 if command[-1] != '&':
                     start_time = time.time()
                     self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": '/'})
-                    # v2.6: Use ; instead of && to ensure sleep always runs
                     self.sandbox.shell.sendline(command + " ; sleep 0.5")
                     self.sandbox.commands[-1]["returncode"] = -1
                 else:
@@ -297,28 +261,26 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                     self.sandbox.shell.sendline(command)
                     self.sandbox.commands[-1]["returncode"] = -1
 
-                self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600)  # 等待bash提示符，带超时
+                self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600)
                 end_time = time.time()
-                elasped_time = end_time - start_time
-                self.sandbox.commands[-1]["time"] = elasped_time
+                elapsed_time = end_time - start_time
+                self.sandbox.commands[-1]["time"] = elapsed_time
 
-                # 获取 shell.before 中匹配到的模式之前的输出
                 output = self.sandbox.shell.before.decode('utf-8').strip()
                 output = output.replace('\x1b[?2004l\r', '')
-
-                # 分析输出行，排除发送的命令行和最后的提示符行
                 output_lines = output.split('\r\n')
 
                 if len(output_lines) > 1:
                     last_line = output_lines[-1]
                     output_lines = output_lines[1:-1]
-                    id = last_line.find('''\x1b[''')
-                    if id != -1 and len(last_line[:id].strip()) > 0:
-                        output_lines.append(last_line[:id].strip())
+                    ansi_idx = last_line.find('''\x1b[''')
+                    if ansi_idx != -1 and len(last_line[:ansi_idx].strip()) > 0:
+                        output_lines.append(last_line[:ansi_idx].strip())
                 res = '\n'.join(output_lines).strip()
                 if len(res.split(' ')) > 5000:
-                    res = "The output is too long, so we've truncated it to show you the first and last 2500 words."
-                    res += (' '.join(res.split(' ')[:2500]) + '\n' + ' '.join(res.splitlines()[-2500:]))
+                    res_words = res.split(' ')
+                    res = "The output is too long, so we've truncated it to show you the first and last 2500 words.\n"
+                    res += (' '.join(res_words[:2500]) + '\n...\n' + ' '.join(res_words[-2500:]))
                 return_code = self.get_returncode()
                 self.sandbox.commands[-1]['returncode'] = return_code
                 if str(return_code) == '0':
@@ -328,63 +290,49 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                     return False, res
 
             def execute(self, command, waiting_list, conflict_list, timeout=600):
-                """
-                Execute command with optional Command Pattern routing.
-                
-                If USE_COMMAND_PATTERN=true, uses CommandExecutor for cleaner code.
-                Otherwise, uses original logic for stability.
-                """
+                """Execute command in container shell."""
                 try:
-                    # ========================================
-                    # NEW: Try Command Pattern first (if enabled)
-                    # ========================================
                     if USE_COMMAND_PATTERN and self.command_executor:
                         return self.command_executor.execute(
                             command, self, waiting_list, conflict_list, timeout
                         )
                     
-                    # ========================================
-                    # ORIGINAL: Legacy logic (stable)
-                    # ========================================
                     if 'hatch shell' == command.lower().strip():
                         return 'You are not allowed to use commands like `hatch shell` that would open a new shell!!!', -1
-                    # 在持久shell中执行명령
+                    
                     if '$pwd$' == command.lower().strip():
                         command = 'pwd'
                         self.sandbox.shell.sendline(command)
-                        self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600)  # 等待bash提示符，带超时
-                        # 获取 shell.before 中匹配到的模式之前的输出
+                        self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600)
                         output = self.sandbox.shell.before.decode('utf-8').strip()
                         output = output.replace('\x1b[?2004l\r', '')
-                        
-                        # 分析输出行，排除发送的命令行和最后的提示符行
                         output_lines = output.split('\r\n')
 
                         if len(output_lines) > 1:
                             last_line = output_lines[-1]
                             output_lines = output_lines[1:-1]
-                            id = last_line.find('''\x1b[''')
-                            if id != -1 and len(last_line[:id].strip()) > 0:
-                                output_lines.append(last_line[:id].strip())
+                            ansi_idx = last_line.find('''\x1b[''')
+                            if ansi_idx != -1 and len(last_line[:ansi_idx].strip()) > 0:
+                                output_lines.append(last_line[:ansi_idx].strip())
                         return output_lines[0], 0
                     
                     if '$pip list --format json$' == command.lower().strip():
                         command = 'pip list --format json'
                         self.sandbox.shell.sendline(command)
-                        self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600)  # 等待bash提示符，带超时
-                        # 获取 shell.before 中匹配到的模式之前的输出
+                        self.sandbox.shell.expect([r'root@.*:.*# '], timeout=600)
+                        
                         output = self.sandbox.shell.before.decode('utf-8').strip()
                         output = output.replace('\x1b[?2004l\r', '')
                         
-                        # 分析输出行，排除发送的命令行和最后的提示符行
+                        
                         output_lines = output.split('\r\n')
 
                         if len(output_lines) > 1:
                             last_line = output_lines[-1]
                             output_lines = output_lines[1:-1]
-                            id = last_line.find('''\x1b[''')
-                            if id != -1 and len(last_line[:id].strip()) > 0:
-                                output_lines.append(last_line[:id].strip())
+                            ansi_idx = last_line.find('''\x1b[''')
+                            if ansi_idx != -1 and len(last_line[:ansi_idx].strip()) > 0:
+                                output_lines.append(last_line[:ansi_idx].strip())
                         return output_lines[0], 0
 
                     if match_download(command):
@@ -470,8 +418,10 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                             start_time = time.time()
                             dir, return_code = self.execute('$pwd$', waiting_list, conflict_list)
                             self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": dir})
-                            # v2.6: Use ; instead of && to ensure sleep always runs
-                            self.sandbox.shell.sendline(command + " ; sleep 0.5")
+                            # v3.9 FIX: Capture ACTUAL returncode (not sleep's!)
+                            # Bug: " ; sleep 0.5" → $? returns 0 (sleep's exit code)
+                            # Fix: ' ; echo "[[[RETURNCODE: $?]]]" ; sleep 0.5'
+                            self.sandbox.shell.sendline(command + ' ; echo "[[[RETURNCODE: $?]]]" ; sleep 0.5')
                             self.sandbox.commands[-1]["returncode"] = -1
                         else:
                             if not (command.split()[0].strip() in safe_cmd and '>' not in command):
@@ -482,37 +432,54 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
                             self.sandbox.shell.sendline(command)
                             self.sandbox.commands[-1]["returncode"] = -1
 
-                        self.sandbox.shell.expect([r'root@.*:.*# '], timeout=command_timeout)  # 等待bash提示符，带超时
+                        self.sandbox.shell.expect([r'root@.*:.*# '], timeout=command_timeout)
                         end_time = time.time()
                         elasped_time = end_time - start_time
                         self.sandbox.commands[-1]["time"] = elasped_time
 
-                        # 获取 shell.before 中匹配到的模式之前的输出
+                        
                         output = self.sandbox.shell.before.decode('utf-8').strip()
                         output = output.replace('\x1b[?2004l\r', '')
 
-                        # 分析输出行，排除发送的命令行和最后的提示符行
+                        # 🔧 v3.9: Parse returncode from marker FIRST (before output processing)
+                        return_code = 0
+                        if '[[[RETURNCODE:' in output:
+                            try:
+                                rc_start = output.rfind('[[[RETURNCODE:') + len('[[[RETURNCODE:')
+                                rc_end = output.find(']]]', rc_start)
+                                if rc_end != -1:
+                                    rc_str = output[rc_start:rc_end].strip()
+                                    if rc_str.isdigit() or (rc_str.startswith('-') and rc_str[1:].isdigit()):
+                                        return_code = int(rc_str)
+                                        # Remove marker from output
+                                        output = output[:output.rfind('[[[RETURNCODE:')].rstrip()
+                                    else:
+                                        return_code = self.get_returncode()
+                                else:
+                                    return_code = self.get_returncode()
+                            except Exception:
+                                return_code = self.get_returncode()
+                        else:
+                            try:
+                                return_code = self.get_returncode()
+                            except pexpect.TIMEOUT:
+                                return_code = 0
+                            except pexpect.EOF:
+                                return_code = 125
+                            except Exception:
+                                return_code = 0
+                        
+                        
                         output_lines = output.split('\r\n')
 
                         if len(output_lines) > 1:
                             last_line = output_lines[-1]
                             output_lines = output_lines[1:-1]
-                            id = last_line.find('''\x1b[''')
-                            if id != -1 and len(last_line[:id].strip()) > 0:
-                                output_lines.append(last_line[:id].strip())
-                        try:
-                            return_code = self.get_returncode()
-                        except pexpect.TIMEOUT as e:
-                            print(f"[WARNING] Timeout getting returncode for: {command}")
-                            print(f"[DEBUG] Assuming command succeeded (sed/grep usually work)")
-                            return_code = 0  # v2.6: Assume success to prevent false failures
-                        except pexpect.EOF as e:
-                            print(f"[ERROR] Container died during: {command}")
-                            return_code = 125  # Container dead
-                        except Exception as e:
-                            print(f"[WARNING] Cannot get returncode for '{command}': {e}")
-                            print(f"[INFO] Assuming command succeeded (returncode=0)")
-                            return_code = 0  # v2.6: Assume success instead of 123
+                            ansi_idx = last_line.find('''\x1b[''')
+                            if ansi_idx != -1 and len(last_line[:ansi_idx].strip()) > 0:
+                                output_lines.append(last_line[:ansi_idx].strip())
+                        
+                        # Returncode already parsed above
                         try:
                             self.sandbox.commands[-1]["returncode"] = return_code
                         except:
@@ -552,15 +519,15 @@ Explanation: Clear all the items in the waiting list.'''
                         
                         result_message = '\n'.join(output_lines)
                         
-                        # 에러 추출 및 분석 (실패 시에만)
+                        # Extract and analyze errors (only on failure)
                         if return_code != 0:
                             # v2.5: Pass last_command for one-step fix generation
                             error_summary = extract_critical_errors(result_message, return_code, last_command=command)
                             if error_summary:
-                                # 에러 요약을 맨 앞에 추가
+                                # Add error summary at the front
                                 result_message = error_summary + "\n" + result_message
                             
-                            # 병렬 빌드 실패 시 단일 스레드 제안
+                            # Suggest single-threaded build on parallel build failure
                             if 'make' in command and '-j' in command:
                                 tip = "\n⚠️  Parallel build failed with complex output.\n"
                                 tip += "💡 TIP: Try 'make' (single-thread) for clearer error messages.\n"
@@ -595,34 +562,31 @@ Explanation: Clear all the items in the waiting list.'''
                 try:
                     start_time = time.time()
                     self.sandbox.commands.append({"command": command, "returncode": -2, "time": -1, "dir": '/'})
-                    # 在持久shell中执行命令
+                    # Execute command in persistent shell
                     self.sandbox.shell.sendline(command)
                     end_time = time.time()
                     self.sandbox.commands[-1]["returncode"] = -1
                     elasped_time = end_time - start_time
                     self.sandbox.commands[-1]["time"] = elasped_time
-                    self.sandbox.shell.expect([r'root@.*:.*# '], timeout=timeout)  # 等待bash提示符，带超时
+                    self.sandbox.shell.expect([r'root@.*:.*# '], timeout=timeout)
 
-                    # 获取 shell.before 中匹配到的模式之前的输出
+                    
                     output = self.sandbox.shell.before.decode('utf-8').strip()
                 
-                    # 分析输出行，排除发送的命令行和最后的提示符行
+                    
                     output_lines = output.split('\r\n')
                     if len(output_lines) > 1:
-                        output_lines = output_lines[1:-1]  # 排除发送的命令行
+                        output_lines = output_lines[1:-1]
 
                     result_message = f'Running Edit...\n' + '\n'.join(output_lines)
                     try:
                         return_code = self.get_returncode()
-                    except pexpect.TIMEOUT as e:
-                        print(f"[WARNING] Timeout getting returncode for edit: {edit_tmp_file}")
-                        return_code = 0  # v2.6: Assume success
-                    except pexpect.EOF as e:
-                        print(f"[ERROR] Container died during edit: {edit_tmp_file}")
-                        return_code = 125  # Container dead
-                    except Exception as e:
-                        print(f"[WARNING] Cannot get returncode for edit: {e}")
-                        return_code = 0  # v2.6: Assume success
+                    except pexpect.TIMEOUT:
+                        return_code = 0
+                    except pexpect.EOF:
+                        return_code = 125
+                    except Exception:
+                        return_code = 0
                     self.sandbox.commands[-1]['returncode'] = return_code
                     return result_message, return_code
 
@@ -634,18 +598,17 @@ Explanation: Clear all the items in the waiting list.'''
                     self.sandbox.shell.sendline('exit')
                     self.sandbox.shell.expect(pexpect.EOF)
                     self.sandbox.shell.close(force=True)
-                    self.sandbox.shell = None  # 设置shell为None
+                    self.sandbox.shell = None
 
         return Session(self)
 
     def stop_container(self):
         if self.container:
             if self.shell and self.shell.isalive():
-                self.shell.close(force=True)  # 确保关闭shell
+                self.shell.close(force=True)
                 self.shell = None
             self.container.stop()
             self.container.remove()
-            print(f"Container {self.container.short_id} stopped and removed")
             self.container = None
             subprocess.run(f"docker rmi {self.full_name.lower().replace('/', '_').replace('-', '_')}:tmp > /dev/null 2>&1", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return self.commands

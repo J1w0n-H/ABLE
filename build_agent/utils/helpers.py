@@ -1,13 +1,20 @@
-#!/usr/bin/env python3
-"""
-Common helper functions and constants
-Extracted to avoid circular imports between sandbox.py and command_handlers.py
-"""
+# Copyright (2025) Bytedance Ltd. and/or its affiliates 
 
-# Safe commands that don't modify system state
+# Licensed under the Apache License, Version 2.0 (the "License"); 
+# you may not use this file except in compliance with the License. 
+# You may obtain a copy of the License at 
+
+#     https://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software 
+# distributed under the License is distributed on an "AS IS" BASIS, 
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+# See the License for the specific language governing permissions and 
+# limitations under the License. 
+
 SAFE_COMMANDS = [
-    "cd", "ls", "cat", "echo", "pwd", "whoami", "who", "date", "cal", "df", "du",
-    "free", "uname", "uptime", "w", "ps", "pgrep", "top", "htop", "vmstat", "iostat",
+    "ls", "cat", "echo", "pwd", "whoami", "who", "date", "cal", "df", "du",
+    "free", "uname", "w", "ps", "pgrep", "top", "htop", "vmstat", "iostat",
     "dmesg", "tail", "head", "more", "less", "grep", "find", "locate", "whereis", "which",
     "file", "stat", "cmp", "diff", "md5sum", "sha256sum", "gzip", "gunzip", "bzip2", "bunzip2",
     "xz", "unxz", "sort", "uniq", "wc", "tr", "cut", "paste", "tee", "awk", "sed", "env", "printenv",
@@ -18,52 +25,76 @@ SAFE_COMMANDS = [
 
 def truncate_msg(result_message, command, truncate=1000, bar_truncate=20, returncode=0):
     """
-    Truncate command output intelligently:
-    - <= 20 lines: Show full output
-    - > 20 lines && returncode=0: Show first 10 + last 10
-    - > 20 lines && returncode!=0 && <= 500: Show full output
-    - > 500 lines: Save to file, show summary + instructions
+    Truncate command output intelligently.
     
-    v2.4.2: Save long output to file instead of truncating critical info
+    v3.9 Simple rules:
+    - FAILURE (returncode != 0):
+      - ≤50 lines: Show full
+      - >50 lines: Save to file + show first/last 25 lines each (50 total)
+    
+    - SUCCESS (returncode == 0):
+      - ≤50 lines: Show full
+      - >50 lines: Show first 25 + last 25 lines (50 total)
     """
     lines = result_message.splitlines()
-    lines = [x for x in lines if len(x.strip()) > 0]
+    # Keep all lines including empty ones for context
     line_count = len(lines)
     
-    # 1. Short output (≤20 lines) - show full
-    if line_count <= 20:
-        return result_message
+    # ========================================
+    # FAILURE: Show full or save to file
+    # ========================================
+    if returncode != 0:
+        if line_count <= 50:
+            # Short error: show full
+            return result_message
+        else:
+            # Long error: save to file + show summary
+            # Use /repo/ instead of /tmp/ so Docker container can access it
+            output_file = '/repo/error_output.txt'
+            try:
+                with open(output_file, 'w') as f:
+                    f.write(result_message)
+                file_saved = True
+            except:
+                file_saved = False
+                # Fallback: try /tmp/ (host only)
+                try:
+                    output_file = '/tmp/last_error_output.txt'
+                    with open(output_file, 'w') as f:
+                        f.write(result_message)
+                    file_saved = True
+                except:
+                    file_saved = False
+            
+            summary = f"⚠️  Error output too long ({line_count} lines)\n"
+            if file_saved:
+                summary += f"📁 Full output saved to: {output_file}\n\n"
+                summary += "💡 Read the file to see all errors:\n"
+                summary += f"   - cat {output_file}\n"
+                summary += f"   - tail -100 {output_file}\n"
+                summary += f"   - grep -i 'error' {output_file}\n\n"
+            
+            summary += "━━━ First 25 lines ━━━\n"
+            summary += '\n'.join(lines[:25]) + "\n\n"
+            summary += f"... ({line_count - 50} lines omitted) ...\n\n"
+            summary += "━━━ Last 25 lines ━━━\n"
+            summary += '\n'.join(lines[-25:])
+            
+            return summary
     
-    # 2. Medium success output (20-500 lines, returncode=0) - truncate
-    if returncode == 0 and line_count <= 500:
-        truncated_output = '\n'.join(lines[:10] + [f'... ({line_count - 20} lines omitted) ...'] + lines[-10:])
-        return truncated_output
-    
-    # 3. Long output (>500 lines) - save to file
-    if line_count > 500:
-        # Save full output to file
-        output_file = '/tmp/last_command_output.txt'
-        with open(output_file, 'w') as f:
-            f.write(result_message)
-        
-        # Create summary for LLM
-        summary = f"⚠️  Output too long ({line_count} lines) - saved to {output_file}\n\n"
-        summary += "📁 Full output available at: /tmp/last_command_output.txt\n"
-        summary += "💡 Use these commands to inspect:\n"
-        summary += "   - tail -100 /tmp/last_command_output.txt (last 100 lines)\n"
-        summary += "   - grep 'error' /tmp/last_command_output.txt (find errors)\n"
-        summary += "   - grep -i 'Error 127' /tmp/last_command_output.txt (find specific error)\n\n"
-        summary += "━━━ First 50 lines ━━━\n"
-        summary += '\n'.join(lines[:50]) + "\n"
-        summary += f"\n... ({line_count - 100} lines omitted - see {output_file}) ...\n\n"
-        summary += "━━━ Last 50 lines ━━━\n"
-        summary += '\n'.join(lines[-50:])
-        
-        return summary
-    
-    # 4. Medium error output (20-500 lines, returncode!=0) - show full
+    # ========================================
+    # SUCCESS: Show full or truncate
+    # ========================================
     else:
-        return result_message
+        if line_count <= 50:
+            # Short success: show full
+            return result_message
+        else:
+            # Long success: show first 25 + last 25 (50 total)
+            truncated = '\n'.join(lines[:25])
+            truncated += f"\n\n... ({line_count - 50} lines omitted) ...\n\n"
+            truncated += '\n'.join(lines[-25:])
+            return truncated
 
 def get_waitinglist_error_msg():
     """Get error message for waitinglist command"""
@@ -88,6 +119,4 @@ Explanation: Similar to the command 2, this constraint specifies a version numbe
 Explanation: Adding -u indicates giving up all the constraints in the conflict list while still retaining the constraints in the waiting list, i.e., not updating the constraints for that library in the waiting list.
 5. `conflictlist clear`
 Explanation: Clear all the items in the conflict list.'''
-
-
 

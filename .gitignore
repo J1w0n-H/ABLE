@@ -19,12 +19,19 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-tests/logs/*.log
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# Environment variables
+.env
+.env.local
+*.key
+secrets/
 
 # IDE
 .vscode/
@@ -33,25 +40,64 @@ tests/logs/*.log
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
+# Logs (now stored in output directories)
 *.log
+logs/
 
-# Temporary
-tmp/
-temp/
-*.tmp
-*.backup
-*.bak
+# Output
+output/
+build_agent/output/
+build_agent/log/
+build_agent/utils/repo/
+*.diff
+
+# Archive (development history)
+.archive/
+*.patch
 
 # Docker
 .dockerignore
 
-# Project specific
-build_agent/utils/repo/
-build_agent/output/*/
-!build_agent/output/.gitkeep
-build_agent/utils/repo/
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.hypothesis/
+
+# Build artifacts
+*.o
+*.a
+*.so
+
+# Repository cache (large files)
+build_agent/utils/repo/*/
+!build_agent/utils/repo/.gitkeep
+
+# Version-specific directories (keep structure, not content)
+v3.*/output/
+v3.*/log/
+v3.*/build_agent/utils/repo/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Backup files
+*.bak
+*.backup
+*~

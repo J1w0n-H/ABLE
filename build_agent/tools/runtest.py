@@ -11,6 +11,10 @@ import sys
 import os
 import glob
 import stat
+import time
+
+# Unbuffer stdout to ensure all output is captured
+sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', buffering=1)
 
 def find_build_artifacts(search_dir, verbose=False):
     """
@@ -93,52 +97,17 @@ def try_test_command(command, cwd, timeout=300):
     return result
 
 def show_build_guidance(build_system, build_dir):
-    """Show clear guidance on how to build the project"""
-    print('╔════════════════════════════════════════════════════════════════╗')
-    print('║  ❌ Error: Build system detected but NO build artifacts found ║')
-    print('╟────────────────────────────────────────────────────────────────╢')
-    print('║  This means the project has NOT been built yet.               ║')
-    print('║  Expected artifacts: *.o, *.a, *.so, executables              ║')
-    print('╟────────────────────────────────────────────────────────────────╢')
-    print('║  📝 How to fix:                                               ║')
-    
-    if build_system == 'cmake':
-        print('║                                                                ║')
-        print('║  Step 1: Build the project                                    ║')
-        print('║    cd /repo/build && make -j4                                 ║')
-        print('║                                                                ║')
-        print('║  Step 2: Run runtest again                                    ║')
-        print('║    runtest                                                     ║')
-    elif build_system == 'makefile':
-        print('║                                                                ║')
-        print('║  Step 1: Build the project                                    ║')
-        print('║    cd /repo && make -j4                                       ║')
-        print('║                                                                ║')
-        print('║  Step 2: Run runtest again                                    ║')
-        print('║    runtest                                                     ║')
-    elif build_system == 'configure':
-        print('║                                                                ║')
-        print('║  Step 1: Configure the build                                  ║')
-        print('║    cd /repo && ./configure                                    ║')
-        print('║                                                                ║')
-        print('║  Step 2: Build the project                                    ║')
-        print('║    make -j4                                                   ║')
-        print('║                                                                ║')
-        print('║  Step 3: Run runtest again                                    ║')
-        print('║    runtest                                                     ║')
-    elif build_system == 'simple':
-        print('║                                                                ║')
-        print('║  Step 1: Compile source files                                 ║')
-        print('║    cd /repo && gcc *.c -o myapp                               ║')
-        print('║  Or for C++:                                                   ║')
-        print('║    cd /repo && g++ *.cpp -o myapp                             ║')
-        print('║                                                                ║')
-        print('║  Step 2: Run runtest again                                    ║')
-        print('║    runtest                                                     ║')
-    
-    print('╟────────────────────────────────────────────────────────────────╢')
-    print('║  ⚠️  IMPORTANT: BUILD FIRST, then run runtest!                 ║')
-    print('╚════════════════════════════════════════════════════════════════╝')
+    """Simple message - LLM already knows how to build from prompt"""
+    print('')
+    print('=' * 70)
+    print('❌ Build artifacts not found')
+    print('=' * 70)
+    print(f'📍 Build system: {build_system}')
+    print(f'📂 Searched in: {build_dir}')
+    print('')
+    print('💡 The project has NOT been built successfully.')
+    print('💡 Fix the build errors, then run runtest again.')
+    print('=' * 70)
 
 def run_c_tests():
     """
@@ -161,8 +130,22 @@ def run_c_tests():
     build_dir = None
     test_command = None
     
-    # Priority 1: CMake build (most specific)
-    if os.path.exists('/repo/build/CMakeCache.txt'):
+    # Priority 1: Meson build (check for meson-info first - most specific)
+    if os.path.exists('/repo/build/meson-info'):
+        print('\n🔍 Detected: Meson project')
+        build_system = 'meson'
+        build_dir = '/repo/build'
+        test_command = 'meson test -C /repo/build'
+    
+    # Priority 2: Bazel build (check for bazel-out)
+    elif os.path.exists('/repo/bazel-out') or os.path.exists('/repo/bazel-bin'):
+        print('\n🔍 Detected: Bazel project')
+        build_system = 'bazel'
+        build_dir = '/repo'
+        test_command = 'cd /repo && bazel test //...'
+    
+    # Priority 3: CMake build
+    elif os.path.exists('/repo/build/CMakeCache.txt'):
         print('\n🔍 Detected: CMake project')
         
         if not os.path.exists('/repo/build/Makefile'):
@@ -172,9 +155,9 @@ def run_c_tests():
         
         build_system = 'cmake'
         build_dir = '/repo/build'
-        test_command = 'ctest --output-on-failure'
+        test_command = 'ctest --test-dir /repo/build --output-on-failure'
     
-    # Priority 2: Makefile (common)
+    # Priority 4: Makefile (common)
     elif os.path.exists('/repo/Makefile'):
         print('\n🔍 Detected: Makefile project')
         build_system = 'makefile'
@@ -292,7 +275,14 @@ def run_c_tests():
             print('│  Build artifacts were verified successfully.')
             print('│')
             print('✅ Build verification passed!')
-            print('\nCongratulations, you have successfully configured the environment!')
+            print('')
+            # Print success message multiple times to ensure capture
+            success_msg = 'Congratulations, you have successfully configured the environment!'
+            print(success_msg)
+            sys.stdout.flush()
+            sys.stderr.write(success_msg + '\n')
+            sys.stderr.flush()
+            time.sleep(0.5)  # Increased sleep time for pexpect capture
             sys.exit(0)
         
         # Test target exists - check result
@@ -303,7 +293,14 @@ def run_c_tests():
         
         if result.returncode == 0:
             print('✅ Tests passed!')
-            print('\nCongratulations, you have successfully configured the environment!')
+            print('')
+            # Print success message multiple times to ensure capture
+            success_msg = 'Congratulations, you have successfully configured the environment!'
+            print(success_msg)
+            sys.stdout.flush()
+            sys.stderr.write(success_msg + '\n')
+            sys.stderr.flush()
+            time.sleep(0.5)  # Increased sleep time for pexpect capture
             sys.exit(0)
         else:
             print('❌ Tests failed!')
@@ -319,10 +316,18 @@ def run_c_tests():
     
     else:
         # No test command - just verify artifacts
-        print('\n✅ Build verification passed!')
+        print('')
+        print('✅ Build verification passed!')
         print('│  Build artifacts found and verified.')
         print('│  No test target to run.')
-        print('\nCongratulations, you have successfully configured the environment!')
+        print('')
+        # Print success message multiple times to ensure capture
+        success_msg = 'Congratulations, you have successfully configured the environment!'
+        print(success_msg)
+        sys.stdout.flush()
+        sys.stderr.write(success_msg + '\n')
+        sys.stderr.flush()
+        time.sleep(0.5)  # Increased sleep time for pexpect capture
         sys.exit(0)
 
 if __name__ == '__main__':

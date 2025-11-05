@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and 
 # limitations under the License. 
 
+"""
+agent_util.py - Core utilities and prompts for build agents
+
+v2.9: Added warnings to EDIT_PROMPT about modifying project files
+      Prevents agents from editing BUILD.bazel, CMakeLists.txt, etc. as quick fixes
+"""
 
 import subprocess
 import os
@@ -31,13 +37,14 @@ try:
     from helpers import SAFE_COMMANDS as safe_cmd
 except ImportError:
     # Fallback if helpers.py not found (for backwards compatibility)
+    # NOTE: cd, export, source are NOT included because they change state
     safe_cmd = [
-        "cd", "ls", "cat", "echo", "pwd", "whoami", "who", "date", "cal", "df", "du",
+        "ls", "cat", "echo", "pwd", "whoami", "who", "date", "cal", "df", "du",
         "free", "uname", "uptime", "w", "ps", "pgrep", "top", "htop", "vmstat", "iostat",
         "dmesg", "tail", "head", "more", "less", "grep", "find", "locate", "whereis", "which",
         "file", "stat", "cmp", "diff", "md5sum", "sha256sum", "gzip", "gunzip", "bzip2", "bunzip2",
         "xz", "unxz", "sort", "uniq", "wc", "tr", "cut", "paste", "tee", "awk", "sed", "env", "printenv",
-        "hostname", "ping", "traceroute", "ssh", "journalctl","lsblk", "blkid", "uptime",
+        "hostname", "ping", "traceroute", "ssh", "journalctl","lsblk", "blkid",
         "lscpu", "lsusb", "lspci", "lsmod", "dmidecode", "ip", "ifconfig", "netstat", "ss", "route", "nmap",
         "strace", "ltrace", "time", "nice", "renice", "killall", "printf"
     ]
@@ -63,6 +70,24 @@ IMPORTANT TIPS:
 
 EDIT_PROMPT = f"""
 CODE EDITING AND WRITING: All changes to files must use the {DIFF_FENCE[0]}  {DIFF_FENCE[1]}  block format, with symbols {HEAD}, {DIVIDER} and {UPDATED} \n
+
+🚨 **CRITICAL: The symbols MUST be EXACTLY as shown below - DO NOT modify them!**
+
+⚠️ **WARNING: WHY are you editing this file?**
+
+**✅ GOOD REASONS to edit:**
+- Fixing actual code bugs (segfault, logic error, memory leak, etc.)
+- Fixing incorrect test assertions or test bugs
+- Adding missing functionality that's needed
+
+**❌ BAD REASONS (treating build system symptoms!):**
+- Changing BUILD.bazel to allow_empty=True → Install missing deps instead!
+- Modifying CMakeLists.txt to skip checks → Fix the actual issue!
+- Editing Makefile to remove failing targets → Understand why it fails!
+
+**Rule:** If you're editing to "make the build pass", you're probably doing it WRONG.
+Fix code bugs? Yes. Fix build config to bypass errors? No.
+
 You need to provide code patch. The patch should according to the original code, indent correctly, and do not include line numbers. The format is as follows: 
 ### Thought: Modify explanation...
 ### Action: 
@@ -80,6 +105,25 @@ You need to provide code patch. The patch should according to the original code,
     new line(s) to replace
 {UPDATED}
 {DIFF_FENCE[1]} 
+
+⛔ **WRONG EXAMPLES (DO NOT USE):**
+```diff
+/repo/file.txt
+<<<<<<< target_link_libraries  ← WRONG! Must be "<<<<<<< SEARCH"
+<<<<<<< some_text  ← WRONG! Must be exactly "<<<<<<< SEARCH"
+<<< SEARCH  ← WRONG! Must be "<<<<<<< SEARCH" (7 angle brackets + space)
+```
+
+✅ **CORRECT EXAMPLE:**
+```diff
+/repo/CMakeLists.txt
+<<<<<<< SEARCH
+    target_link_libraries(${{PROJECT_NAME}} gcc)
+=======
+    target_link_libraries(${{PROJECT_NAME}} gcc_s)
+>>>>>>> REPLACE
+```
+
 Every *SEARCH/REPLACE block must use this format:
 1. The opening fence {DIFF_FENCE[0]} 
 2. The file path alone on a line, verbatim. No bold asterisks, no quotes around it, no escaping of characters, etc.
@@ -111,17 +155,6 @@ Once you want to modify the code you MUST:
 {DIFF_FENCE[1]}
 """
 
-# def extract_commands(text):
-#     pattern = rf'{BASH_FENCE[0]}([\s\S]*?){BASH_FENCE[1]}'
-#     matches = re.findall(pattern, text)
-#     command_text = ''
-#     if len(matches) > 0:
-#         command_text = matches[0]
-
-#     commands = []
-#     if command_text:
-#         commands = list(filter(None, command_text.strip().split('\n')))
-#     return commands
 def extract_commands(text):
     BASH_FENCE = ('```bash', '```')
     pattern = rf'{re.escape(BASH_FENCE[0])}([\s\S]*?){re.escape(BASH_FENCE[1])}'
@@ -129,26 +162,14 @@ def extract_commands(text):
     
     return matches
 
-# def extract_submit(text):
-#     extract_text = extract_commands(text)
-#     if len(extract_text) != 1:
-#         return ''
-#     extract_text = extract_text[0].strip()
-#     if len(extract_text.split()) != 2:
-#         return ''
-#     extract_text_split = extract_text.split()
-#     if extract_text_split[0] == 'submit':
-#         return extract_text_split[1]
-#     return ''
-    
 def append_trajectory(trajectory, messages, agent: str):
-    # 对于messages中的每个message，添加一个agent字段
+    # Add agent field to each message in messages
     for message in messages:
         message['agent'] = agent.lower()
         trajectory.append(message)
 
 def save_trajectory(id, traj_dir, trajectory):
-    # 获取一个唯一的文件名
+    # Get a unique filename
     trial_index = 1
     def get_unique_filename(traj_dir, trial_index):
         filename = f"{id}_{trial_index}.txt"
@@ -165,7 +186,7 @@ def save_trajectory(id, traj_dir, trajectory):
 def save_report(id, report_path, report):
     trial_index = 1
 
-    # 获取一个唯一的文件名
+    # Get a unique filename
     def get_unique_filename(report_path, trial_index):
         filename = f"{id}_{trial_index}.md"
         while os.path.exists(os.path.join(report_path, filename)):

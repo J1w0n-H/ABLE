@@ -15,7 +15,3 @@
 class Agent:
     def __init__(self):
         self.messages = []
-        pass
-    
-    def get_massages(self):
-        return self.messages

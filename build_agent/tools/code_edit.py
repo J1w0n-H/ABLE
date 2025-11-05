@@ -122,14 +122,12 @@ The REPLACE lines are already in {filePath}!
             temp.write(fileContent)
             temp.flush() 
             temp_name = temp.name
-            #os.chmod(temp_name, 0o666)  # 设置所有用户可读写
             command_options = f"pylint {temp_name} --disable=all --enable=E0001"
             result = subprocess.run(command_options, shell=True, capture_output=True, text=True)
-            #检查修改前的代码是否能扫出来错误，如果能扫出来，就不对新代码做静态检查了
-            if ('E0001' in result.stdout) or ('E0001' in result.stderr):
+                        if ('E0001' in result.stdout) or ('E0001' in result.stderr):
                 if len(diff) != 0:
                     diff = diff.replace(MASK, '')
-                    write_text(filePath, new_content) #直接把文件写入覆盖
+                    write_text(filePath, new_content)
                     return {'message': 'succeed','diff': diff + '\n\n'}
                 else:
                     return {'message': 'Fail to apply diff(s)','diff': ''}
@@ -139,7 +137,6 @@ The REPLACE lines are already in {filePath}!
             temp.write(new_content)
             temp.flush() 
             temp_name = temp.name
-            #os.chmod(temp_name, 0o666)  # 设置所有用户可读写
             command_options = f"pylint {temp_name} --disable=all --enable=E0001"
             result = subprocess.run(command_options, shell=True, capture_output=True,text=True)
             if ('E0001' in result.stdout) or ('E0001' in result.stderr):
@@ -148,7 +145,7 @@ The REPLACE lines are already in {filePath}!
                 return {'message': result.stdout + result.stderr, 'diff': diff + '\n\n'}
 
     if len(diff) != 0:
-        write_text(filePath, new_content) #直接把文件写入覆盖
+        write_text(filePath, new_content)
         diff = diff.replace(MASK, '')
         return {'message': 'succeed','diff': diff + '\n\n'}
     else:
@@ -511,18 +508,15 @@ def parse_diffs_block(content, fence=DIFF_FENCE):
     return results
 
 def insert_char_outside_range(text, edit_range, mask = MASK):
-    # 按行分割字符串
-    lines = text.splitlines(True)
+        lines = text.splitlines(True)
     extend = 3
-    # 遍历所有行，在不属于指定范围的行前插入字符
-    for i in range(len(lines)):
+        for i in range(len(lines)):
         if i < (edit_range["start_line"] - extend - 1):
             lines[i] = mask + lines[i]
         if i > (edit_range["end_line"] + extend - 1):
             lines[i] = mask + lines[i]
 
-    # 重新组合为字符串
-    return ''.join(lines)
+        return ''.join(lines)
 
 
 def process_diff(text:str, project_path: str, edit_range = None):
@@ -578,7 +572,7 @@ def process_diff(text:str, project_path: str, edit_range = None):
             if edit_range:
                 print("Error! Old lines can not be empty in edit limit mode!")
                 continue
-            if os.path.exists(filename): # 如果文件存在，将新行放在文件开头
+            if os.path.exists(filename):
                 with open(filename, 'r', encoding='utf-8') as file:
                     original_content = file.read()
                 new_content = updated_text + original_content
@@ -586,7 +580,7 @@ def process_diff(text:str, project_path: str, edit_range = None):
                 succeed_patches += f"The new code snippet is inserted at the beginning of the file {filename}\n" + diff_message
                 with open(filename, 'w', encoding='utf-8') as file:
                     file.write(new_content)
-            else: # 如果文件不存在，创建文件并写入新行
+            else:
                 try:
                     with open(filename, 'w') as f:
                         f.write(updated_text)
@@ -599,23 +593,23 @@ def process_diff(text:str, project_path: str, edit_range = None):
                 if filename.strip() != edit_range["file_path"].strip():
                     print("Error! You can only edit the code you are responsible for!")
                     continue
-            if os.path.exists(filename): # 如果文件存在，读取文件内容
+            if os.path.exists(filename):
                 with open(filename, 'r', encoding='utf-8') as file:
                     original_content = file.read()
 
                 diff_msgs = apply_edit(filename, original_content, original_text, updated_text)
-                if not diff_msgs['diff'].strip(): # 如果diff为空，返回报错信息
+                if not diff_msgs['diff'].strip():
                     fail_patches += diff_msgs['message']
                     if edit_range:
                         fail_patches += "\nMake sure your changes' old line(s) are within the [User Given Code] range!"
-                elif diff_msgs['message'] == 'succeed': # diff不空，修改成功
+                elif diff_msgs['message'] == 'succeed':
                     patch_string = diff_msgs['diff'].replace(project_path, '')
                     patch_string = patch_string.replace('//', '/')
                     succeed_patches += patch_string
-                else: #diff不空，但修改失败，linter语法检查问题
+                else:
                     fail_patches += (f"ERROR! The patch does not pass the lint check and fail to apply. Try to fix the lint error:\n"
                                      f"### lint message:\n{diff_msgs['message']}\n")
-            else: # 如果文件不存在，返回报错信息
+            else:
                 fail_patches += f"ERROR! The file {filename} does not exist.\n"
     
     patch_apply_result = f"* Succeed Patch:\n{succeed_patches}"
@@ -643,31 +637,23 @@ if __name__ == "__main__":
     with open(args.patch_tmp_file, 'r') as file:
         content = file.read()
     edit_range = {}
-    # 如果存在编辑限制
-    if args.file_path:
+        if args.file_path:
         edit_range["file_path"] = args.file_path
         edit_range["start_line"] = args.start_line
         edit_range["end_line"] = args.end_line
         
-        # 读取有编辑限制的文件
-        with open(edit_range["file_path"], 'r', encoding='utf-8') as file:
+                with open(edit_range["file_path"], 'r', encoding='utf-8') as file:
             target_original_content = file.read()
-        # 把无关片段打上mask
-        target_masked_content = insert_char_outside_range(target_original_content, edit_range)
-        # 把mask后的代码片段写回文件
-        with open(edit_range["file_path"], 'w', encoding='utf-8') as file:
+                target_masked_content = insert_char_outside_range(target_original_content, edit_range)
+                with open(edit_range["file_path"], 'w', encoding='utf-8') as file:
             file.write(target_masked_content)
             
     print(process_diff(content, args.project_path, edit_range))
 
-    # 如果存在编辑限制
-    if args.file_path:
-        # 读取有编辑限制的文件
-        target_masked_content = ''
+        if args.file_path:
+                target_masked_content = ''
         with open(edit_range["file_path"], 'r', encoding='utf-8') as file:
             target_masked_content = file.read()
-        # 去除mask
-        target_unmasked_content = target_masked_content.replace(MASK, '')
-        # 把mask去除后的代码片段写回文件
-        with open(edit_range["file_path"], 'w', encoding='utf-8') as file:
+                target_unmasked_content = target_masked_content.replace(MASK, '')
+                with open(edit_range["file_path"], 'w', encoding='utf-8') as file:
             file.write(target_unmasked_content)

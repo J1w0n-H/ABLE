@@ -15,13 +15,31 @@
 
 import openai
 import time
+import os
+
+# Support both direct execution and package import
+try:
+    from ..config import Config
+    USE_CONFIG = True
+except ImportError:
+    try:
+        from config import Config
+        USE_CONFIG = True
+    except ImportError:
+        USE_CONFIG = False
 
 def get_llm_response(model: str, messages, temperature = 0.0, n = 1, max_tokens = 1024):
-    max_retry = 5
+    if USE_CONFIG:
+        max_retry = Config.LLM_RETRY
+        api_key = Config.OPENAI_API_KEY if 'gpt' in model.lower() else Config.ANTHROPIC_API_KEY
+    else:
+        max_retry = 5
+        api_key = os.getenv('OPENAI_API_KEY', '')
+    
     count = 0
     while count < max_retry:
         try:
-            client = openai.OpenAI()
+            client = openai.OpenAI(api_key=api_key) if api_key else openai.OpenAI()
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,
@@ -31,7 +49,12 @@ def get_llm_response(model: str, messages, temperature = 0.0, n = 1, max_tokens 
             )
             return response.choices[0].message.content, response.usage
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"LLM API Error: {e}")
             count += 1
-            time.sleep(3)
+            if count < max_retry:
+                wait_time = 3 * (2 ** (count - 1))  # Exponential backoff
+                print(f"Retrying in {wait_time} seconds... ({count}/{max_retry})")
+                time.sleep(wait_time)
+    
+    print(f"Failed after {max_retry} retries")
     return None, None

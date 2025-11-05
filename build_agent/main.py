@@ -21,14 +21,29 @@ import time
 import os
 import sys
 from datetime import datetime, timedelta
-from utils.sandbox import Sandbox
-from agents.configuration import Configuration
+
+# Support both direct execution and package import
+try:
+    from .utils.sandbox import Sandbox
+    from .agents.configuration import Configuration
+    from .config import Config
+    from .utils.waiting_list import WaitingList
+    from .utils.conflict_list import ConflictList
+    from .utils.integrate_dockerfile import integrate_dockerfile
+except ImportError:
+    from utils.sandbox import Sandbox
+    from agents.configuration import Configuration
+    from config import Config
+    from utils.waiting_list import WaitingList
+    from utils.conflict_list import ConflictList
+    from utils.integrate_dockerfile import integrate_dockerfile
+
 import subprocess
-from utils.waiting_list import WaitingList
-from utils.conflict_list import ConflictList
-from utils.integrate_dockerfile import integrate_dockerfile
 import ast
 import shutil
+
+# Save original stderr at module level BEFORE any redirection
+original_stderr = sys.stderr
 
 class TeeOutput:
     """Writes output to both stdout and a log file simultaneously"""
@@ -50,28 +65,23 @@ class TeeOutput:
         self.log.close()
 
 def move_files_to_repo(source_folder):
-    # Define the path where the target folder is located
     target_folder = os.path.join(source_folder, 'repo_inner_directory_long_long_name_to_avoid_duplicate')
     
-    # Check if target folder exists, create if it doesn't
     if not os.path.exists(target_folder):
         os.mkdir(target_folder)
     
-    # Iterate through all files and folders in source folder
     for item in os.listdir(source_folder):
         item_path = os.path.join(source_folder, item)
         
-        # Skip the target folder
         if item == 'repo_inner_directory_long_long_name_to_avoid_duplicate':
             continue
         
-        # Move files or folders to target folder
         shutil.move(item_path, os.path.join(target_folder, item))
 
     os.rename(target_folder, os.path.join(source_folder, 'repo'))
 
 # Download repo to utils/repo folder, remove the outermost folder, and remove any existing Dockerfile
-def download_repo(root_path, full_name, sha):
+def download_repo(root_path, full_name, sha, output_root=None):
     if len(full_name.split('/')) != 2:
         raise Exception("full_name Wrong!!!")
     author_name = full_name.split('/')[0]
@@ -183,27 +193,21 @@ def download_repo(root_path, full_name, sha):
 
     checkout_cmd = f"git checkout {sha}"
     subprocess.run(checkout_cmd, cwd=repo_path, capture_output=True, shell=True)
-
-    # x = subprocess.run('git log -1 --format="%H"', cwd=f'{root_path}/utils/repo/{author_name}/{repo_name}/repo', capture_output=True, shell=True)
-    output_root = os.getenv('REPO2RUN_OUTPUT_ROOT', root_path)
-    if not os.path.exists(f'{output_root}/output/{author_name}/{repo_name}'):
-        os.makedirs(f'{output_root}/output/{author_name}/{repo_name}', exist_ok=True)
-    with open(f'{output_root}/output/{author_name}/{repo_name}/sha.txt', 'w') as w1:
-        w1.write(sha)
-
-def main():
-    # subprocess.run('docker rm -f $(docker ps -aq)', shell=True)
-    parser = argparse.ArgumentParser(description='Run script with repository full name as an argument.')
-    parser.add_argument('full_name', type=str, help='The full name of the repository (e.g., user/repo).')
-    parser.add_argument('sha', type=str, help='sha')
-    parser.add_argument('root_path', type=str, help='root path')
     
-    args = parser.parse_args()
+    # Create output directory structure if needed
+    if output_root:
+        author_name = full_name.split('/')[0]
+        repo_name = full_name.split('/')[1]
+        if not os.path.exists(f'{output_root}/output/{author_name}/{repo_name}'):
+            os.makedirs(f'{output_root}/output/{author_name}/{repo_name}', exist_ok=True)
+        with open(f'{output_root}/output/{author_name}/{repo_name}/sha.txt', 'w') as w1:
+            w1.write(sha)
 
+def run_build(repository, commit, root_path='.'):
+    """Core build logic extracted from main()"""
+    
     waiting_list = WaitingList()
     conflict_list = ConflictList()
-
-    root_path = args.root_path
 
     if not os.path.isabs(root_path):
         root_path = os.path.abspath(root_path)
@@ -212,55 +216,53 @@ def main():
     if not root_path.endswith('build_agent'):
         root_path = os.path.join(root_path, 'build_agent')
 
-    full_name = args.full_name
-    sha = args.sha
+    full_name = repository
+    sha = commit
     
-    output_root = os.getenv('REPO2RUN_OUTPUT_ROOT', root_path)
+    # Determine output_root (must be root_path for compatibility with legacy code)
+    # Config.OUTPUT_ROOT is relative to root_path, but output_root itself should be root_path
+    # because code uses {output_root}/output/{repo}/...
+    if os.path.isabs(Config.OUTPUT_ROOT):
+        # If absolute path, use it directly (but this is unusual)
+        output_root = Config.OUTPUT_ROOT
+    else:
+        # Use root_path as output_root (legacy compatible)
+        # This ensures paths like {output_root}/output/{repo}/ work correctly
+        output_root = root_path
     
-    # 🆕 Setup automatic logging
-    log_dir = os.path.join(output_root, 'log')
-    os.makedirs(log_dir, exist_ok=True)
-    log_file = os.path.join(log_dir, f"{full_name.replace('/', '_')}_{sha[:7]}.log")
+    # Setup automatic logging in project-specific directory
+    project_output_dir = os.path.join(output_root, 'output', full_name.split('/')[0], full_name.split('/')[1])
+    os.makedirs(project_output_dir, exist_ok=True)
+    log_file = os.path.join(project_output_dir, f"{full_name.replace('/', '_')}_{sha[:7]}.log")
     tee = TeeOutput(log_file)
     sys.stdout = tee
     sys.stderr = tee
     
-    print(f"ARVO2.0 - Automated C/C++ Build Environment Configuration")
-    print(f"Log file: {log_file}")
+    print(f"ABLE - Automated C/C++ Build Environment Configuration")
+    print(f"Model: {Config.LLM_MODEL}")
     print(f"Repository: {full_name}")
     print(f"Commit: {sha}")
+    print(f"Max turns: {Config.MAX_TURN}")
+    print(f"Log file: {log_file}")
     print("-" * 70)
     
-    # if os.path.exists(f'{root_path}/{full_name}/TIMEOUT'):
-    #     sys.exit(123)
-    
-    if os.path.exists(f'{output_root}/output/{full_name}/patch'):
-        rm_cmd = f"rm -rf {output_root}/output/{full_name}/patch"
+    # Check for old-style patch directory (legacy compatibility)
+    old_patch_path = f'{output_root}/output/{full_name}/patch'
+    if os.path.exists(old_patch_path):
+        rm_cmd = f"rm -rf {old_patch_path}"
         subprocess.run(rm_cmd, shell=True, check=True)
     if not os.path.exists(f'{output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}'):
         subprocess.run(f'mkdir -p {output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}', shell=True)
     
-    # 🆕 Repository Reuse: Don't delete existing repo!
-    # The download_repo() function will handle reusing or cloning as needed
-    
-    def timer():
-        time.sleep(3600*2)  # Wait for 2 hours
-        print("Timeout for 2 hour!")
-        os._exit(1)  # Force exit the program
-
-    # Start timer thread
-    timer_thread = threading.Thread(target=timer)
-    timer_thread.daemon = True
-    timer_thread.start()
-
-    download_repo(root_path, full_name, sha)
+    download_repo(root_path, full_name, sha, output_root)
 
     trajectory = []
 
-    # C 전용 이미지 사용
-    configuration_sandbox = Sandbox("gcr.io/oss-fuzz-base/base-builder", full_name, root_path)
+    # Use C-specific image
+    docker_image = Config.DOCKER_IMAGE
+    configuration_sandbox = Sandbox(docker_image, full_name, root_path)
     configuration_sandbox.start_container()
-    configuration_agent = Configuration(configuration_sandbox, 'gcr.io/oss-fuzz-base/base-builder', full_name, root_path, 100)
+    configuration_agent = Configuration(configuration_sandbox, docker_image, full_name, root_path)
     msg, outer_commands = configuration_agent.run('/tmp', trajectory, waiting_list, conflict_list)
     with open(f'{output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}/track.json', 'w') as w1:
         w1.write(json.dumps(msg, indent=4))
@@ -269,18 +271,26 @@ def main():
         w2.write(json.dumps(commands, indent=4))
     with open(f'{output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}/outer_commands.json', 'w') as w3:
         w3.write(json.dumps(outer_commands, indent=4))
-    try:
-        integrate_dockerfile(f'{output_root}/output/{full_name}')
-        msg = f'Generate success!'
-        with open(f'{output_root}/output/{full_name}/track.txt', 'a') as a1:
-            a1.write(msg + '\n')
-    except Exception as e:
-        msg = f'integrate_docker failed, reason:\n {e}'
-        with open(f'{output_root}/output/{full_name}/track.txt', 'a') as a1:
-            a1.write(msg + '\n')
     
-    # 🆕 P3.3: Verify Dockerfile can be built
-    def verify_dockerfile(output_path, full_name):
+    # Check if runtest passed
+    runtest_passed = False
+    test_txt_path = f'{output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}/test.txt'
+    if os.path.exists(test_txt_path):
+        with open(test_txt_path, 'r') as f:
+            runtest_passed = "Congratulations" in f.read()
+    
+    # Generate Dockerfile
+    dockerfile_output_path = f'{output_root}/output/{full_name.split("/")[0]}/{full_name.split("/")[1]}'
+    try:
+        integrate_dockerfile(dockerfile_output_path)
+        with open(f'{dockerfile_output_path}/track.txt', 'a') as a1:
+            a1.write('Dockerfile generation: ✅ SUCCESS\n')
+    except Exception as e:
+        with open(f'{dockerfile_output_path}/track.txt', 'a') as a1:
+            a1.write(f'Dockerfile generation: ❌ FAILED\n{e}\n')
+    
+    # 🆕 P3.3: Verify Dockerfile can be built (only if runtest passed)
+    def verify_dockerfile(output_path, full_name, root_path):
         """
         Verify that the generated Dockerfile can actually be built.
         Returns True if build succeeds, False otherwise.
@@ -290,11 +300,11 @@ def main():
             return False, "Dockerfile not found"
         
         # Create a unique test image name (must be lowercase for Docker)
-        test_image = f"arvo_test_{full_name.replace('/', '_').lower()}_{int(time.time())}"
+        test_image = f"able_test_{full_name.replace('/', '_').lower()}_{int(time.time())}"
         
-        # Build context must be root_path (build_agent dir) to access utils/repo/
-        # Dockerfile is in output_path, so use -f flag
-        build_context = output_path.rsplit('/output/', 1)[0]  # Get build_agent directory
+        # v3.0 FIX: Use common build_agent directory (not version-specific)
+        # This allows Docker to access utils/repo via symlink or directly
+        build_context = "/root/Git/ABLE/build_agent"
         dockerfile_rel_path = os.path.relpath(dockerfile_path, build_context)
         build_cmd = ["docker", "build", "-f", dockerfile_rel_path, "-t", test_image, build_context]
         
@@ -311,7 +321,13 @@ def main():
             )
             
             if result.returncode == 0:
-                print(f"✅ Dockerfile builds successfully!")
+                print()
+                print("╔══════════════════════════════════════════════════════════════════════════╗")
+                print("║                   ✅ DOCKERFILE BUILD: SUCCESS                            ║")
+                print("╚══════════════════════════════════════════════════════════════════════════╝")
+                print(f"📦 Project: {full_name}")
+                print(f"✅ Docker build completed successfully")
+                print()
                 
                 # Clean up test image
                 cleanup_cmd = ["docker", "rmi", test_image]
@@ -319,10 +335,17 @@ def main():
                 
                 return True, "Build successful"
             else:
-                print(f"❌ Dockerfile build failed!")
+                print()
+                print("╔══════════════════════════════════════════════════════════════════════════╗")
+                print("║                   ❌ DOCKERFILE BUILD: FAILED                             ║")
+                print("╚══════════════════════════════════════════════════════════════════════════╝")
+                print(f"📦 Project: {full_name}")
+                print(f"❌ Docker build failed")
+                print()
                 print(f"Error output (last 50 lines):")
                 error_lines = result.stderr.split('\n')[-50:]
                 print('\n'.join(error_lines))
+                print()
                 
                 return False, f"Build failed: {result.stderr[-500:]}"
                 
@@ -336,29 +359,66 @@ def main():
             print(f"❌ {msg}")
             return False, msg
     
-    # Run verification
-    dockerfile_valid, verification_msg = verify_dockerfile(
-        f'{output_root}/output/{full_name}',
-        full_name
-    )
+    # Verify Dockerfile (only if runtest passed)
+    if runtest_passed:
+        dockerfile_valid, verification_msg = verify_dockerfile(
+            dockerfile_output_path,
+            full_name,
+            root_path
+        )
+        with open(f'{dockerfile_output_path}/dockerfile_verification.txt', 'w') as f:
+            f.write(f"Valid: {dockerfile_valid}\n")
+            f.write(f"Message: {verification_msg}\n")
+            f.write(f"Timestamp: {datetime.now().isoformat()}\n")
+    else:
+        print()
+        print("⏭️  Skipping Dockerfile verification (runtest did not pass)")
+        print()
+        with open(f'{dockerfile_output_path}/dockerfile_verification.txt', 'w') as f:
+            f.write(f"Valid: False\n")
+            f.write(f"Message: Skipped - runtest did not pass\n")
+            f.write(f"Timestamp: {datetime.now().isoformat()}\n")
     
-    # Save verification result
-    with open(f'{output_root}/output/{full_name}/dockerfile_verification.txt', 'w') as f:
-        f.write(f"Valid: {dockerfile_valid}\n")
-        f.write(f"Message: {verification_msg}\n")
-        f.write(f"Timestamp: {datetime.now().isoformat()}\n")
-    
-    # Also append to track.txt
-    with open(f'{output_root}/output/{full_name}/track.txt', 'a') as a1:
-        status = "✅ VERIFIED" if dockerfile_valid else "❌ FAILED"
-        a1.write(f'Dockerfile verification: {status}\n')
-        if not dockerfile_valid:
-            a1.write(f'Reason: {verification_msg}\n')
-    
-    # 🆕 Close log file
+    # Close log file and restore stdout
     if hasattr(sys.stdout, 'close') and hasattr(sys.stdout, 'terminal'):
+        terminal = sys.stdout.terminal  # Save reference before closing
         sys.stdout.close()
-        sys.stdout = sys.stdout.terminal
+        sys.stdout = terminal
+
+def main():
+    """Legacy entry point for backwards compatibility"""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='ABLE - Automated C/C++ Build Environment Configuration')
+    parser.add_argument('full_name', type=str, help='Repository full name (e.g., ImageMagick/ImageMagick)')
+    parser.add_argument('sha', type=str, help='Git commit SHA')
+    parser.add_argument('root_path', type=str, help='Root path (build_agent directory)')
+    parser.add_argument('--model', type=str, help=f'LLM model to use (default: {Config.LLM_MODEL})')
+    parser.add_argument('--max-turns', type=int, help=f'Maximum turns (default: {Config.MAX_TURN})')
+    parser.add_argument('--output', type=str, help=f'Output directory (default: {Config.OUTPUT_ROOT})')
+    parser.add_argument('--verbose', action='store_true', help='Enable verbose logging')
+    
+    args = parser.parse_args()
+    
+    # Apply CLI overrides
+    if args.model:
+        Config.LLM_MODEL = args.model
+    if args.max_turns:
+        Config.MAX_TURN = args.max_turns
+    if args.output:
+        Config.OUTPUT_ROOT = args.output
+    if args.verbose:
+        Config.VERBOSE = True
+    
+    # Validate configuration
+    try:
+        Config.validate()
+    except ValueError as e:
+        print(f"Configuration Error: {e}")
+        sys.exit(2)
+    
+    run_build(args.full_name, args.sha, args.root_path)
+
 
 if __name__ == '__main__':
     try:
@@ -370,14 +430,17 @@ if __name__ == '__main__':
     try:
         main()
     finally:
+        # v3.0 FIX: Restore stderr FIRST (critical for exit code 120!)
+        sys.stderr = original_stderr
         # Ensure log file is closed even on errors
         if hasattr(sys.stdout, 'close') and hasattr(sys.stdout, 'terminal'):
+            terminal = sys.stdout.terminal  # Save reference before closing
             end_time = time.time()
             elapsed_time = end_time - start_time
-            print(f'Spend totally {elapsed_time}.')
+            print(f'Total execution time: {elapsed_time:.2f} seconds')
             sys.stdout.close()
-            sys.stdout = sys.stdout.terminal
+            sys.stdout = terminal
         else:
             end_time = time.time()
             elapsed_time = end_time - start_time
-            print(f'Spend totally {elapsed_time}.')
+            print(f'Total execution time: {elapsed_time:.2f} seconds')

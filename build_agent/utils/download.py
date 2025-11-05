@@ -13,8 +13,6 @@
 # limitations under the License. 
 
 
-# from apt_download import run_apt
-# from pip_download import run_pip
 import subprocess
 
 TIME_OUT_LABEL= ' seconds. Partial output:'
@@ -29,9 +27,7 @@ def download(session, waiting_list, conflict_list):
     successful_download = list()
     failed_download = list()
     tool_error = list()
-    # if errorformat_list.size() > 0:
-    #     errorformat_list.get_message()
-    #     return -1
+    
     if conflict_list.size() > 0:
         conflict_list.get_message(waiting_list)
         return -1

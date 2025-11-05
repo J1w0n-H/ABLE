@@ -1,8 +1,0 @@
-Valid: False
-Message: Build failed: DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
-            Install the buildx component to build images with BuildKit:
-            https://docs.docker.com/go/buildx/
-
-COPY failed: file not found in build context or excluded by .dockerignore: stat utils/repo/ArtifexSoftware/Ghostscript.NET/repo: file does not exist
-
-Timestamp: 2025-10-24T22:16:00.372787

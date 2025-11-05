@@ -1,3 +1,0 @@
-Valid: False
-Message: Dockerfile not found
-Timestamp: 2025-10-25T06:20:40.151898
