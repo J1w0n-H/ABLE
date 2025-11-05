@@ -600,18 +600,6 @@ able config --help       # Config options
 
 ---
 
-## 🤝 Contributing
-
-Contributions welcome! Areas of interest:
-- Build system improvements
-- Error pattern recognition
-- Performance optimization
-- Security features
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
----
-
 ## 📄 License
 
 Copyright (2025) Bytedance Ltd. - Licensed under Apache License 2.0
