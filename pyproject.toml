@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "able"
+version = "1.0.0"
+description = "Automated Build Learning Environment - LLM-Driven Build Automation for C/C++ Projects"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Bytedance Ltd."},
+]
+keywords = ["build-automation", "llm", "c-cpp", "docker", "oss-fuzz"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Testing",
+]
+
+dependencies = [
+    "docker>=7.0.0,<8.0.0",
+    "pexpect>=4.9.0,<5.0.0",
+    "openai>=1.0.0,<2.0.0",
+    "python-dotenv>=1.0.0,<2.0.0",
+    "click>=8.0.0,<9.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.scripts]
+able = "build_agent.cli:main_cli"
+able-legacy = "build_agent.main:main"
+
+[project.urls]
+Homepage = "https://github.com/bytedance/able"
+Documentation = "https://able.readthedocs.io"
+Repository = "https://github.com/bytedance/able"
+"Bug Tracker" = "https://github.com/bytedance/able/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["build_agent*"]
+exclude = ["build_agent.utils.repo*", "build_agent.output*", "build_agent.log*"]
+
+[tool.black]
+line-length = 120
+target-version = ['py38', 'py39', 'py310', 'py311']
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+  | utils/repo
+)/
+'''
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --cov=build_agent --cov-report=html --cov-report=term"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+exclude = ["utils/repo", "output", "log"]
+

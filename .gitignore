@@ -1,0 +1,103 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# Environment variables
+.env
+.env.local
+*.key
+secrets/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs (now stored in output directories)
+*.log
+logs/
+
+# Output
+output/
+build_agent/output/
+build_agent/log/
+build_agent/utils/repo/
+*.diff
+
+# Archive (development history)
+.archive/
+*.patch
+
+# Docker
+.dockerignore
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.hypothesis/
+
+# Build artifacts
+*.o
+*.a
+*.so
+
+# Repository cache (large files)
+build_agent/utils/repo/*/
+!build_agent/utils/repo/.gitkeep
+
+# Version-specific directories (keep structure, not content)
+v3.*/output/
+v3.*/log/
+v3.*/build_agent/utils/repo/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Backup files
+*.bak
+*.backup
+*~
