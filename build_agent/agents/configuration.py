@@ -277,6 +277,30 @@ In addition to typical bash commands, we also provide the following commands tha
     def get_max_turn(self):
         return self.max_turn
 
+    def _normalize_command(self, command: str) -> str:
+        """Simplify commands for loop detection."""
+        if not command:
+            return ''
+        stripped = command.strip()
+        if not stripped:
+            return ''
+        low_effect_prefixes = (
+            'cd ',
+            'pwd',
+            'ls',
+            'cat ',
+            'tail ',
+            'head ',
+            'history',
+            'printf ',
+            'echo ',
+        )
+        if stripped in {'cd /repo', 'cd /repo && pwd'}:
+            return ''
+        if stripped.startswith(low_effect_prefixes):
+            return ''
+        return stripped
+
     def run(self, project_path, trajectory, waiting_list, conflict_list):
         print('************** configuration **************')
         print(self.init_prompt)
@@ -296,6 +320,8 @@ In addition to typical bash commands, we also provide the following commands tha
         turn = 0
         cost_tokens = 0
         diff_no = 1
+        self.current_phase = 'Scan'
+        self.docs_checked = False
         def manage_token_usage(messages, max_tokens=30000):
             """
             When message list exceeds token limit, delete from the oldest messages
@@ -420,9 +446,9 @@ In addition to typical bash commands, we also provide the following commands tha
                     recent.append("="*60)
                     recent.append("🚨 CRITICAL: INFINITE LOOP DETECTED!")
                     recent.append("="*60)
-                    recent.append("You are alternating between two commands that both fail!")
-                    recent.append("🛑 This approach is NOT working!")
-                    recent.append("📖 REQUIRED: Check INSTALL/README documentation")
+                    recent.append("You are alternating between the same commands without progress!")
+                    recent.append("🛑 Stop re-running the identical build commands.")
+                    recent.append("📖 REQUIRED: Analyze the latest error output/log (or grep for the failing symbol), identify the root cause, and try a different fix—do NOT jump back to STEP 1 unless you truly need fresh instructions.")
                     recent.append("="*60)
             
             return recent
@@ -458,16 +484,20 @@ In addition to typical bash commands, we also provide the following commands tha
             print('---------------------------')
             print(configuration_agent)
             system_res = '### Observation:\n'
+            system_res += f'**Current Phase:** {self.current_phase}\n'
+            system_res += f'**Docs scanned:** {"✅" if self.docs_checked else "❌"} (README/INSTALL)\n'
             init_commands = extract_commands(configuration_agent)
             commands = list()
             for ic in init_commands:
                 commands.extend(split_cmd_statements(ic))
             diffs = extract_diffs(configuration_agent)
+            loop_alerts = []
             #如果回答중同时有修改和命령，拒绝
             if len(diffs) != 0 and len(commands) != 0:
                 system_res = f"ERROR! Your reply contains both bash block and diff block, which is not accepted. Each round of your reply can only contain one {BASH_FENCE[0]} {BASH_FENCE[1]} block or one {DIFF_FENCE[0]} {DIFF_FENCE[1]} block. Each round of your answers contain only *ONE* action!"
             elif len(commands) != 0: #按顺序执행工具
                 for i in range(len(commands)):
+                    current_cmd = commands[i].strip()
                     self.outer_commands.append({"command": commands[i], "returncode": -2, "time": -1})
                     start_time = time.time()
                     vdb = subprocess.run("df -h | grep '/dev/vdb' | awk '{print $5}'", shell=True, capture_output=True, text=True)
@@ -477,8 +507,37 @@ In addition to typical bash commands, we also provide the following commands tha
                             print('Warning! The disk /dev/vdb has occupied over 90% memories!')
                             sys.exit(3)
                     
+                    normalized_current = self._normalize_command(current_cmd)
+                    recent_cmds_only = []
+                    for cmd in self.sandbox.commands:
+                        normalized = self._normalize_command(cmd.get("command", ""))
+                        if normalized:
+                            recent_cmds_only.append(normalized)
+
+                    if normalized_current:
+                        if recent_cmds_only and recent_cmds_only[-1] == normalized_current:
+                            loop_alerts.append(f"Command '{current_cmd}' was just executed in the previous step. Inspect the prior error output instead of repeating it verbatim.")
+                            self.outer_commands[-1]["returncode"] = 1
+                            self.outer_commands[-1]["time"] = time.time() - start_time
+                            continue
+                        if len(recent_cmds_only) >= 2 and recent_cmds_only[-2] == normalized_current:
+                            loop_alerts.append(f"Detected loop: '{recent_cmds_only[-2]}' → '{recent_cmds_only[-1]}' → '{current_cmd}'. Analyze the latest failure logs before retrying.")
+                            self.outer_commands[-1]["returncode"] = 1
+                            self.outer_commands[-1]["time"] = time.time() - start_time
+                            continue
+                        if len(recent_cmds_only) >= 4:
+                            last_pair = tuple(recent_cmds_only[-2:])
+                            prev_pair = tuple(recent_cmds_only[-4:-2])
+                            if last_pair == prev_pair and normalized_current == last_pair[0]:
+                                loop_alerts.append(
+                                    f"Detected repeating command pair '{last_pair[0]}' ↔ '{last_pair[1]}'. Break the cycle by investigating the earlier error output and trying a new remediation path."
+                                )
+                                self.outer_commands[-1]["returncode"] = 1
+                                self.outer_commands[-1]["time"] = time.time() - start_time
+                                continue
+                    
                     # 恢복 초기 상태
-                    if commands[i].strip() == 'clear_configuration':
+                    if current_cmd == 'clear_configuration':
                         try:
                             sandbox = self.sandbox_session.sandbox.clear_configuration()
                             self.sandbox = sandbox
@@ -516,6 +575,15 @@ In addition to typical bash commands, we also provide the following commands tha
                         self.outer_commands[-1]["returncode"] = 1
                     success_check = 'Congratulations, you have successfully configured the environment!' in sandbox_res
                     runtest_check = '# This is $runtest.py$' not in sandbox_res
+                    lower_cmd = current_cmd.lower()
+                    if 'readme' in lower_cmd or 'install' in lower_cmd:
+                        self.docs_checked = True
+                    if 'configure' in lower_cmd:
+                        self.current_phase = 'Build' if return_code == 0 else 'Configure'
+                    elif any(token in lower_cmd for token in ['make', 'cmake', 'ninja']):
+                        self.current_phase = 'Verify' if return_code == 0 else 'Build'
+                    elif 'runtest.py' in lower_cmd and return_code == 0:
+                        self.current_phase = 'Complete'
                     
                     if success_check and runtest_check:
                         # ========================================
@@ -603,6 +671,11 @@ The edit format is as follows:
             else:
                 self.outer_commands[-1]["returncode"] = 2
                 system_res += "ERROR! Your reply does not contain valid block or final answer."
+
+            if loop_alerts:
+                system_res += "\n### Loop Alerts\n"
+                for alert in loop_alerts:
+                    system_res += f"- {alert}\n"
             
             current_directory, return_code = self.sandbox_session.execute('$pwd$', waiting_list, conflict_list)
             current_directory = '\n[Current directory]:\n' + current_directory + '\n'
@@ -624,7 +697,7 @@ The edit format is as follows:
                 appendix += '\n' + '='*60
                 
                 # v4.0: Every 10 turns, add documentation check reminder
-                if turn % 10 == 0 and turn > 0:
+                if turn % 10 == 0 and turn > 0 and not self.docs_checked:
                     appendix += '\n\n' + '🔔'*30 + '\n'
                     appendix += f'⚠️  CHECKPOINT (Turn {turn}) - Search docs for error keywords!\n'
                     appendix += '🔔'*30 + '\n'

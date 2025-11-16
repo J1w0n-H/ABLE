@@ -201,14 +201,33 @@ RUN mkdir -p /repo && git config --global --add safe.directory /repo
             cmd = f"docker cp {self.root_path}/utils/repo/{self.full_name}/repo {self.container.name}:/"
             subprocess.run(cmd, check=True, shell=True)
             return 1
-        except Exception:
-            return -1
+        except subprocess.CalledProcessError as e:
+            error_msg = e.stderr.decode('utf-8', errors='ignore') if e.stderr else str(e)
+            if self.container is not None:
+                try:
+                    self.container.stop()
+                    self.container.remove()
+                except Exception:
+                    pass
+                finally:
+                    self.container = None
+            raise RuntimeError(f"Failed to start container while executing '{e.cmd}': {error_msg}") from e
+        except Exception as e:
+            if self.container is not None:
+                try:
+                    self.container.stop()
+                    self.container.remove()
+                except Exception:
+                    pass
+                finally:
+                    self.container = None
+            raise RuntimeError(f"Failed to start container: {e}") from e
 
     def start_shell(self):
         if self.container:
             if self.shell and self.shell.isalive():
                 self.shell.close(force=True)
-            command = f'docker exec -it {self.container.id} /bin/bash'
+            command = f'docker exec -it -w /repo {self.container.id} /bin/bash'
             self.shell = pexpect.spawn(command, maxread=1000000)
             self.shell.expect([r'\$ ', r'# '], timeout=600)
         else:

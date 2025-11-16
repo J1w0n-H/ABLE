@@ -62,19 +62,12 @@ Please rewrite as a single line with && connections!
     cmd = re.sub(r'\n', ' ', cmd)
 
     # ═══════════════════════════════════════════════════════════════
-    # v2.7: Return single command (Bash handles && logic)
+    # Split on &&
     # ═══════════════════════════════════════════════════════════════
-    # REMOVED: && splitting to preserve Bash semantics
-    # OLD: statements = re.split(r'\s*&&\s*', cmd)
-    # OLD: return [statement.strip() for statement in statements]
-    
-    # NEW: Let Bash handle && connections
-    # Benefits:
-    #   1. Accurate returncode (last command's exit status)
-    #   2. Proper cd behavior (all commands in same session)
-    #   3. One-Step commands work as intended
-    #   4. Fail-fast behavior (A && B stops if A fails)
-    return [cmd.strip()]
+    # Respect quoted strings so that `echo "a && b"` is not split.
+    statements = re.split(r'\s*&&\s*(?=(?:[^\'"]|\'[^\']*\'|"[^"]*")*$)', cmd)
+    cleaned = [statement.strip() for statement in statements if statement.strip()]
+    return cleaned
 
 if __name__ == "__main__":
     # 示例输入

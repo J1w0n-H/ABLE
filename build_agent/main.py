@@ -302,9 +302,10 @@ def run_build(repository, commit, root_path='.'):
         # Create a unique test image name (must be lowercase for Docker)
         test_image = f"able_test_{full_name.replace('/', '_').lower()}_{int(time.time())}"
         
-        # v3.0 FIX: Use common build_agent directory (not version-specific)
-        # This allows Docker to access utils/repo via symlink or directly
-        build_context = "/root/Git/ABLE/build_agent"
+        # Use the actual build_agent directory passed via root_path
+        build_context = os.path.abspath(root_path)
+        if not os.path.isdir(build_context):
+            return False, f"Build context not found: {build_context}"
         dockerfile_rel_path = os.path.relpath(dockerfile_path, build_context)
         build_cmd = ["docker", "build", "-f", dockerfile_rel_path, "-t", test_image, build_context]
         
@@ -385,6 +386,8 @@ def run_build(repository, commit, root_path='.'):
         sys.stdout.close()
         sys.stdout = terminal
 
+    return runtest_passed
+
 def main():
     """Legacy entry point for backwards compatibility"""
     import argparse
@@ -417,7 +420,7 @@ def main():
         print(f"Configuration Error: {e}")
         sys.exit(2)
     
-    run_build(args.full_name, args.sha, args.root_path)
+    return run_build(args.full_name, args.sha, args.root_path)
 
 
 if __name__ == '__main__':
@@ -427,8 +430,9 @@ if __name__ == '__main__':
         print("No dangling images")
     
     start_time = time.time()
+    result = False
     try:
-        main()
+        result = main()
     finally:
         # v3.0 FIX: Restore stderr FIRST (critical for exit code 120!)
         sys.stderr = original_stderr
@@ -444,3 +448,5 @@ if __name__ == '__main__':
             end_time = time.time()
             elapsed_time = end_time - start_time
             print(f'Total execution time: {elapsed_time:.2f} seconds')
+    if not result:
+        sys.exit(1)
